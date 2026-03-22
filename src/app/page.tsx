@@ -2,8 +2,8 @@ import React from 'react';
 
 const page = () => {
   return (
-    <div>
-      jingcheng
+    <div className="flex  items-center justify-center h-screen ">
+      jingcheng gg
     </div>
   );
 };

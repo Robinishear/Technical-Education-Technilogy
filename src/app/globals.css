@@ -128,3 +128,16 @@
     @apply font-sans;
   }
 }
+@layer base {
+  *, ::after, ::before {
+    border-color: var(--border);
+  }
+  
+  .dark {
+    color-scheme: dark;
+  }
+  
+  :root {
+    color-scheme: light;
+  }
+}
