@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -16,13 +17,20 @@ import { StepTwo } from "../steps/step-two";
 import { StepThree } from "../steps/step-three";
 import { StepFour } from "../steps/step-four";
 
+import { handleFullRegistration } from "./registration.service";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 export function StepperRegister() {
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const router = useRouter();
 
   const form = useForm<RegisterValues>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema as any),
     defaultValues: {
 // Step 1: Applicant Info
+     name: "",
       instituteName: "",
       directorName: "",
       email: "",
@@ -45,10 +53,10 @@ export function StepperRegister() {
       endMonth: "",
       educationQualification: "",
 // Step 4: ID Card Upload
-      directorPhoto: undefined,
-      institutePhoto: undefined,
-      nationalIDPhoto: undefined,
-      signaturePhoto: undefined,
+      directorPhoto: null,
+      institutePhoto: null,
+      nationalIDPhoto: null,
+      signaturePhoto: null,
 // Step 5: Login Info
       username: "",
       password: "",
@@ -58,10 +66,25 @@ export function StepperRegister() {
     },
   });
 
-  const onSubmit = (data: RegisterValues) => {
-    console.log("সব ডাটা:", data);
-    alert("আবেদন সফলভাবে জমা হয়েছে!");
+
+const onSubmit = async (data: RegisterValues) => {
+    setIsSubmitting(true);
+    const toastId = toast.loading("সব তথ্য এবং ছবি আপলোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
+
+    try {
+      const result = await handleFullRegistration(data);
+if (result.success) {
+  toast.success("রেজিস্ট্রেশন সফল! 🎉");
+  router.push(`/verify-email?email=${data.email}`);
+}
+
+    } catch (error: any) {
+      toast.error(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে!", { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   const stepVariants = {
     hidden: { opacity: 0, x: 20 },
@@ -70,7 +93,7 @@ export function StepperRegister() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-xl rounded-lg border relative z-10">
+    <div className="max-w-4xl mx-auto p-6 bg-white  rounded-lg border border-gray-200 relative z-10">
       <div className="flex justify-between mb-8">
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
@@ -117,7 +140,7 @@ export function StepperRegister() {
                   let fields: (keyof RegisterValues)[] = [];
 
                   if (step === 1)
-                    fields = ["instituteName","directorName","email","phone","gender","nationality"];
+                    fields = ["name","instituteName","directorName","email","phone","gender","nationality"];
 
                if (step === 2)
   fields = [
@@ -145,8 +168,12 @@ export function StepperRegister() {
                 Next Step
               </Button>
             ) : (
-              <Button type="submit" className="bg-green-600 hover:bg-green-700">
-                Submit Application
+             <Button 
+                type="submit" 
+                className="bg-green-600 hover:bg-green-700"
+                disabled={isSubmitting} 
+              >
+                {isSubmitting ? "Processing..." : "Submit Application"}
               </Button>
             )}
           </div>

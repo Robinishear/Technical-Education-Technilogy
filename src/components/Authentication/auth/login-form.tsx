@@ -1,79 +1,92 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Lock } from "lucide-react"
-import Link from "next/link"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, Lock, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { api } from "./api";
 
-const loginSchema = z.object({
-  email: z.string().email("সঠিক ইমেইল দিন"),
-  password: z.string().min(1, "পাসওয়ার্ড দিন"),
-})
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-export function LoginForm() {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
-  })
+  const router = useRouter();
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log("Login Data:", values)
-    alert("লগইন বাটন কাজ করছে!")
-  }
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const data = await api("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+
+      // 👉 token store
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      router.push("/dashboard");
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Card className="border-border/50 shadow-xl bg-card">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">লগইন করুন</CardTitle>
-        <CardDescription>আবার স্বাগতম!</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField 
-              control={form.control} 
-              name="email" 
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ইমেইল</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="example@mail.com" className="pl-10" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} 
-            />
-            <FormField 
-              control={form.control} 
-              name="password" 
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>পাসওয়ার্ড</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input type="password" placeholder="••••••••" className="pl-10" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} 
-            />
-            <Button type="submit" className="w-full">প্রবেশ করুন</Button>
-          </form>
-        </Form>
-        <div className="mt-4 text-center text-sm">
-          নতুন? <Link href="/register" className="text-primary font-bold">অ্যাকাউন্ট খুলুন</Link>
+    <div className="relative z-50 flex items-center justify-center min-h-[70vh] px-4">
+      <div className="w-full max-w-md p-8 space-y-6 border rounded-2xl bg-card/50 backdrop-blur-xl shadow-2xl border-primary/10">
+        
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold tracking-tight">Welcome Back</h1>
+          <p className="text-muted-foreground">Enter your details to sign in</p>
         </div>
-      </CardContent>
-    </Card>
-  )
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          
+          {/* Email */}
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border rounded-md"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border rounded-md"
+            />
+          </div>
+
+          {/* Button */}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                Signing In...
+              </>
+            ) : (
+              "Sign In"
+            )}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
 }

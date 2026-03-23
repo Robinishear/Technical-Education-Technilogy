@@ -2,15 +2,22 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react"; 
+import { Menu, X, LogOut, User, Loader2 } from "lucide-react"; 
 import { PUBLIC_NAV_LINKS } from "@/core/constants/navigation";
 import { cn } from "@/core/lib/utils";
 import { ModeToggle } from "./ModeToggle";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { authClient } from "../Authentication/Logout/auth-client";
+import { handleLogout } from "../Authentication/Logout/auth.service";
+
+
 
 export const Navbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  
+  const { data: session, isPending } = authClient.useSession();
 
   return (
     <header className="w-full border-b bg-background/70 backdrop-blur-md sticky top-0 z-50">
@@ -25,24 +32,17 @@ export const Navbar = () => {
         <nav className="hidden md:flex items-center gap-8">
           {PUBLIC_NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
-
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
                   "relative flex items-center gap-2 text-sm font-medium transition",
-                  isActive
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-primary"
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                 )}
               >
                 <link.icon className="h-4 w-4" />
                 {link.label}
-
-                {isActive && (
-                  <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-primary rounded-full" />
-                )}
               </Link>
             );
           })}
@@ -52,28 +52,33 @@ export const Navbar = () => {
         <div className="flex items-center gap-3">
           <ModeToggle />
 
-          {/* Desktop buttons */}
           <div className="hidden md:flex items-center gap-2">
-            <Link
-              href="/login"
-              className="px-4 py-1.5 text-sm border rounded-md hover:bg-accent transition"
-            >
-              Sign In
-            </Link>
-
-            <Link
-              href="/register"
-              className="px-4 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition"
-            >
-              Get Started
-            </Link>
+            {isPending ? (
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            ) : !session ? (
+              <>
+                <Link href="/login" className="px-4 py-1.5 text-sm border rounded-md hover:bg-accent transition">
+                  Sign In
+                </Link>
+                <Link href="/register" className="px-4 py-1.5 text-sm bg-primary text-primary-foreground rounded-md transition">
+                  Get Started
+                </Link>
+              </>
+            ) : (
+              <div className="flex items-center gap-3">
+                 <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium border px-3 py-1.5 rounded-md hover:bg-accent transition">
+                    <User className="h-4 w-4" />
+                    {session.user.name?.split(' ')[0] || "User"}
+                 </Link>
+                 <Button variant="destructive" size="sm" onClick={handleLogout} className="h-8 gap-1">
+                    <LogOut className="h-4 w-4" /> Logout
+                 </Button>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-md border hover:bg-accent transition"
-          >
+          <button onClick={() => setOpen(!open)} className="md:hidden p-2 border rounded-md hover:bg-accent transition">
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
@@ -81,49 +86,32 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden border-t bg-background px-4 py-4 space-y-4">
-          
-          {PUBLIC_NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href;
-
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "flex items-center gap-2 text-sm font-medium",
-                  isActive
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                )}
-              >
-                <link.icon className="h-4 w-4" />
-                {link.label}
-              </Link>
-            );
-          })}
-
-          {/* Mobile Buttons */}
-          <div className="flex flex-col gap-2 pt-2">
+        <div className="md:hidden border-t bg-background px-4 py-4 space-y-4 animate-in slide-in-from-top-2">
+          {PUBLIC_NAV_LINKS.map((link) => (
             <Link
-              href="/login"
-              className="w-full text-center px-4 py-2 border rounded-md"
+              key={link.href}
+              href={link.href}
               onClick={() => setOpen(false)}
+              className={cn(
+                "flex items-center gap-2 text-sm font-medium p-2 rounded-md",
+                pathname === link.href ? "bg-accent text-primary" : "text-muted-foreground"
+              )}
             >
-              Sign In
+              <link.icon className="h-4 w-4" />
+              {link.label}
             </Link>
-
-            <Link
-              href="/register"
-              className="w-full text-center px-4 py-2 bg-primary text-primary-foreground rounded-md"
-              onClick={() => setOpen(false)}
-            >
-              Get Started
-            </Link>
+          ))}
+          <div className="pt-2 border-t flex flex-col gap-2">
+            {!session ? (
+              <Link href="/login" className="w-full text-center p-2 border rounded-md" onClick={() => setOpen(false)}>Sign In</Link>
+            ) : (
+              <Button variant="destructive" className="w-full gap-2" onClick={() => { setOpen(false); handleLogout(); }}>
+                <LogOut size={16} /> Logout
+              </Button>
+            )}
           </div>
         </div>
       )}
     </header>
   );
-};
+}

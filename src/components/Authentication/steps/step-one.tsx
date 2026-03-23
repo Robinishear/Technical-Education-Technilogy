@@ -16,6 +16,34 @@ export function StepOne({ form }: { form: UseFormReturn<RegisterValues> }) {
 
       <FormField
         control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>1. Name *</FormLabel>
+            <FormControl>
+              <Input placeholder="Enter your name" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="instituteName"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>2. Institute Name *</FormLabel>
+            <FormControl>
+              <Input placeholder="Enter institute name" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+       <FormField
+        control={form.control}
         name="instituteName"
         render={({ field }) => (
           <FormItem>
@@ -27,6 +55,7 @@ export function StepOne({ form }: { form: UseFormReturn<RegisterValues> }) {
           </FormItem>
         )}
       />
+      
 
       <FormField
         control={form.control}

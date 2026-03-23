@@ -1,7 +1,8 @@
 import * as z from "zod";
 
-export const registerSchema = z.object({
+export const registerSchema = z.object({ 
   // Step 1: Applicant Info
+  name: z.string().min(2, " নাম দিন"),
   instituteName: z.string().min(2, "ইন্সটিটিউট নাম দিন"),
   directorName: z.string().min(2, "ডিরেক্টর নাম দিন"),
   email: z.string().email("সঠিক ইমেইল দিন"),

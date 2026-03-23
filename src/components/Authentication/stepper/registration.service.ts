@@ -1,0 +1,46 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios from "axios";
+import { uploadImageToCloudinary } from "./upload.service";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
+export const handleFullRegistration = async (data: any) => {
+  try {
+    const getFile = (field: any) => {
+      if (!field) return null;
+      if (field instanceof FileList) return field[0];
+      if (field[0] instanceof File) return field[0];
+      return null;
+    };
+
+    const directorFile = getFile(data.directorPhoto);
+    const directorPhoto = directorFile ? await uploadImageToCloudinary(directorFile) : "";
+
+    const instituteFile = getFile(data.institutePhoto);
+    const institutePhoto = instituteFile ? await uploadImageToCloudinary(instituteFile) : "";
+
+    const nationalIDFile = getFile(data.nationalIDPhoto);
+    const nationalIDPhoto = nationalIDFile ? await uploadImageToCloudinary(nationalIDFile) : "";
+
+    const signatureFile = getFile(data.signaturePhoto);
+    const signaturePhoto = signatureFile ? await uploadImageToCloudinary(signatureFile) : "";
+
+    const finalPayload = {
+      ...data,
+      directorPhoto,
+      institutePhoto,
+      nationalIdPhoto: nationalIDPhoto, 
+      signaturePhoto,
+    };
+
+    console.log("Payload sending to backend:", finalPayload);
+
+    const response = await axios.post(`${API_URL}/auth/register`, finalPayload);
+
+    return response.data;
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message || error.message || "Registration failed!";
+    console.error("Full Registration Error:", error.response?.data || error);
+    throw new Error(errorMessage);
+  }
+};
