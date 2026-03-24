@@ -66,26 +66,23 @@ export function StepperRegister() {
     },
   });
 
-
 const onSubmit = async (data: RegisterValues) => {
-    setIsSubmitting(true);
-    const toastId = toast.loading("সব তথ্য এবং ছবি আপলোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
+  const toastId = toast.loading("সব তথ্য এবং ছবি আপলোড হচ্ছে...?");
 
-    try {
-      const result = await handleFullRegistration(data);
-if (result.success) {
-  toast.success("রেজিস্ট্রেশন সফল! 🎉");
-  router.push(`/verify-email?email=${data.email}`);
-}
+  try {
+    const result = await handleFullRegistration(data);
 
-    } catch (error: any) {
-      toast.error(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে!", { id: toastId });
-    } finally {
-      setIsSubmitting(false);
+    if (result.success) {
+      toast.success("রেজিস্ট্রেশন সফল! 🎉", { id: toastId }); 
+      router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
     }
-  };
-
-
+  } catch (error: any) {
+    toast.error(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে!", { id: toastId }); 
+  } finally {
+    setIsSubmitting(false);
+    // toast.dismiss(toastId); 
+  }
+};
   const stepVariants = {
     hidden: { opacity: 0, x: 20 },
     visible: { opacity: 1, x: 0 },

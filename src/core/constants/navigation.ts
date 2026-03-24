@@ -24,6 +24,7 @@ export const USER_NAV_LINKS = [
   { label: "Certificates", href: "/dashboard/certificates", icon: FileText },
   { label: "Messages", href: "/dashboard/messages", icon: MessageSquare },
   { label: "Help & Support", href: "/dashboard/support", icon: MessageSquare },
+  
 ];
 
 export const PUBLIC_NAV_LINKS = [
@@ -31,5 +32,7 @@ export const PUBLIC_NAV_LINKS = [
   { label: "Browse Courses", href: "/courses", icon: BookOpen },
   { label: "About Us", href: "/about", icon: FileText },
   { label: "Contact", href: "/contact", icon: MessageSquare },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+
   
 ];

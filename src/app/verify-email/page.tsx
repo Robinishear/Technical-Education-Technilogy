@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { api } from "./api"; // নিশ্চিত করুন api.ts একই ফোল্ডারে আছে
+import { api } from "./api"; 
 
 function VerifyContentPage() {
   const searchParams = useSearchParams();
@@ -15,48 +15,56 @@ function VerifyContentPage() {
   const [otp, setOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
 
-  // ইমেইল না থাকলে রেজিস্ট্রেশন পেজে পাঠিয়ে দেওয়া
   useEffect(() => {
     if (!email) {
       router.push("/register");
     }
   }, [email, router]);
 
-  // ওটিপি ইনপুট হ্যান্ডলার (শুধু নাম্বার এলাউ করবে)
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, ""); // নাম্বার ছাড়া সব রিমুভ করবে
+    const value = e.target.value.replace(/\D/g, "");
     setOtp(value);
   };
+  
+const handleVerify = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  // ১. ওটিপি কি আদেও ৬ ডিজিট?
+  if (otp.trim().length !== 6) {
+    return toast.error("দয়া করে ৬ ডিজিটের ওটিপি কোড দিন।");
+  }
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (otp.length !== 6) {
-      return toast.error("৬ ডিজিটের কোড দিন।");
-    }
+  setIsVerifying(true);
+  const toastId = toast.loading("ভেরিফাই হচ্ছে...");
 
-    setIsVerifying(true);
-    const toastId = toast.loading("ভেরিফাই হচ্ছে...");
+  try {
+    // ২. পে-লোড তৈরি (এখানে ওটিপি-কে নাম্বার বানিয়ে পাঠানো হচ্ছে)
+    const payload = { 
+      email: email?.trim(), 
+      otp: Number(otp) // ব্যাকএন্ড যদি নাম্বার চায়, তবে এটিই কাজ করবে
+    };
 
-    try {
-      // আপনার ব্যাকএন্ড এপিআই কল
-      const response = await api.post("/auth/verify-email", { 
-        email, 
-        otp 
-      });
+    console.log("Sending to Backend:", payload);
 
-      if (response.data.success) {
-        toast.success("ইমেইল ভেরিফিকেশন সফল! 🎉", { id: toastId });
+    const response = await api.post("/auth/verify-email", payload);
+
+    if (response.data.success) {
+      toast.success("ইমেইল ভেরিফিকেশন সফল! 🎉", { id: toastId });
+      
+      // ৩. সফল হলে লগইন পেজে পাঠিয়ে দিন
+      setTimeout(() => {
         router.push("/login");
-      }
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || "ভুল ওটিপি দিয়েছেন!";
-      toast.error(errorMessage, { id: toastId });
-    } finally {
-      setIsVerifying(false);
+      }, 2000);
     }
-  };
-
+  } catch (err: any) {
+    console.error("Backend Error Detail:", err.response?.data);
+    
+    const errorMessage = err.response?.data?.message || "ভুল ওটিপি দিয়েছেন!";
+    toast.error(errorMessage, { id: toastId });
+  } finally {
+    setIsVerifying(false);
+  }
+};
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 bg-[#0a0a0a] text-white">
       <div className="w-full max-w-md p-8 rounded-3xl bg-[#111] border border-cyan-500/20 shadow-[0_0_30px_rgba(6,182,212,0.05)] text-center">

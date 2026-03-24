@@ -25,7 +25,7 @@ export const uploadImageToCloudinary = async (file: File): Promise<string> => {
 
     const formData = new FormData();
     formData.append("file", compressedFile);
-    formData.append("upload_preset", "zahid_preset"); // আপনার 'Unsigned' প্রিসেট নাম
+    formData.append("upload_preset", "zahid_preset");
 
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/dr9gketux/image/upload`, 

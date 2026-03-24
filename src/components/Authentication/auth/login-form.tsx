@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { api } from "./api";
+import { toast } from "sonner";
+import { api } from "../../../core/lib/axios";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,29 +14,42 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const data = await api("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const response = await api.post("/auth/login", { 
+      email, 
+      password 
+    });
 
-      // 👉 token store
+    // Axios-এ ডাটা সরাসরি response.data তে থাকে
+    const data = response.data;
+
+    if (data?.success) {
       if (data?.token) {
         localStorage.setItem("token", data.token);
       }
 
-      router.push("/dashboard");
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
+      // প্রক্সির 'next' প্যারামিটার হ্যান্ডেল করা
+      const searchParams = new URLSearchParams(window.location.search);
+      const nextPath = searchParams.get("next") || "/dashboard";
+
+      toast.success("Login Successful! 🚀");
+      
+      // ড্যাশবোর্ডে পাঠানো এবং প্রক্সিকে সেশন চেনানোর জন্য রিফ্রেশ
+      router.push(nextPath);
+      router.refresh(); 
     }
-  };
+  } catch (err: any) {
+    // Axios এরর মেসেজ হ্যান্ডেল করা
+    const msg = err.response?.data?.message || "Invalid credentials! ❌";
+    toast.error(msg);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="relative z-50 flex items-center justify-center min-h-[70vh] px-4">
