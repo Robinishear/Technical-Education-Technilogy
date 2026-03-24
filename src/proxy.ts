@@ -1,36 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function proxy(request: NextRequest) {
-  const { pathname, search } = request.nextUrl;
+export default async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api/v1";
 
-  if (pathname.startsWith("/dashboard")) {
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin-dashboard")) {
     try {
       const cookieStore = await cookies();
       const allCookies = cookieStore.toString();
 
       if (!allCookies) {
-        const next = encodeURIComponent(pathname + (search || ""));
-        return NextResponse.redirect(new URL(`/login?next=${next}`, request.url));
+        return NextResponse.redirect(new URL(`/login?next=${pathname}`, request.url));
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/me`, {
-        headers: {
-          Cookie: allCookies,         },
+      const response = await fetch(`${apiUrl}/auth/me`, {
+        headers: { Cookie: allCookies },
         cache: "no-store",
       });
 
       const result = await response.json();
 
-      const user = result?.data;
-      const isAuthenticated = !!user;
-
-      if (!isAuthenticated) {
-        const next = encodeURIComponent(pathname + (search || ""));
-        return NextResponse.redirect(new URL(`/login?next=${next}`, request.url));
+      if (!result.success || !result.data) {
+        return NextResponse.redirect(new URL(`/login?next=${pathname}`, request.url));
       }
 
-      if (pathname.startsWith("/dashboard/admin") && user.role !== "ADMIN") {
+      if (pathname.startsWith("/admin-dashboard") && result.data.role !== "ADMIN") {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
 
@@ -40,24 +35,9 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/signup";
-  if (isAuthPage) {
-    const cookieStore = await cookies();
-    const hasSession = cookieStore.has("auth_session") || cookieStore.has("session");
-    
-    if (hasSession) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/login",
-    "/register",
-    "/signup",
-  ],
+  matcher: ["/dashboard/:path*", "/admin-dashboard/:path*", "/login", "/register"],
 };

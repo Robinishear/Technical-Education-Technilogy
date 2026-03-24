@@ -1,49 +1,42 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { api } from "../../../core/lib/axios";
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
-  const handleLogin = async (e: React.FormEvent) => {
+const router = useRouter();
+const searchParams = useSearchParams();
+
+const handleLogin = async (e: React.FormEvent) => {
   e.preventDefault();
   setLoading(true);
 
   try {
-    const response = await api.post("/auth/login", { 
-      email, 
-      password 
-    });
-
-    // Axios-এ ডাটা সরাসরি response.data তে থাকে
-    const data = response.data;
-
-    if (data?.success) {
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-      }
-
-      // প্রক্সির 'next' প্যারামিটার হ্যান্ডেল করা
-      const searchParams = new URLSearchParams(window.location.search);
-      const nextPath = searchParams.get("next") || "/dashboard";
-
+    const response = await api.post("/auth/login", { email, password });
+    
+    if (response.data.success) {
       toast.success("Login Successful! 🚀");
-      
-      // ড্যাশবোর্ডে পাঠানো এবং প্রক্সিকে সেশন চেনানোর জন্য রিফ্রেশ
-      router.push(nextPath);
+
       router.refresh(); 
+
+      const nextPath = searchParams.get("next") || "/admin-dashboard";
+      
+      setTimeout(() => {
+        router.push(nextPath);
+      }, 100);
     }
   } catch (err: any) {
-    // Axios এরর মেসেজ হ্যান্ডেল করা
     const msg = err.response?.data?.message || "Invalid credentials! ❌";
     toast.error(msg);
   } finally {
@@ -53,12 +46,19 @@ export default function LoginPage() {
 
   return (
     <div className="relative z-50 flex items-center justify-center min-h-[70vh] px-4">
-      <div className="w-full max-w-md p-8 space-y-6 border rounded-2xl bg-card/50 backdrop-blur-xl shadow-2xl border-primary/10">
+      <div className="w-full max-w-md p-8 space-y-6 border rounded-2xl bg-card/50 backdrop-blur-xl  border-primary/10">
         
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">Welcome Back</h1>
-          <p className="text-muted-foreground">Enter your details to sign in</p>
-        </div>
+        <div className="space-y-3 text-center">
+  
+  <Link href="/" className="text-3xl md:text-4xl font-extrabold tracking-tight bg-linear-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+    Welcome Back
+  </Link>
+
+  <p className="text-sm md:text-base text-gray-500">
+    Sign in to continue to your account
+  </p>
+
+</div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           
@@ -99,6 +99,26 @@ export default function LoginPage() {
               "Sign In"
             )}
           </Button>
+        <div className="flex flex-col items-center gap-3 mt-4">
+  
+  <Link
+    href="/forgot-password"
+    className="text-sm text-gray-500 hover:text-primary hover:underline transition duration-200"
+  >
+    Forgot Password?
+  </Link>
+
+  <div className="flex items-center gap-1 text-sm text-gray-600">
+    <span>Don't have an account?</span>
+    <Link
+      href="/register"
+      className="text-primary font-medium hover:underline transition duration-200"
+    >
+      Sign Up
+    </Link>
+  </div>
+
+</div>
         </form>
       </div>
     </div>
