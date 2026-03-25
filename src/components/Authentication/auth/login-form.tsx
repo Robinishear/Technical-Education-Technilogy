@@ -30,7 +30,7 @@ const handleLogin = async (e: React.FormEvent) => {
 
       router.refresh(); 
 
-      const nextPath = searchParams.get("next") || "/admin-dashboard";
+      const nextPath = searchParams.get("next") || "/";
       
       setTimeout(() => {
         router.push(nextPath);
