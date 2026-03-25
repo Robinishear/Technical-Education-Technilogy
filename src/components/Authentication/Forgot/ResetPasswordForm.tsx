@@ -12,7 +12,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { toast } from "sonner";
 import { Lock, Loader2 } from "lucide-react";
 import { resetPasswordSchema, ResetPasswordValues } from "./forgotPasswordSchema";
-
 export default function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();

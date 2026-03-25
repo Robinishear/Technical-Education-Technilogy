@@ -25,9 +25,22 @@ export default async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL(`/login?next=${pathname}`, request.url));
       }
 
-      if (pathname.startsWith("/admin-dashboard") && result.data.role !== "ADMIN") {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+      const role = result.data.role;
+
+      const isAdminGoingToUser = pathname.startsWith("/dashboard") && role === "ADMIN";
+      const isUserGoingToAdmin = pathname.startsWith("/admin-dashboard") && role !== "ADMIN";
+
+      if (isAdminGoingToUser || isUserGoingToAdmin) {
+        await fetch(`${apiUrl}/auth/logout`, {
+          method: "POST",
+          headers: { Cookie: allCookies },
+          cache: "no-store",
+        });
+
+        return NextResponse.redirect(new URL("/login", request.url));
       }
+
+      return NextResponse.next();
 
     } catch (error) {
       console.error("Proxy Auth Error:", error);
