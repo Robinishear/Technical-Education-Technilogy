@@ -1,27 +1,27 @@
 import imageCompression from "browser-image-compression";
 
 /**
- * @description 
- * @param file 
+ * @description
+ * @param file
+ * @returns 
  */
-export const uploadImageToCloudinary = async (file: File): Promise<string> => {
+export const uploadToCloudinary = async (file: File): Promise<string | null> => {
   if (!file) {
-    console.error("কোনো ফাইল পাওয়া যায়নি!");
-    return "";
+    console.error("No file found.!");
+    return null;
   }
 
   const compressionOptions = {
-    maxSizeMB: 1,          
-    maxWidthOrHeight: 1920, 
+    maxSizeMB: 1,           
+    maxWidthOrHeight: 1920,   
     useWebWorker: true,     
   };
 
   try {
-    console.log(`আসল সাইজ: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+    console.log(`Original Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
 
     const compressedFile = await imageCompression(file, compressionOptions);
-    
-    console.log(`কম্প্রেসড সাইজ: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+    console.log(`Compressed Size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
 
     const formData = new FormData();
     formData.append("file", compressedFile);
@@ -38,14 +38,14 @@ export const uploadImageToCloudinary = async (file: File): Promise<string> => {
     const data = await response.json();
 
     if (response.ok && data.secure_url) {
-      console.log("আপলোড সফল! ইউআরএল:", data.secure_url);
+      console.log("Upload Success! URL:", data.secure_url);
       return data.secure_url; 
     } else {
       console.error("Cloudinary Error:", data.error?.message || "Unknown error");
-      return "";
+      return null;
     }
   } catch (error) {
-    console.error("কম্প্রেশন বা আপলোডে সমস্যা হয়েছে:", error);
-    return "";
+    console.error("Compression or Upload Error:", error);
+    return null;
   }
 };

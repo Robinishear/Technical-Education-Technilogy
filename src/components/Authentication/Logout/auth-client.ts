@@ -6,5 +6,9 @@ export const authClient = createAuthClient({
   baseURL: "http://localhost:5000",
   fetchOptions: {
     credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
   },
 });
+

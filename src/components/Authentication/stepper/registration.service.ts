@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { uploadToCloudinary } from "@/core/services/upload.service";
 import axios from "axios";
-import { uploadImageToCloudinary } from "./upload.service";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
@@ -14,16 +14,16 @@ export const handleFullRegistration = async (data: any) => {
     };
 
     const directorFile = getFile(data.directorPhoto);
-    const directorPhoto = directorFile ? await uploadImageToCloudinary(directorFile) : "";
+    const directorPhoto = directorFile ? await uploadToCloudinary(directorFile) : "";
 
     const instituteFile = getFile(data.institutePhoto);
-    const institutePhoto = instituteFile ? await uploadImageToCloudinary(instituteFile) : "";
+    const institutePhoto = instituteFile ? await uploadToCloudinary(instituteFile) : "";
 
     const nationalIDFile = getFile(data.nationalIDPhoto);
-    const nationalIDPhoto = nationalIDFile ? await uploadImageToCloudinary(nationalIDFile) : "";
+    const nationalIDPhoto = nationalIDFile ? await uploadToCloudinary(nationalIDFile) : "";
 
     const signatureFile = getFile(data.signaturePhoto);
-    const signaturePhoto = signatureFile ? await uploadImageToCloudinary(signatureFile) : "";
+    const signaturePhoto = signatureFile ? await uploadToCloudinary(signatureFile) : "";
 
     const finalPayload = {
       ...data,

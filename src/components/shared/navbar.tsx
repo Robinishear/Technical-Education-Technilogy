@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
@@ -16,9 +17,11 @@ export const Navbar = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const { data: session, isPending } = authClient.useSession();
-  const user = session?.user;
-  const role = user?.role || "USER"; // default USER
+ const { data: session, isPending } = authClient.useSession();
+const user = session?.user;
+const role = (session?.user as any)?.role || "USER";
+
+console.log("Session:", session); // ✅ এটা add করো
 
   return (
     <header className="w-full border-b bg-background/70 backdrop-blur-md sticky top-0 z-50">
