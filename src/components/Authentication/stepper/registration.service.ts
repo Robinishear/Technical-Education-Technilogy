@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { uploadToCloudinary } from "@/core/services/upload.service";
+import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";

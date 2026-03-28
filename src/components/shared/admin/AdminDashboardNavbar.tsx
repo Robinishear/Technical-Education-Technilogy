@@ -1,50 +1,78 @@
 "use client";
 
-import { authClient } from "@/components/Authentication/Logout/auth-client";
-import { User, Bell, Loader2, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { User, Bell, Loader2, Search, Menu } from "lucide-react";
 import { ModeToggle } from "../ModeToggle";
+import { getCookie } from "@/core/utils/cookieUtils";
+import { jwtUtils } from "@/core/utils/jwtUtils";
 
-export const AdminDashboardNavbar = () => {
-  const { data: session, isPending } = authClient.useSession();
+export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: () => void }) => {
+  const [adminData, setAdminData] = useState<{ name: string; role: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      const token = await getCookie("accessToken");
+      if (token) {
+        const decoded = jwtUtils.decodedToken(token);
+        setAdminData({ 
+          name: decoded?.name || "Admin User", 
+          role: decoded?.role || "ADMIN" 
+        });
+      }
+      setLoading(false);
+    };
+    fetchAdmin();
+  }, []);
 
   return (
-    <header className="h-16 border-b bg-background/50 backdrop-blur-md sticky top-0 z-30 flex items-center px-6 justify-between">
+    <header className="h-16 border-b bg-background/50 backdrop-blur-md sticky top-0 z-30 flex items-center px-4 md:px-6 justify-between">
       <div className="flex items-center gap-4 flex-1">
+        {/* মোবাইল মেনু বাটন */}
+        <button 
+          onClick={onOpenMobileMenu}
+          className="p-2 hover:bg-accent rounded-md md:hidden"
+        >
+          <Menu className="h-5 w-5 text-primary" />
+        </button>
+
         <h2 className="text-sm font-semibold text-muted-foreground hidden sm:block">
-          Admin / <span className="text-foreground capitalize">Dashboard</span>
+          Admin / <span className="text-foreground font-bold capitalize">Dashboard</span>
         </h2>
-        {/* Admin Search */}
-        <div className="relative max-w-xs w-full hidden md:block">
+
+        {/* Admin Search Bar */}
+        <div className="relative max-w-xs w-full hidden lg:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input 
             type="text" 
-            placeholder="Search students..." 
-            className="w-full bg-accent/50 border rounded-md py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+            placeholder="Search students/records..." 
+            className="w-full bg-accent/30 border rounded-lg py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <ModeToggle />
-        <button className="p-2 hover:bg-accent rounded-full transition relative">
-          <Bell className="h-5 w-5 text-muted-foreground" />
+        
+        <button className="p-2 hover:bg-accent rounded-full transition relative text-muted-foreground">
+          <Bell className="h-5 w-5" />
           <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-background"></span>
         </button>
 
-        <div className="flex items-center gap-3 border-l pl-4">
-          {isPending ? (
+        <div className="flex items-center gap-2 md:gap-3 border-l pl-3 md:pl-4">
+          {loading ? (
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           ) : (
             <div className="flex items-center gap-2">
               <div className="text-right hidden sm:block">
-                <p className="text-xs font-extrabold leading-none text-primary">
-                  {session?.user?.name || "Admin"}
+                <p className="text-xs font-extrabold leading-none text-primary uppercase">
+                  {adminData?.name}
                 </p>
-                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-                  System Admin
+                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">
+                  {adminData?.role}
                 </p>
               </div>
-              <div className="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20">
+              <div className="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/30 ring-2 ring-primary/10">
                 <User className="h-5 w-5" />
               </div>
             </div>

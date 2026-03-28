@@ -2,6 +2,7 @@
     "prisma-smart-formatter.typescript.defaultFormatter": "esbenp.prettier-vscode",
     "prisma-smart-formatter.typescriptreact.defaultFormatter": "esbenp.prettier-vscode",
     "cSpell.words": [
+        "Dhanmondi",
         "Upazila",
         "zahid",
         "অ্যাকাউন্ট",

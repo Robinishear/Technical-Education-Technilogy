@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
-  { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Dashboard", href: "/admin-dashboard", icon: LayoutDashboard },
   { label: "All Students", href: "/admin-dashboard/AllStudents", icon: Users },
   { label: "All Courses", href: "/admin-dashboard/courses", icon: BookOpen },
   { label: "Instructors", href: "/admin-dashboard/teachers", icon: ShieldCheck },

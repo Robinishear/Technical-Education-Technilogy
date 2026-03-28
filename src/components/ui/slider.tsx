@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Slider as SliderPrimitive } from "radix-ui"
-import { cn } from "@/core/lib/utils"
+import { cn } from "@/core/utils/utils"
 
 
 function Slider({

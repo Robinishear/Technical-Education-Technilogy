@@ -17,11 +17,9 @@ export const registerSchema = z.object({
   thanaUpazila: z.string().min(2, "থানা/উপজেলা লিখুন"),
   district: z.string().min(2, "জেলা লিখুন"),
 
-  // Step 2: Parent Info
   fatherName: z.string().min(2, "পিতার নাম দিন"),
   motherName: z.string().min(2, "মাতার নাম দিন"),
 
-  // Step 3: Course Info
   courseName: z.string().min(2, "কোর্সের নাম দিন"),
   duration: z.string().min(1, "মেয়াদ লিখুন"),
   startYear: z.string().min(4, "শুরুর বছর লিখুন"),
@@ -30,13 +28,11 @@ export const registerSchema = z.object({
   endMonth: z.string().min(1, "শেষের মাস লিখুন"),
   educationQualification: z.string().min(2, "শিক্ষাগত যোগ্যতা লিখুন"),
 
-  // Step 4: ID Card Upload
   directorPhoto: z.any().refine((file) => !!file && file.length > 0, "ফটো আপলোড করুন"),
   institutePhoto: z.any().refine((file) => !!file && file.length > 0, "ফটো আপলোড করুন"),
   nationalIDPhoto: z.any().refine((file) => !!file && file.length > 0, "ফটো আপলোড করুন"),
   signaturePhoto: z.any().refine((file) => !!file && file.length > 0, "ফটো আপলোড করুন"),
 
-  // Step 5: Login Info
   username: z.string().min(4, "ইউজারনেম দিন"),
   password: z.string().min(6, "পাসওয়ার্ড দিন"),
 });

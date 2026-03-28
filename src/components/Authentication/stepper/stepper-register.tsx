@@ -29,7 +29,6 @@ export function StepperRegister() {
   const form = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema as any),
     defaultValues: {
-// Step 1: Applicant Info
      name: "",
       instituteName: "",
       directorName: "",
@@ -37,14 +36,14 @@ export function StepperRegister() {
       phone: "",
       gender: "",
       nationality: "",
-// Step 2: Parent Info
+
       fatherName: "",
       motherName: "",
       fullAddress: "",
       village: "",
       postOffice: "",
       thanaUpazila: "",
-// Step 3: Course Info
+
       courseName: "",
       duration: "",
       startYear: "",
@@ -52,12 +51,12 @@ export function StepperRegister() {
       endYear: "",
       endMonth: "",
       educationQualification: "",
-// Step 4: ID Card Upload
+
       directorPhoto: null,
       institutePhoto: null,
       nationalIDPhoto: null,
       signaturePhoto: null,
-// Step 5: Login Info
+
       username: "",
       password: "",
       instituteAge: "",

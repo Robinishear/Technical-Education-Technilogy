@@ -1,10 +1,10 @@
-import Students from '@/features/usersDashboard/Students-add/students';
+import StudentAddForm from '@/features/usersDashboard/Students-add/students.students';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-            <Students/>
+            <StudentAddForm/>
         </div>
     );
 };

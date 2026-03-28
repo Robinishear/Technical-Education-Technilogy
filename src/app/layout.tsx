@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
 import { Toaster } from "sonner";
+import { ReactQueryProvider } from "@/core/providers/ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mr Robin Ahmed | Vexio LMS",
+  title: "Love You",
   description: "Advanced Learning Management System",
 };
 
@@ -33,8 +34,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* রুট লেআউটে এখন শুধু চিলড্রেন, নেভবার নেই */}
+          <ReactQueryProvider>
           {children} 
+          </ReactQueryProvider>
           
           <Toaster position="top-right" richColors closeButton />
         </ThemeProvider>

@@ -1,20 +1,69 @@
 import { z } from "zod";
 
-export const studentValidationSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email"),
-  picture: z.string().min(1, "Picture is required"),
-  fatherName: z.string().optional(),
-  motherName: z.string().optional(),
-  dob: z.string().optional(),
-  gender: z.string().optional(),
-  guardianPhone: z.string().optional(),
-  studentAddress: z.string().optional(),
-  district: z.string().optional(),
-  thana: z.string().optional(),
-  educationQualification: z.string().optional(),
-  institute: z.string().optional(),
-  directorName: z.string().optional(),
-  issueDate: z.string().optional(),
-  expireDate: z.string().optional(),
+// reusable
+const requiredString = (field: string) =>
+  z.string().min(1, `${field} is required`);
+
+const optionalString = z.string().optional();
+
+// CREATE (strict)
+export const createStudentSchema = z.object({
+  name: requiredString("Name"),
+  email: z.string().email("Valid email is required"),
+  picture: requiredString("Picture"),
+
+  fatherName: requiredString("Father name"),
+  motherName: requiredString("Mother name"),
+  dob: requiredString("Date of birth"),
+  gender: requiredString("Gender"),
+  passport: requiredString("Passport"),
+  guardianPhone: requiredString("Guardian phone"),
+
+  studentAddress: requiredString("Address"),
+  district: requiredString("District"),
+  thana: requiredString("Thana"),
+
+  duration: requiredString("Duration"),
+  year1: requiredString("Start year"),
+  month1: requiredString("Start month"),
+  year2: requiredString("End year"),
+  month2: requiredString("End month"),
+
+  educationQualification: requiredString("Education"),
+  institute: requiredString("Institute"),
+  directorName: requiredString("Director"),
+
+  issueDate: requiredString("Issue date"),
+  expireDate: requiredString("Expire date"),
+});
+
+// UPDATE (flexible)
+export const updateStudentSchema = z.object({
+  name: optionalString,
+  email: z.string().email().optional(),
+  picture: optionalString,
+
+  fatherName: optionalString,
+  motherName: optionalString,
+  dob: optionalString,
+  gender: optionalString,
+  passport: optionalString,
+  guardianPhone: optionalString,
+
+  studentAddress: optionalString,
+  district: optionalString,
+  thana: optionalString,
+
+  duration: optionalString,
+  year1: optionalString,
+  month1: optionalString,
+  year2: optionalString,
+  month2: optionalString,
+
+  educationQualification: optionalString,
+  institute: optionalString,
+  directorName: optionalString,
+
+  issueDate: optionalString,
+  expireDate: optionalString,
 });
