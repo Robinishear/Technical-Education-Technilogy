@@ -3,88 +3,186 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, User as  Mail, Settings, Crown } from "lucide-react";
+import { ShieldCheck, Mail, Settings, Crown, MapPin, BookOpen, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+/* ================== CONFIG ================== */
+const BASE_URL = "http://localhost:5000";
+
+/* ================== Helper ================== */
+const getImageUrl = (src?: string | null) =>
+  src ? (src.startsWith("http") ? src : `${BASE_URL}/uploads/${src}`) : null;
+
+/* ================== Info Card Component ================== */
+const InfoCard = ({ label, value, isSpecial }: { label: string; value: any; isSpecial?: boolean }) => (
+  <div className={`group flex items-center justify-between px-5 py-4 rounded-2xl border transition-all duration-300 hover:shadow-md
+    ${isSpecial ? "border-primary/20 bg-primary/5" : "border-border bg-card/40 hover:bg-card"}`}>
+    <span className="text-sm font-medium text-muted-foreground">{label}</span>
+    <span className={`font-semibold text-sm ${isSpecial ? "text-primary" : "text-foreground"}`}>
+      {value || "—"}
+    </span>
+  </div>
+);
+
+/* ================== Image Card Component ================== */
+const ImageCard = ({ label, src }: { label: string; src?: string | null }) => {
+  const finalSrc = getImageUrl(src);
+  return (
+    <div className="group relative overflow-hidden rounded-2xl border bg-muted/30 p-2 transition-all">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-2 ml-1">{label}</p>
+      {finalSrc ? (
+        <div className="aspect-video w-full rounded-xl overflow-hidden border bg-background">
+          <img
+            src={finalSrc}
+            alt={label}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        </div>
+      ) : (
+        <div className="aspect-video w-full flex items-center justify-center text-xs text-muted-foreground border-dashed border-2 rounded-xl">
+          No {label} Found
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ================== Section Wrapper ================== */
+const Section = ({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) => (
+  <div className="space-y-4">
+    <div className="flex items-center gap-2 mb-2">
+      <div className="p-2 rounded-lg bg-primary/10 text-primary">
+        <Icon size={18} />
+      </div>
+      <h2 className="text-lg font-bold tracking-tight">{title}</h2>
+    </div>
+    <div className="grid sm:grid-cols-2 gap-3">{children}</div>
+  </div>
+);
+
+/* ================== MAIN PROFILE CONTENT ================== */
 export const ProfileContent = ({ user }: { user: any }) => {
-  const isUSER = user?.role === "USER";
+  const isAdmin = user?.role === "ADMIN";
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 30 }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto p-4"
+      className="max-w-5xl mx-auto p-6 space-y-8 border  rounded-2xl"
     >
-      <div className={`relative overflow-hidden rounded-[2.5rem] border bg-card/30 backdrop-blur-3xl shadow-2xl transition-all duration-500 ${isUSER ? 'border-red-500/30 shadow-red-500/10' : 'border-primary/20 shadow-primary/10'}`}>
+      {/* 🚀 Header Section */}
+      <div className="relative overflow-hidden rounded-[2.5rem] border bg-linear-to-br from-background via-background to-primary/5 p-8 ">
+        <div className="absolute top-0 right-0 p-8 opacity-10">
+            <Crown size={120} />
+        </div>
         
-        {/* Animated Background Glow */}
-        <div className={`absolute -top-24 -right-24 w-64 h-64 blur-[120px] rounded-full ${isUSER ? 'bg-red-600/20' : 'bg-primary/20'}`} />
-
-        <div className="px-8 py-12 relative z-10">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
-            
-            {/* User Image / Avatar */}
-            <div className="relative group">
-              <div className={`h-44 w-44 rounded-3xl bg-background p-1.5 shadow-2xl border-2 transition-transform duration-500 group-hover:rotate-3 ${isUSER ? 'border-red-500/50' : 'border-primary/50'}`}>
-                <div className="h-full w-full rounded-[1.4rem] bg-secondary flex items-center justify-center overflow-hidden">
-                  {user?.image ? (
-                    <img src={user.image} alt="Avatar" className="h-full w-full object-cover" />
-                  ) : (
-                    <span className={`text-6xl font-black ${isUSER ? 'text-red-500' : 'text-primary'}`}>
-                      {user?.name?.charAt(0)}
-
-                    </span>
-                  )}
-                </div>
+        <div className="relative flex flex-col md:flex-row items-center gap-8">
+          {/* Profile Avatar logic */}
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-3xl overflow-hidden ring-4 ring-primary/20 shadow-2xl">
+              <img 
+                src={getImageUrl(user?.directorPhoto) || "https://ui-avatars.com/api/?name=" + user?.name} 
+                alt="Profile" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {isAdmin && (
+              <div className="absolute -top-3 -right-3 bg-yellow-500 text-white p-2 rounded-xl shadow-lg animate-bounce">
+                <Crown size={18} />
               </div>
-              {isUSER && (
-                <div className="absolute -top-4 -right-4 bg-red-600 text-white p-2 rounded-xl shadow-lg ring-4 ring-background">
-                  <Crown size={20} />
-                </div>
-              )}
+            )}
+          </div>
+
+          <div className="flex-1 text-center md:text-left space-y-3">
+            <div>
+              <h1 className="text-3xl font-black tracking-tight">{user?.name}</h1>
+              <p className="text-primary font-medium italic">@{user?.username}</p>
             </div>
 
-            {/* Profile Info */}
-            <div className="flex-1 space-y-4 text-center md:text-left pt-4">
-              <div className="space-y-1">
-                <div className="flex items-center justify-center md:justify-start gap-3">
-                  <h1 className="text-4xl font-black tracking-tight">{user?.name}</h1>
-                  {isUSER && <ShieldCheck className="h-7 w-7 text-red-500" />}
-                </div>
-                <p className="text-lg text-muted-foreground flex items-center justify-center md:justify-start gap-2">
-                  <Mail className="h-4 w-4" /> {user?.email}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3 pt-2 justify-center md:justify-start">
-                <span className={`px-5 py-2 rounded-2xl text-[11px] font-black uppercase tracking-widest border ${isUSER ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-primary/10 text-primary border-primary/20'}`}>
-                  {isUSER ? "System USERistrator" : "Standard Member"}
-                </span>
-                <span className="px-5 py-2 rounded-2xl text-[11px] font-black uppercase tracking-widest border bg-secondary/50 text-muted-foreground">
-                  ID: {user?.id?.slice(-6) || "N/A"}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4">
-                <Button className={`rounded-2xl font-bold px-8 py-7 shadow-xl hover:scale-105 transition-all ${isUSER ? 'bg-red-600 hover:bg-red-700' : 'bg-primary hover:bg-primary/90'}`}>
-                    <Settings className="h-4 w-4 mr-2" /> Account Settings
-                </Button>
+            <div className="flex flex-wrap gap-4 justify-center md:justify-start items-center text-sm">
+              <span className="flex items-center gap-1.5 text-muted-foreground bg-muted/50 px-3 py-1 rounded-full border">
+                <Mail size={14} /> {user?.email}
+              </span>
+              <span className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest
+                ${isAdmin ? "bg-red-500 text-white" : "bg-emerald-500 text-white"}`}>
+                {user?.role || "USER"}
+              </span>
             </div>
           </div>
 
-          {/* Additional Stats Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
-            <div className="p-6 rounded-[2rem] border bg-background/40 hover:bg-background/60 transition-colors">
-              <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Joined Date</p>
-              <p className="font-bold text-lg">{new Date().toLocaleDateString()}</p>
+          <Button variant="default" className="rounded-2xl px-8 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+            <Settings size={18} className="mr-2" />
+            Edit Profile
+          </Button>
+        </div>
+      </div>
+
+      {/* 📊 Content Body */}
+      <div className="grid lg:grid-cols-3 gap-8">
+        
+        {/* Left Column (Main Data) */}
+        <div className="lg:col-span-2 space-y-10">
+          <Section title="Personal Details" icon={UserIcon}>
+            <InfoCard label="Father's Name" value={user?.fatherName} />
+            <InfoCard label="Mother's Name" value={user?.motherName} />
+            <InfoCard label="Gender" value={user?.gender} />
+            <InfoCard label="Nationality" value={user?.nationality} />
+            <InfoCard label="Phone" value={user?.phone} isSpecial />
+            <InfoCard label="Religion" value={user?.religion} />
+          </Section>
+
+          <Section title="Residential Address" icon={MapPin}>
+            <div className="col-span-full">
+               <InfoCard label="Full Address" value={user?.fullAddress} />
             </div>
-            <div className="p-6 rounded-[2rem] border bg-background/40 hover:bg-background/60 transition-colors">
-              <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Account Security</p>
-              <p className="font-bold text-lg text-green-500 flex items-center gap-2">High Security <ShieldCheck size={16}/></p>
-            </div>
+            <InfoCard label="Village" value={user?.village} />
+            <InfoCard label="District" value={user?.district} />
+          </Section>
+
+          <Section title="Course & Academic" icon={BookOpen}>
+            <InfoCard label="Course Name" value={user?.courseName} isSpecial />
+            <InfoCard label="Duration" value={user?.duration} />
+            <InfoCard label="Education" value={user?.educationQualification} />
+            <InfoCard label="Session" value={`${user?.startMonth} ${user?.startYear} - ${user?.endYear}`} />
+          </Section>
+        </div>
+
+        {/* Right Column (Sidebar Style) */}
+        <div className="space-y-6">
+          <div className="p-6 rounded-[2rem] border bg-card/50 backdrop-blur-sm space-y-6">
+             <h3 className="font-bold text-center border-b pb-3">Institute Information</h3>
+             <div className="space-y-3">
+                <div className="text-center p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                    <p className="text-xs text-muted-foreground uppercase font-bold">Institute Name</p>
+                    <p className="text-lg font-bold text-primary">{user?.instituteName}</p>
+                </div>
+                <InfoCard label="Director" value={user?.directorName} />
+                <InfoCard label="Est. Age" value={user?.instituteAge} />
+             </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="font-bold px-2">Verification Documents</h3>
+            <ImageCard label="Director Photo" src={user?.directorPhoto} />
+          </div>
+
+          {/* Security Footer */}
+          <div className="p-5 rounded-2xl border bg-emerald-500/5 border-emerald-500/20 flex items-center justify-between">
+             <div>
+                <p className="text-[10px] font-bold uppercase text-emerald-600">Account Status</p>
+                <p className="font-bold text-emerald-700">Verified Secure</p>
+             </div>
+             <ShieldCheck className="text-emerald-500" size={32} />
           </div>
         </div>
+
+      </div>
+
+      {/* 📅 System Info */}
+      <div className="text-center pt-8 border-t">
+         <p className="text-muted-foreground text-xs uppercase tracking-[0.2em]">
+            Account Member Since: {user?.createdAt ? new Date(user?.createdAt).getFullYear() : '2026'}
+         </p>
       </div>
     </motion.div>
   );

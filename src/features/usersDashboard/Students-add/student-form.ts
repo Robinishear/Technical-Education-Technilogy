@@ -1,9 +1,12 @@
-// student-form.ts
+export type StudentFormFieldType = 
+  "text" | "email" | "date" | "select";
+
 export type StudentField = {
   name: string;
   label: string;
-  type: string;
+  type: StudentFormFieldType;
   placeholder?: string;
+  options?: string[];
 };
 
 export const STUDENT_FORM_FIELDS: StudentField[] = [
@@ -12,20 +15,25 @@ export const STUDENT_FORM_FIELDS: StudentField[] = [
   { name: "fatherName", label: "Father Name", type: "text", placeholder: "Father Name" },
   { name: "motherName", label: "Mother Name", type: "text", placeholder: "Mother Name" },
   { name: "dob", label: "Date of Birth", type: "date" },
-  { name: "gender", label: "Gender", type: "text", placeholder: "Male/Female" },
-  { name: "passport", label: "Passport No", type: "text" },
+  { 
+    name: "gender", 
+    label: "Gender", 
+    type: "select",
+    options: ["Male", "Female", "Other"]
+  },
+  { name: "passport", label: "Passport No", type: "text", placeholder: "AB1234567" },
   { name: "guardianPhone", label: "Guardian Phone", type: "text", placeholder: "+8801XXXXXXXXX" },
-  { name: "studentAddress", label: "Address", type: "text" },
-  { name: "district", label: "District", type: "text" },
-  { name: "thana", label: "Thana", type: "text" },
-  { name: "duration", label: "Course Duration", type: "text" },
-  { name: "year1", label: "Start Year", type: "text" },
-  { name: "month1", label: "Start Month", type: "text" },
-  { name: "year2", label: "End Year", type: "text" },
-  { name: "month2", label: "End Month", type: "text" },
-  { name: "educationQualification", label: "Education Qualification", type: "text" },
-  { name: "institute", label: "Institute", type: "text" },
-  { name: "directorName", label: "Director Name", type: "text" },
+  { name: "studentAddress", label: "Address", type: "text", placeholder: "House, Road, Area" },
+  { name: "district", label: "District", type: "text", placeholder: "Dhaka" },
+  { name: "thana", label: "Thana", type: "text", placeholder: "Mirpur" },
+  { name: "duration", label: "Course Duration", type: "text", placeholder: "6 months" },
+  { name: "year1", label: "Start Year", type: "text", placeholder: "2024" },
+  { name: "month1", label: "Start Month", type: "text", placeholder: "January" },
+  { name: "year2", label: "End Year", type: "text", placeholder: "2025" },
+  { name: "month2", label: "End Month", type: "text", placeholder: "June" },
+  { name: "educationQualification", label: "Education Qualification", type: "text", placeholder: "SSC/HSC/BSc" },
+  { name: "institute", label: "Institute", type: "text", placeholder: "Institute Name" },
+  { name: "directorName", label: "Director Name", type: "text", placeholder: "Director Name" },
   { name: "issueDate", label: "Issue Date", type: "date" },
   { name: "expireDate", label: "Expire Date", type: "date" },
 ];
