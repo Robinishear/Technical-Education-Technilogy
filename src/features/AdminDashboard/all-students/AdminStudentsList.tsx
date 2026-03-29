@@ -6,10 +6,12 @@ import { toast } from "sonner";
 import { 
   Loader2, Eye, Phone, Hash, User, 
   MapPin, BookOpen, Calendar, ShieldCheck, X,
-  Trash2, Pencil, ChevronLeft, ChevronRight
+  Trash2, Pencil, ChevronLeft, ChevronRight,
+  Download
 } from "lucide-react";
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
+import { downloadAdmitCard } from "./studet-utils/downloadAdmitCard";
 
 interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
@@ -123,12 +125,36 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
           </div>
         </div>
 
-        <button
-          className="w-full mt-10 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
-          onClick={onClose}
-        >
-          Close Profile
-        </button>
+       <div className="flex flex-col sm:flex-row gap-3 mt-10">
+  <button
+    onClick={() => downloadAdmitCard({
+      studentId: student.studentId,
+      name: student.name,
+      fatherName: student.fatherName,
+      motherName: student.motherName,
+      dob: student.dob,
+      month1: student.month1,
+      year1: student.year1,
+      month2: student.month2,
+      year2: student.year2,
+      roll: student.roll,
+      regNumber: student.regNumber,
+      gender: student.gender,
+      educationQualification: student.educationQualification,
+      institute: student.institute,
+      photoUrl: student.picture,
+    })}
+    className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+  >
+    <Download size={15} /> Download Admit Card
+  </button>
+  <button
+    className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
+    onClick={onClose}
+  >
+    Close Profile
+  </button>
+</div>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
-import { getMyProfileAction } from "@/features/profile/-actions";
-import { ProfileContent } from "@/features/profile/profile.profile";
+import { getMyProfileAction } from "@/features/usersDashboard/profile/-actions";
+import { ProfileContent } from "@/features/usersDashboard/profile/profile.profile";
+
 
 export default async function Page() {
     const result = await getMyProfileAction();
