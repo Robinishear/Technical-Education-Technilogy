@@ -53,11 +53,11 @@ export default function AdminStudentUpdateModal({ student, onClose, onUpdated }:
           Update Student — {student.name}
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 ">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {STUDENT_FORM_FIELDS.map((field) => (
               <div key={field.name} className="space-y-1">
-                <label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+                <label className="text-[11px] font-black  uppercase tracking-widest text-muted-foreground ml-1">
                   {field.label}
                 </label>
                 {field.type === "select" ? (
@@ -75,7 +75,7 @@ export default function AdminStudentUpdateModal({ student, onClose, onUpdated }:
                     type={field.type}
                     {...register(field.name)}
                     placeholder={field.placeholder ?? ""}
-                    className="rounded-xl h-12 bg-white/5 border-white/10"
+                    className="rounded-xl h-12 bg-white/5  border-gray-100"
                   />
                 )}
               </div>
@@ -91,8 +91,12 @@ export default function AdminStudentUpdateModal({ student, onClose, onUpdated }:
               {isSubmitting ? "Updating..." : "Update Student"}
             </Button>
           </div>
+         
         </form>
+        
       </div>
+      
     </div>
+    
   );
 }

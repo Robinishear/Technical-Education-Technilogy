@@ -8,7 +8,7 @@ export const ADMIN_NAV_LINKS = [
   { label: "Dashboard", href: "/admin-dashboard", icon: LayoutDashboard },
   { label: "All Students", href: "/admin-dashboard/AllStudents", icon: Users },
   { label: "All Courses", href: "/admin-dashboard/courses", icon: BookOpen },
-  { label: "Instructors", href: "/admin-dashboard/teachers", icon: ShieldCheck },
+  { label: "Instructor Directory", href: "/admin-dashboard/InstructorDirectory", icon: ShieldCheck },
   { label: "Payments", href: "/admin-dashboard/payments", icon: CreditCard },
   { label: "Withdraw Requests", href: "/admin-dashboard/withdraw", icon: CreditCard },
   { label: "Support Tickets", href: "/admin-dashboard/support", icon: MessageSquare },

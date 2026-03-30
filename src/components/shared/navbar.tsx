@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
@@ -7,9 +8,9 @@ import { Menu, X, LayoutDashboard, LogOut,  } from "lucide-react";
 import { PUBLIC_NAV_LINKS } from "@/core/constants/navigation";
 import { ModeToggle } from "./ModeToggle";
 import { cn } from "@/core/utils/utils";
-import { getCookie, deleteCookie } from "@/core/utils/cookieUtils"; // আপনার বানানো
-import { jwtUtils } from "@/core/utils/jwtUtils"; // আপনার বানানো
-import { getDefaultDashboardRoute } from "@/core/utils/authUtils"; // আপনার বানানো
+import { getCookie, deleteCookie } from "@/core/utils/cookieUtils"; 
+import { jwtUtils } from "@/core/utils/jwtUtils"; 
+import { getDefaultDashboardRoute } from "@/core/utils/authUtils";
 import { toast } from "sonner";
 
 export const Navbar = () => {
@@ -19,7 +20,6 @@ export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [dashboardUrl, setDashboardUrl] = useState("/dashboard");
 
-  // ১. মাউন্ট হওয়ার পর সেশন চেক করা
   useEffect(() => {
     const checkAuth = async () => {
       const token = await getCookie("accessToken");
@@ -33,9 +33,8 @@ export const Navbar = () => {
       }
     };
     checkAuth();
-  }, [pathname]); // পাথ চেঞ্জ হলেই আবার চেক করবে
+  }, [pathname]);
 
-  // ২. লগআউট হ্যান্ডেলার
   const handleLogout = async () => {
     await deleteCookie("accessToken");
     await deleteCookie("refreshToken");
@@ -46,15 +45,27 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="w-full border-b bg-background/70 backdrop-blur-md sticky top-0 z-50">
+    <header className="w-full border-b bg-background/70 backdrop-blur-md fixed top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
         
-        {/* 🏷️ Logo */}
-        <Link href="/" className="text-lg font-bold tracking-tight">
-          Clean<span className="text-primary">Structure</span>
+          <Link href="/" className="flex items-center gap-3">
+          <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
+            <img
+              src="https://i.ibb.co.com/r2dVnpdh/Screenshot-from-2026-03-04-16-25-16-removebg-preview.png"
+              alt="Logo"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-red-500 font-bold text-lg md:text-xl leading-tight">
+              BANGLADESH <span className="text-blue-700">TECHNICAL</span>
+            </h1>
+            <p className="text-green-500 text-[10px] md:text-[11px] font-semibold uppercase">
+              EDUCATION TECHNOLOGY
+            </p>
+          </div>
         </Link>
 
-        {/* 💻 Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {PUBLIC_NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
@@ -81,7 +92,6 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
               <>
-                {/* লগইন থাকলে এই বাটনগুলো দেখাবে */}
                 <Link 
                   href={dashboardUrl} 
                   className="flex items-center gap-2 px-4 py-1.5 text-sm border rounded-lg hover:bg-accent transition-all"
@@ -99,7 +109,6 @@ export const Navbar = () => {
               </>
             ) : (
               <>
-                {/* লগইন না থাকলে এই বাটনগুলো দেখাবে */}
                 <Link href="/login" className="px-4 py-1.5 text-sm border rounded-lg hover:bg-accent transition-all">
                   Sign In
                 </Link>
@@ -110,7 +119,6 @@ export const Navbar = () => {
             )}
           </div>
 
-          {/* 📱 Mobile Menu Button */}
           <button
             onClick={() => setOpen(!open)}
             className="md:hidden p-2 border rounded-md hover:bg-accent"

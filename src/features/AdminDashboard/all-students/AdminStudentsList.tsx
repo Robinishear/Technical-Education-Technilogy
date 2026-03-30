@@ -7,11 +7,15 @@ import {
   Loader2, Eye, Phone, Hash, User, 
   MapPin, BookOpen, Calendar, ShieldCheck, X,
   Trash2, Pencil, ChevronLeft, ChevronRight,
-  Download
+  Download,
+  SquarePen,
+  PenOff
 } from "lucide-react";
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
-import { downloadAdmitCard } from "./studet-utils/downloadAdmitCard";
+import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
+import MarkStudent from "./MarkStudent";
+import ResultStudent from "./ResultStudent";
 
 interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
@@ -174,9 +178,12 @@ export default function AdminStudentsList() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [markStudent, setMarkStudent] = useState<Student | null>(null);     
+  const [resultStudent, setResultStudent] = useState<Student | null>(null);  
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [meta, setMeta] = useState<Meta>({ total: 0, totalPages: 1, page: 1, limit: 10 });
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchRoll, setSearchRoll] = useState("");
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -192,6 +199,10 @@ export default function AdminStudentsList() {
     };
     fetchStudents();
   }, [currentPage]);
+
+  const filteredStudents = students.filter((s) =>
+  s.roll.toLowerCase().includes(searchRoll.toLowerCase())
+);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this student?")) return;
@@ -224,26 +235,42 @@ export default function AdminStudentsList() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 bg-stone-50 min-h-screen">
-      {/* Header */}
-      <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <p className="text-xs text-amber-500 font-bold uppercase tracking-widest mb-1">Admin Panel</p>
-          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-stone-800">
-            Student Directory
-          </h2>
-          <p className="text-stone-400 text-sm font-medium mt-1">
-            {meta.total} records found
-          </p>
-        </div>
-        <div className="bg-white border border-stone-200 shadow-sm px-5 py-2 rounded-xl text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
-          Database Online
-        </div>
-      </header>
+    
+<header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-5">
+
+  {/* LEFT SIDE (TITLE + COUNT) */}
+  <div className="flex flex-col">
+    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-stone-800">
+      Student Directory
+    </h2>
+
+    <p className="text-stone-400 text-sm font-medium mt-2">
+      {meta.total} records found
+    </p>
+  </div>
+
+  <input
+    type="text"
+    placeholder="Search by Roll No..."
+    value={searchRoll}
+    onChange={(e) => setSearchRoll(e.target.value)}
+    className="border border-stone-200 rounded-xl px-4 py-2 text-sm 
+    focus:outline-none focus:ring-1 focus:ring-amber-400 
+    transition-all w-full md:w-64"
+  />
+
+  <div className="bg-white border border-stone-200 shadow-sm px-5 py-2 rounded-xl 
+  text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+
+    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
+    Database Online
+  </div>
+
+</header>
 
       {/* 📱 Mobile View */}
       <div className="md:hidden space-y-3">
-        {students.map((student) => (
+        {filteredStudents.map((student) => (
           <StudentMobileCard
             key={student.id}
             student={student}
@@ -271,7 +298,7 @@ export default function AdminStudentsList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
-              {students.map((student, index) => (
+              {filteredStudents.map((student, index) => (
                 <tr key={student.id} className="hover:bg-amber-50/40 transition-colors group">
                   <td className="px-6 py-4 text-stone-400 text-xs font-mono">
                     {(currentPage - 1) * 10 + index + 1}
@@ -312,12 +339,29 @@ export default function AdminStudentsList() {
                       >
                         <Eye size={14} className="text-stone-500 group-hover:text-amber-500" />
                       </button>
+                {/* Edit data */}
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
                         onClick={() => setEditingStudent(student)}
                         title="Edit"
                       >
                         <Pencil size={13} className="text-blue-400" />
+                      </button>
+                 {/* Edit Mark */}
+                       <button
+                        className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
+                        onClick={() => setMarkStudent(student)}
+                        title="Edit"
+                      >
+                        <SquarePen size={13} className="text-blue-400" />
+                      </button>
+                {/* Edit Result */}
+                       <button
+                        className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
+                        onClick={() => setResultStudent(student)}
+                        title="Edit"
+                      >
+                        <PenOff size={13} className="text-blue-400" />
                       </button>
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
@@ -385,7 +429,23 @@ export default function AdminStudentsList() {
           onClose={() => setEditingStudent(null)}
           onUpdated={handleUpdated}
         />
-      )}
+      )};
+      {markStudent && (
+  <MarkStudent
+    student={markStudent}
+    onClose={() => setMarkStudent(null)}
+    onUpdated={handleUpdated}
+  />
+)}
+
+
+{resultStudent && (
+  <ResultStudent
+    student={resultStudent}
+    onClose={() => setResultStudent(null)}
+    onUpdated={handleUpdated}
+  />
+)}
     </div>
   );
 }
