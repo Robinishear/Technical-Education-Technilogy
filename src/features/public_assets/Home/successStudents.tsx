@@ -8,7 +8,8 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-interface Teacher {
+// 📘 Interface naming (Singular is better practice)
+interface Student {
   id: string;
   name: string;
   image: string;
@@ -23,33 +24,34 @@ interface Teacher {
   bio?: string;
 }
 
-export default function TeachersSection() {
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
+export default function SuccessStudents() {
+  // tate variables fixed
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTeacher, setActiveTeacher] = useState<Teacher | null>(null);
+  const [activeStudent, setActiveStudent] = useState<Student | null>(null);
 
   useEffect(() => {
-    const fetchTeachers = async () => {
+    const fetchStudents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/instructors");
+        const res = await fetch("http://localhost:5000/api/v1/successStudents");
         const data = await res.json();
-        setTeachers(data?.data || []);
+        setStudents(data?.data || []);
       } catch (err) {
-        console.error(err);
+        console.error("❌ Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchTeachers();
+    fetchStudents();
   }, []);
 
   return (
     <section className="py-20 font-sans overflow-hidden">
       <div className="container mx-auto px-6">
-        {/* Header */}
+        {/* 📢 Header */}
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 uppercase">
-            OUR <span className="text-[#678E1A]">TEACHERS</span>
+            Success <span className="text-[#678E1A]">Students</span>
           </h2>
         </div>
 
@@ -58,7 +60,7 @@ export default function TeachersSection() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="h-80 rounded border border-gray-200 dark:border-gray-700"
+                className="h-80 rounded border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
               />
             ))}
           </div>
@@ -67,7 +69,7 @@ export default function TeachersSection() {
             modules={[Autoplay, Pagination]}
             spaceBetween={25}
             slidesPerView={1}
-            loop
+            loop={students.length > 1} // 💡 Only loop if multiple students exist
             autoplay={{ delay: 3000, disableOnInteraction: false }}
             pagination={{ clickable: true }}
             breakpoints={{
@@ -75,39 +77,37 @@ export default function TeachersSection() {
               1024: { slidesPerView: 3 },
               1280: { slidesPerView: 4 },
             }}
-            className="pb-20 pt-10 teachers-swiper"
+            className="pb-20 pt-10 Students-swiper"
           >
-            {teachers.map((teacher) => (
+            {students.map((student) => (
               <SwiperSlide
-                key={teacher.id}
+                key={student.id}
                 className="border border-gray-200 dark:border-gray-700 rounded-md p-3 flex flex-col min-h-95"
               >
                 <div className="flex flex-col flex-1">
-                  {/* Image */}
                   <div className="relative aspect-4/3 overflow-hidden rounded-md">
                     <Image
-                      src={teacher.image || "/placeholder.png"}
-                      alt={teacher.name || "Teacher"}
+                      src={student.image || "/placeholder.png"}
+                      alt={student.name || "Student"}
                       fill
                       className="object-cover transition-transform duration-700 hover:scale-105"
                       unoptimized
                     />
                   </div>
 
-                  {/* Content */}
                   <div className="p-4 flex flex-col flex-1">
                     <h3 className="text-md font-bold text-gray-800 dark:text-gray-200">
-                      {teacher.name}
+                      {student.name}
                     </h3>
 
                     <p className="text-[#678E1A] text-[10px] font-bold uppercase mb-3 line-clamp-2">
-                      {teacher.position?.role ||
-                        teacher.position?.title ||
+                      {student.position?.role ||
+                        student.position?.title ||
                         "Instructor"}
                     </p>
 
                     <div className="flex flex-wrap gap-1 mb-3 overflow-hidden flex-1">
-                      {teacher.items?.map((item, i) => (
+                      {student.items?.map((item, i) => (
                         <span
                           key={i}
                           className="text-[10px] px-2 py-0.5 rounded italic text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
@@ -118,7 +118,7 @@ export default function TeachersSection() {
                     </div>
 
                     <button
-                      onClick={() => setActiveTeacher(teacher)}
+                      onClick={() => setActiveStudent(student)}
                       className="mt-auto bg-[#678E1A] hover:bg-[#678E1A]/90 text-white px-4 py-2 rounded font-semibold text-xs transition"
                     >
                       View Details
@@ -131,21 +131,20 @@ export default function TeachersSection() {
         )}
       </div>
 
-      {/* Modal */}
-      {activeTeacher && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-md p-6 max-w-md w-full max-h-[80vh] overflow-y-auto relative">
+      {activeStudent && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-md p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative shadow-2xl">
             <button
-              className="absolute top-2 right-2 text-gray-600 dark:text-gray-300"
-              onClick={() => setActiveTeacher(null)}
+              className="absolute top-2 right-2 text-gray-600 dark:text-gray-300 hover:text-red-500 text-xl"
+              onClick={() => setActiveStudent(null)}
             >
               ✕
             </button>
 
             <div className="mb-4 relative aspect-4/3">
               <Image
-                src={activeTeacher.image || "/placeholder.png"}
-                alt={activeTeacher.name}
+                src={activeStudent.image || "/placeholder.png"}
+                alt={activeStudent.name}
                 fill
                 className="object-cover rounded-md"
                 unoptimized
@@ -153,17 +152,17 @@ export default function TeachersSection() {
             </div>
 
             <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">
-              {activeTeacher.name}
+              {activeStudent.name}
             </h3>
             <p className="text-[#678E1A] text-[10px] font-bold uppercase mb-3">
-              {activeTeacher.position?.role ||
-                activeTeacher.position?.title ||
-                "Instructor"}
+              {activeStudent.position?.role ||
+                activeStudent.position?.title ||
+                "successStudents"}
             </p>
 
-            {activeTeacher.items && (
+            {activeStudent.items && (
               <div className="flex flex-wrap gap-2 mb-3">
-                {activeTeacher.items.map((item, i) => (
+                {activeStudent.items.map((item, i) => (
                   <span
                     key={i}
                     className="text-[10px] px-2 py-0.5 rounded italic text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
@@ -174,24 +173,23 @@ export default function TeachersSection() {
               </div>
             )}
 
-            {activeTeacher.bio && (
-              <p className="text-gray-700 dark:text-gray-300 text-sm">
-                {activeTeacher.bio}
+            {activeStudent.bio && (
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                {activeStudent.bio}
               </p>
             )}
           </div>
         </div>
       )}
 
-      {/* Swiper Pagination Styles */}
       <style jsx global>{`
-        .teachers-swiper .swiper-pagination-bullet {
+        .Students-swiper .swiper-pagination-bullet {
           background: #9ca3af;
         }
-        .teachers-swiper .swiper-pagination-bullet-active {
+        .Students-swiper .swiper-pagination-bullet-active {
           background: #678e1a !important;
           width: 30px !important;
-          border-radius: 2px;
+          border-radius: 4px;
         }
       `}</style>
     </section>

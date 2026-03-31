@@ -1,7 +1,8 @@
 import { 
   LayoutDashboard, Users, BookOpen, CreditCard, 
   Settings, Bell, MessageSquare, ShieldCheck, 
-  GraduationCap, History, FileText, Home 
+  GraduationCap, History, FileText, Home, 
+  Images
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
@@ -9,7 +10,7 @@ export const ADMIN_NAV_LINKS = [
   { label: "All Students", href: "/admin-dashboard/AllStudents", icon: Users },
   { label: "All Courses", href: "/admin-dashboard/courses", icon: BookOpen },
   { label: "Instructor Directory", href: "/admin-dashboard/InstructorDirectory", icon: ShieldCheck },
-  { label: "Payments", href: "/admin-dashboard/payments", icon: CreditCard },
+  { label: "Slider ", href: "/admin-dashboard/Slider", icon: Images },
   { label: "Withdraw Requests", href: "/admin-dashboard/withdraw", icon: CreditCard },
   { label: "Support Tickets", href: "/admin-dashboard/support", icon: MessageSquare },
   { label: "Site Settings", href: "/admin-dashboard/settings", icon: Settings },
