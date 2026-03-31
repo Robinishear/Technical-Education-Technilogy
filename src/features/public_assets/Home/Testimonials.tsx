@@ -32,7 +32,7 @@ export default function Testimonials() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/testimonials");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/testimonials`);
         const data = await res.json();
         setTestimonials(data?.data || []);
       } catch (err) {
@@ -126,7 +126,7 @@ export default function Testimonials() {
 
                     <button
                       onClick={() => setActiveItem(item)}
-                      className="mt-auto group/btn flex items-center justify-center gap-3 w-full bg-slate-900 dark:bg-[#678E1A] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:bg-[#678E1A] dark:hover:bg-white dark:hover:text-slate-900 shadow-lg"
+                      className="mt-auto group/btn flex items-center justify-center gap-3 w-full bg-slate-900 dark:bg-[#678E1A] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:bg-[#678E1A] dark:hover:bg-gray-800 dark:hover:text-white  shadow-lg"
                     >
                       Read Success Story
                       <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>

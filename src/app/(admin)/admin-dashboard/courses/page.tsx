@@ -1,10 +1,10 @@
-import CourseSection from '@/features/public_assets/Courses/CourseSection';
+import CoursesPage from '@/features/AdminDashboard/courses/CoursesPage';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-            <CourseSection></CourseSection>
+            <CoursesPage></CoursesPage>
         </div>
     );
 };

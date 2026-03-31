@@ -13,4 +13,7 @@ export const showToast = {
   failed: () => toast.error("Something went wrong!"),
   uploading: () => toast.loading("Uploading..."),
   processing: () => toast.loading("Processing..."),
+  copySuccess: () => toast.success("Link copied Successfully!"),
+
+  
 };

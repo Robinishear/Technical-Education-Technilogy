@@ -21,7 +21,7 @@ export default function Slider() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/slider/get-slider")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/slider/get-slider`)
       .then((res) => res.json())
       .then((data) => {
         setSliders(Array.isArray(data?.data) ? data.data : []);

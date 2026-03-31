@@ -30,7 +30,7 @@ export const USER_NAV_LINKS = [
 
 export const PUBLIC_NAV_LINKS = [
   { label: "Home", href: "/", icon: Home },
-  { label: "Browse Courses", href: "/courses", icon: BookOpen },
+  { label: "Our Courses", href: "/courses", icon: BookOpen },
   { label: "About Us", href: "/about", icon: FileText },
   { label: "Contact", href: "/contact", icon: MessageSquare },
 

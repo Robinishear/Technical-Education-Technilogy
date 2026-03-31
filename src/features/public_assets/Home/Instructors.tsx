@@ -31,7 +31,7 @@ export default function Instructors() {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/instructors");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/instructors`);
         const data = await res.json();
         setTeachers(data?.data || []);
       } catch (err) {
