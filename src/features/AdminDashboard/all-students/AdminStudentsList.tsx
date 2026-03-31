@@ -16,6 +16,8 @@ import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
 import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
 import MarkStudent from "./MarkStudent";
 import ResultStudent from "./ResultStudent";
+import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
+import { downloadCertificateCard } from "./student-utils/downloadCertificateCard";
 
 interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
@@ -129,7 +131,8 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
           </div>
         </div>
 
-       <div className="flex flex-col sm:flex-row gap-3 mt-10">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+{/*1 downloadAdmitCard */}
   <button
     onClick={() => downloadAdmitCard({
       studentId: student.studentId,
@@ -152,6 +155,52 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
   >
     <Download size={15} /> Download Admit Card
   </button>
+
+  <button
+    onClick={() => downloadRegistrationCard({
+      studentId: student.studentId,
+      name: student.name,
+      fatherName: student.fatherName,
+      motherName: student.motherName,
+      dob: student.dob,
+      month1: student.month1,
+      year1: student.year1,
+      month2: student.month2,
+      year2: student.year2,
+      roll: student.roll,
+      regNumber: student.regNumber,
+      gender: student.gender,
+      educationQualification: student.educationQualification,
+      institute: student.institute,
+      photoUrl: student.picture,
+    })}
+    className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+  >
+    <Download size={15} /> download Reg Card
+  </button>
+
+<button
+    onClick={() => downloadCertificateCard({
+      studentId: student.studentId,
+      name: student.name,
+      fatherName: student.fatherName,
+      motherName: student.motherName,
+      dob: student.dob,
+      month1: student.month1,
+      year1: student.year1,
+      month2: student.month2,
+      year2: student.year2,
+      roll: student.roll,
+      regNumber: student.regNumber,
+      gender: student.gender,
+      educationQualification: student.educationQualification,
+      institute: student.institute,
+      photoUrl: student.picture,
+    })}
+    className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+  >
+    <Download size={15} /> download Cert Card
+</button>
   <button
     className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
     onClick={onClose}

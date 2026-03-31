@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
+
+import { default as  jspdf} from "jspdf";
+
 export async function downloadAdmitCard(student: {
   studentId?: string;
   name?: string;
@@ -15,69 +20,84 @@ export async function downloadAdmitCard(student: {
   institute?: string;
   photoUrl?: string;
 }) {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  // Next.js dynamic import — browser only
+  const { default: jsPDF } = await import("jspdf");
 
-  // Template image load
-  const templateImg = new Image();
-  templateImg.src = "/admit.png";
-
-  await new Promise<void>((resolve) => {
-    templateImg.onload = () => resolve();
-    templateImg.onerror = () => resolve(); 
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "px",
+    format: [794, 1123],
   });
 
-  canvas.width = templateImg.width || 794;
-  canvas.height = templateImg.height || 1123;
-  ctx.drawImage(templateImg, 0, 0);
+  // Helper: Image load করো
+  const loadImage = (src: string): Promise<HTMLImageElement> =>
+    new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(img);
+      img.src = src;
+    });
 
-  const sx = (x: number) => (x / 794) * canvas.width;
-  const sy = (y: number) => (y / 1123) * canvas.height;
+  // Helper: Image → base64 dataURL
+  const imageToDataURL = (img: HTMLImageElement): string => {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth || 304;
+    canvas.height = img.naturalHeight || 523;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(img, 0, 0);
+    return canvas.toDataURL("image/png");
+  };
 
-  ctx.fillStyle = "#000000";
-ctx.font = `${sx(14)}px "Times New Roman", serif`;
+  // ১. Background template
+  try {
+    const templateImg = await loadImage("/admit.png");
+    const templateDataUrl = imageToDataURL(templateImg);
+    pdf.addImage(templateDataUrl, "PNG", 0, 0, 794, 1123);
+  } catch {
+  }
+
+  // ২. Text fields
+  pdf.setFont("times", "normal");
+  pdf.setFontSize(14);
+  pdf.setTextColor(0, 0, 0);
 
   const fields: [string, number, number][] = [
-    [student.studentId ?? "",          370, 295],
-    [student.institute ?? "",          340, 335],
-    [student.name ?? "",               310, 375],
-    [student.fatherName ?? "",         310, 415],
-    [student.motherName ?? "",         310, 455],
-    [student.dob ?? "",                310, 495],
+    [student.studentId ?? "",                                                       370, 295],
+    [student.institute ?? "",                                                        340, 335],
+    [student.name ?? "",                                                             310, 375],
+    [student.fatherName ?? "",                                                       310, 415],
+    [student.motherName ?? "",                                                       310, 455],
+    [student.dob ?? "",                                                              310, 495],
     [`${student.month1 ?? ""} ${student.year1 ?? ""} - ${student.month2 ?? ""} ${student.year2 ?? ""}`, 310, 535],
-    [student.roll ?? "",               310, 575],
-    [student.regNumber ?? "",          310, 615],
-    [student.gender ?? "",             310, 655],
-    [student.educationQualification ?? "", 310, 695],
+    [student.roll ?? "",                                                             310, 575],
+    [student.regNumber ?? "",                                                        310, 615],
+    [student.gender ?? "",                                                           310, 655],
+    [student.educationQualification ?? "",                                           310, 695],
   ];
 
   for (const [text, x, y] of fields) {
-    ctx.fillText(text, sx(x), sy(y));
+    pdf.text(text, x, y);
   }
 
+  // ৩. Student photo
   if (student.photoUrl) {
     try {
-      const res = await fetch(`/api/proxy-image?url=${encodeURIComponent(student.photoUrl)}`);
+      const res = await fetch(
+        `/api/proxy-image?url=${encodeURIComponent(student.photoUrl)}`
+      );
       const blob = await res.blob();
       const objectUrl = URL.createObjectURL(blob);
-
-      const photo = new Image();
-      photo.src = objectUrl;
-
-      await new Promise<void>((resolve) => {
-        photo.onload = () => resolve();
-        photo.onerror = () => resolve();
-      });
-
-      ctx.drawImage(photo, sx(650), sy(320), sx(100), sy(120));
+      const photoImg = await loadImage(objectUrl);
+      const photoDataUrl = imageToDataURL(photoImg);
       URL.revokeObjectURL(objectUrl);
+
+      pdf.addImage(photoDataUrl, "JPEG", 650, 320, 100, 120);
     } catch {
+      // photo না থাকলে skip
     }
   }
 
-  const link = document.createElement("a");
-  link.download = `admit_${student.name ?? "student"}.png`;
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+  // ৪. PDF save/download
+  pdf.save(`admit_${student.name ?? "student"}.pdf`);
 }
