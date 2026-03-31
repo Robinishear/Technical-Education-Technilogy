@@ -148,25 +148,31 @@ export default function CourseSection() {
 </div>
 
           {/* Price Section */}
-          <div className="mt-auto pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-2xl font-black text-gray-900 dark:text-white">
-                ৳{course.price}
-              </span>
-              {course.oldPrice && (
-                <span className="text-sm text-gray-400 line-through decoration-red-400/50">
-                  ৳{course.oldPrice}
-                </span>
-              )}
-            </div>
-            
-            {/* Action Button */}
-            <Link href={`/courses/${course.id}`}>
-  <button className="h-11 w-11 flex items-center justify-center bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl hover:bg-cyan-500 dark:hover:bg-cyan-400 hover:text-white transition-all duration-300 shadow-md active:scale-90">
-    <ArrowRight size={20} />
-  </button>
-</Link>
-          </div>
+        <div className="mt-auto pt-6 border-t border-gray-100 dark:border-white/5 flex items-center gap-4">
+  {/* --- Price Section --- */}
+  <div className="flex flex-col shrink-0">
+    <span className="text-2xl font-black text-gray-900 dark:text-white leading-none">
+      ৳{course.price}
+    </span>
+    {course.oldPrice && (
+      <span className="text-[13px] text-gray-400 line-through decoration-red-400/40 mt-1">
+        ৳{course.oldPrice}
+      </span>
+    )}
+  </div>
+  
+  {/* --- Action Button --- */}
+  <Link href={`/courses/${course.id}`} className="flex-1">
+    <button className="group relative flex items-center justify-center gap-2 w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-cyan-500 dark:hover:bg-cyan-500 hover:text-white transition-all duration-300 active:scale-95 overflow-hidden shadow-sm hover:shadow-cyan-500/25">
+      <span className="text-[12px] uppercase tracking-wider relative z-10">Enrol Now</span>
+      
+      <ArrowRight 
+        size={16} 
+        className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" 
+      />
+    </button>
+  </Link>
+</div>
         </div>
       </div>
     ))
