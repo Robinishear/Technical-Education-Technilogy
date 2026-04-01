@@ -23,6 +23,7 @@ export const api = async (
   }
 
   if (!res.ok) {
+      console.log("error data:", data); 
     throw new Error(data.message || "Something went wrong");
   }
 

@@ -152,11 +152,11 @@ export default function CourseSection() {
   {/* --- Price Section --- */}
   <div className="flex flex-col shrink-0">
     <span className="text-2xl font-black text-gray-900 dark:text-white leading-none">
-      ৳{course.price}
+      ${course.price}
     </span>
     {course.oldPrice && (
       <span className="text-[13px] text-gray-400 line-through decoration-red-400/40 mt-1">
-        ৳{course.oldPrice}
+        ${course.oldPrice}
       </span>
     )}
   </div>

@@ -128,9 +128,9 @@ const handleShare = async () => {
           <div className="sticky top-8 bg-white dark:bg-[#121212] rounded-3xl border border-gray-100 dark:border-white/5  overflow-hidden">
             <div className="p-8">
               <div className="flex items-end gap-3 mb-6">
-                <span className="text-4xl font-black text-gray-900 dark:text-white">৳{course.price}</span>
+                <span className="text-4xl font-black text-gray-900 dark:text-white">${course.price}</span>
                 {course.oldPrice && (
-                  <span className="text-lg text-gray-400 line-through mb-1">৳{course.oldPrice}</span>
+                  <span className="text-lg text-gray-400 line-through mb-1">${course.oldPrice}</span>
                 )}
                 {discount > 0 && (
                    <span className="mb-1.5 px-2 py-0.5 bg-green-500/10 text-green-500 rounded-md font-bold text-xs">

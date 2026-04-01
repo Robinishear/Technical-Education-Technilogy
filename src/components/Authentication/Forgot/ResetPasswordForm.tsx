@@ -5,13 +5,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams, useRouter } from "next/navigation";
-import { api } from "@/core/lib/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "sonner";
 import { Lock, Loader2 } from "lucide-react";
 import { resetPasswordSchema, ResetPasswordValues } from "./forgotPasswordSchema";
+import { api } from "@/app/verify-email/otp-api";
 export default function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();

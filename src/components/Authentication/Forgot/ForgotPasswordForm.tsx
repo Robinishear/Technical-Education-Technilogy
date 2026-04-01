@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/core/lib/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -12,6 +11,7 @@ import { toast } from "sonner";
 import { Mail, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { forgotPasswordSchema, ForgotPasswordValues } from "./forgotPasswordSchema";
+import { api } from "@/app/verify-email/otp-api";
 
 export default function ForgotPasswordForm() {
   const [loading, setLoading] = useState(false);

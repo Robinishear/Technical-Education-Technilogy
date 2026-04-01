@@ -84,6 +84,8 @@ export const ProfileContent = ({ user }: { user: any }) => {
                 <h1 className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-tight">{user?.name}</h1>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-2 text-sm font-mono font-bold">
                   <span className="text-primary">@{user?.username}</span>
+                                    <span className="text-primary">{user?.email}</span>
+
                   <span className="text-muted-foreground/30">/</span>
                   <span className="text-muted-foreground">{user?.branchId}</span>
                 </div>

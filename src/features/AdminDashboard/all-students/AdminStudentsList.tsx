@@ -13,12 +13,11 @@ import {
 } from "lucide-react";
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
-import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
 import MarkStudent from "./MarkStudent";
-import ResultStudent from "./ResultStudent";
-import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
-import { downloadCertificateCard } from "./student-utils/downloadCertificateCard";
 
+import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
+import { downloadCertificateCard } from "./student-utils/downloadCertificateCard";
+import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
 interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
   motherName: string; dob: string; gender: string; passport: string;
@@ -228,7 +227,6 @@ export default function AdminStudentsList() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [markStudent, setMarkStudent] = useState<Student | null>(null);     
-  const [resultStudent, setResultStudent] = useState<Student | null>(null);  
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [meta, setMeta] = useState<Meta>({ total: 0, totalPages: 1, page: 1, limit: 10 });
   const [currentPage, setCurrentPage] = useState(1);
@@ -283,13 +281,13 @@ export default function AdminStudentsList() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-stone-50 min-h-screen">
+    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-stone-50 dark:bg-gray-900 min-h-screen">
     
 <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-5">
 
   {/* LEFT SIDE (TITLE + COUNT) */}
   <div className="flex flex-col">
-    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-stone-800">
+    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight dark:text-white text-stone-800">
       Student Directory
     </h2>
 
@@ -308,7 +306,7 @@ export default function AdminStudentsList() {
     transition-all w-full md:w-64"
   />
 
-  <div className="bg-white border border-stone-200 shadow-sm px-5 py-2 rounded-xl 
+  <div className="bg-white border dark:bg-gray-800 border-stone-200 shadow-sm px-5 py-2 rounded-xl 
   text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
 
     <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
@@ -332,10 +330,10 @@ export default function AdminStudentsList() {
       </div>
 
       {/* 🖥️ Desktop Table */}
-      <div className="hidden md:block overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
-        <div className="overflow-x-auto">
+      <div className="hidden md:block overflow-hidden rounded border  border-gray-300 dark:bg-gray-900 shadow-sm">
+        <div className="">
           <table className="w-full text-sm">
-            <thead className="bg-stone-50 border-b border-stone-200">
+            <thead className="bg-stone-50 border-b dark:bg-gray-900 ">
               <tr className="text-left">
                 <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-black text-stone-400">#</th>
                 <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-black text-stone-400">Student</th>
@@ -352,11 +350,11 @@ export default function AdminStudentsList() {
                   <td className="px-6 py-4 text-stone-400 text-xs font-mono">
                     {(currentPage - 1) * 10 + index + 1}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <img src={student.picture} className="h-10 w-10 rounded-xl border border-stone-100 object-cover shadow-sm" alt="" />
+                  <td className="px-1 py-4">
+                    <div className="flex items-center gap-2">
+                      <img src={student.picture} className="h-10 w-10 rounded-xl border border-gray-600 object-cover shadow-sm" alt="" />
                       <div>
-                        <p className="font-bold text-stone-800 group-hover:text-amber-600 transition-colors text-sm">{student.name}</p>
+                        <p className="font-bold text-stone-800 dark:text-white group-hover:text-amber-600 transition-colors text-sm">{student.name}</p>
                         <p className="text-[11px] text-stone-400 truncate w-32">{student.email}</p>
                       </div>
                     </div>
@@ -404,14 +402,7 @@ export default function AdminStudentsList() {
                       >
                         <SquarePen size={13} className="text-blue-400" />
                       </button>
-                {/* Edit Result */}
-                       <button
-                        className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
-                        onClick={() => setResultStudent(student)}
-                        title="Edit"
-                      >
-                        <PenOff size={13} className="text-blue-400" />
-                      </button>
+              
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
                         onClick={() => handleDelete(student.id)}
@@ -487,14 +478,6 @@ export default function AdminStudentsList() {
   />
 )}
 
-
-{resultStudent && (
-  <ResultStudent
-    student={resultStudent}
-    onClose={() => setResultStudent(null)}
-    onUpdated={handleUpdated}
-  />
-)}
     </div>
   );
 }

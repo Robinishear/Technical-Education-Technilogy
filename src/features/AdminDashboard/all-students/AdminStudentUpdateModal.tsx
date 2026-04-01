@@ -10,8 +10,9 @@ import { Loader2, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { adminUpdateStudentAction } from "./-actions";
-import { updateStudentSchema } from "@/features/usersDashboard/Students-add/students.schema";
-import { STUDENT_FORM_FIELDS } from "@/features/usersDashboard/Students-add/student-form";
+import { updateStudentSchema } from "@/features/usersDashboard/Students/students.schema";
+import { STUDENT_FORM_FIELDS } from "@/features/usersDashboard/Students/student-form";
+
 
 interface Props {
   student: any;
