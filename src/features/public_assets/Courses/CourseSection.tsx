@@ -163,7 +163,7 @@ export default function CourseSection() {
   
   {/* --- Action Button --- */}
   <Link href={`/courses/${course.id}`} className="flex-1">
-    <button className="group relative flex items-center justify-center gap-2 w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-cyan-500 dark:hover:bg-cyan-500 hover:text-white transition-all duration-300 active:scale-95 overflow-hidden shadow-sm hover:shadow-cyan-500/25">
+    <button className="group relative flex items-center justify-center gap-2 w-full py-3 bg-gray-900 dark:bg-gray-800 text-white dark:text-blue-600 font-bold rounded-xl hover:bg-cyan-500 dark:hover:bg-cyan-500 hover:text-white transition-all duration-300 active:scale-95 overflow-hidden shadow-sm hover:shadow-cyan-500/25">
       <span className="text-[12px] uppercase tracking-wider relative z-10">Enrol Now</span>
       
       <ArrowRight 

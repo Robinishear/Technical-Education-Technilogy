@@ -13,7 +13,7 @@ export default function ContactPage() {
 
         <div className="max-w-6xl mx-auto rounded-[2.5rem] overflow-hidden border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 backdrop-blur-xl  flex flex-col md:flex-row">
 
-          <div className="md:w-1/3 bg-linear-to-br from-cyan-500 to-blue-600 p-10 text-white flex flex-col justify-between">
+          <div className="md:w-1/3 bg-linear-to-br bg-gray-700 dark:bg-gray-800 p-10 text-white flex flex-col justify-between">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-5">
                 Contact Our School
@@ -77,7 +77,7 @@ export default function ContactPage() {
                 />
               </div>
 
-              <button className="flex items-center justify-center gap-3 w-full bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold py-3 rounded-xl hover:scale-[1.02] transition shadow-lg">
+              <button className="flex items-center justify-center gap-3 w-full bg-gray-700 dark:bg-gray-800 text-white py-3 rounded-xl hover:scale-[1.02] transition shadow-lg">
                 Submit Inquiry <Send size={18} />
               </button>
 

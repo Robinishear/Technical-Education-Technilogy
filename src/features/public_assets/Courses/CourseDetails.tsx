@@ -11,7 +11,6 @@ import {
   Star, 
   User, 
   Share2, 
-  PlayCircle,
   ShieldCheck,
   ArrowRight
 } from "lucide-react";
@@ -112,17 +111,13 @@ const handleShare = async () => {
           </div>
 
           {/* Thumbnail Preview */}
-          <div className="relative aspect-video rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl group bg-black">
+          <div className="relative aspect-video rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10  group bg-black">
             <img 
               src={course.thumbnail} 
               alt={course.title} 
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
             />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform shadow-2xl">
-                <PlayCircle size={60} fill="white" className="text-cyan-500" />
-              </button>
-            </div>
+           
           </div>
 
           
