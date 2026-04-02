@@ -2,8 +2,12 @@
 
 import { getAllUsers, approveUser, blockUser, deleteUser, unblockUser } from "./users.service";
 
-export const getUsersAction = async () => {
-  return getAllUsers();
+// export const getUsersAction = async () => {
+//   return getAllUsers();
+// };
+
+export const getUsersAction = async (search?: string) => {
+  return getAllUsers(search);
 };
 
 export const approveUserAction = async (userId: string) => {

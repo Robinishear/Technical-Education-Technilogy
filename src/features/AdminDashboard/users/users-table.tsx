@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Eye, Check, Ban, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { getUsersAction, approveUserAction, blockUserAction, deleteUserAction, unblockUserAction } from "./users.actions";
@@ -19,10 +19,18 @@ export default function UsersTable() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  //  debounce
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 500);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: getUsersAction,
+    queryKey: ["users", debouncedSearch],
+    queryFn: () => getUsersAction(debouncedSearch),
   });
 
   const users: IUser[] = data?.data ?? [];
@@ -45,14 +53,22 @@ export default function UsersTable() {
   });
 
   const unblock = useMutation({
-  mutationFn: (id: string) => unblockUserAction(id),
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
-});
+    mutationFn: (id: string) => unblockUserAction(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+  });
 
   if (isLoading) return <div className="p-8 text-center text-gray-400">Loading...</div>;
 
+
   return (
     <div className="p-6">
+      <input
+  type="text"
+  placeholder="Search by name, email or branch ID..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  className="w-full max-w-sm px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary text-sm mb-4"
+/>
       {/* Table */}
       <div className="rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full text-sm">

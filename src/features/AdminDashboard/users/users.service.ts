@@ -1,8 +1,13 @@
 import { httpClient } from "@/core/axios/httpClient";
 import { IUser } from "./users.types";
 
-export const getAllUsers = async () => {
-  return httpClient.get<IUser[]>("/users");
+// export const getAllUsers = async () => {
+//   return httpClient.get<IUser[]>("/users");
+// };
+
+export const getAllUsers = async (search?: string) => {
+  const params = search ? { search } : {};
+  return httpClient.get<IUser[]>("/users", { params });
 };
 
 export const approveUser = async (userId: string) => {
