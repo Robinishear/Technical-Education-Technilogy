@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -60,13 +61,24 @@ const UpskillLanding = () => {
                 whileHover={{ y: -6 }}
                 className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 backdrop-blur-xl shadow-sm hover:shadow-xl transition-all"
               >
-                <div className="mb-4 flex justify-center">
+                {/* <div className="mb-4 flex justify-center">
                   <div className="p-4 rounded-2xl bg-gray-100 dark:bg-white/10">
                     {React.cloneElement(item.icon as React.ReactElement, {
                       size: 28,
                     })}
                   </div>
-                </div>
+                </div> */}
+                <div className="mb-4 flex justify-center">
+  <div className="p-4 rounded-2xl bg-gray-100 dark:bg-white/10">
+    {React.isValidElement(item.icon) ? (
+      React.cloneElement(item.icon as React.ReactElement<any>, {
+        size: 28,
+      })
+    ) : (
+      item.icon
+    )}
+  </div>
+</div>
                 <h3 className="font-semibold text-lg">{item.title}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                   Learn industry ready skills with guided mentorship.
@@ -138,7 +150,7 @@ const UpskillLanding = () => {
             <motion.div
               key={i}
               whileHover={{ scale: 1.02 }}
-              className={`relative overflow-hidden p-10 rounded-3xl border border-gray-200 dark:border-white/10 bg-gradient-to-br ${card.color} backdrop-blur-xl flex justify-between items-center group`}
+              className={`relative overflow-hidden p-10 rounded-3xl border border-gray-200 dark:border-white/10 bg-linear-to-br ${card.color} backdrop-blur-xl flex justify-between items-center group`}
             >
               <div className="z-10">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4 max-w-60">

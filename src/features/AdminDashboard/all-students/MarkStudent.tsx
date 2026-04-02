@@ -13,7 +13,7 @@ import { getAdminStudentsAction } from "./-actions";
 interface MarkStudentProps {
   student: any;
   onClose: () => void;
-  onUpdated?: (updated: any) => void; // Parent থেকে আসা আপডেট ফাংশন
+  onUpdated?: (updated: any) => void; 
 }
 
 const getGradeFromCGPA = (cgpa: string) => {
@@ -48,7 +48,6 @@ export default function MarkStudent({ student, onClose, onUpdated }: MarkStudent
     })
   );
 
-  // ৩. ফাইনাল রেজাল্ট স্টেট
   const [finalResult, setFinalResult] = useState({
     fullMark: student?.fullMark || "100",
     writtenMarks: student?.writtenMarks || "",
