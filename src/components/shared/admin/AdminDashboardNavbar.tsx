@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { User, Bell, Loader2, Search, Menu } from "lucide-react";
 import { ModeToggle } from "../ModeToggle";
 import { getCookie } from "@/core/utils/cookieUtils";
 import { jwtUtils } from "@/core/utils/jwtUtils";
+import { getUnreadCountAction } from "@/features/AdminDashboard/contacts/admin-contact.actions";
+import Link from "next/link";
 
 export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: () => void }) => {
   const [adminData, setAdminData] = useState<{ name: string; role: string } | null>(null);
@@ -25,10 +29,18 @@ export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: (
     fetchAdmin();
   }, []);
 
+  // unread count
+  const { data: unreadData } = useQuery({
+    queryKey: ["unread-count"],
+    queryFn: getUnreadCountAction,
+    refetchInterval: 30000,
+  });
+
+  const unreadCount = (unreadData?.data as any)?.data?.count ?? 0;
+
   return (
     <header className="h-16 border-b bg-background/50 backdrop-blur-md sticky top-0 z-30 flex items-center px-4 md:px-6 justify-between">
       <div className="flex items-center gap-4 flex-1">
-        {/* মোবাইল মেনু বাটন */}
         <button 
           onClick={onOpenMobileMenu}
           className="p-2 hover:bg-accent rounded-md md:hidden"
@@ -40,7 +52,6 @@ export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: (
           Admin / <span className="text-foreground font-bold capitalize">Dashboard</span>
         </h2>
 
-        {/* Admin Search Bar */}
         <div className="relative max-w-xs w-full hidden lg:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input 
@@ -54,10 +65,17 @@ export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: (
       <div className="flex items-center gap-3">
         <ModeToggle />
         
-        <button className="p-2 hover:bg-accent rounded-full transition relative text-muted-foreground">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-background"></span>
-        </button>
+        {/* ✅ Bell with real count */}
+        <Link href="/admin-dashboard/ContactMessagesTable">
+          <button className="p-2 hover:bg-accent rounded-full transition relative text-muted-foreground">
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                {unreadCount}
+              </span>
+            )}
+          </button>
+        </Link>
 
         <div className="flex items-center gap-2 md:gap-3 border-l pl-3 md:pl-4">
           {loading ? (

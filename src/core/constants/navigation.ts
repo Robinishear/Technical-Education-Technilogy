@@ -1,9 +1,10 @@
 import { 
-  LayoutDashboard, Users, BookOpen, CreditCard, 
+  LayoutDashboard, Users, BookOpen,  
   Settings, Bell, MessageSquare, ShieldCheck, 
   GraduationCap, History, FileText, Home, 
   Images,
-  Webhook
+  Webhook,
+  UserCheck
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
@@ -12,8 +13,8 @@ export const ADMIN_NAV_LINKS = [
   { label: "All Courses", href: "/admin-dashboard/courses", icon: BookOpen },
   { label: "Instructor Directory", href: "/admin-dashboard/InstructorDirectory", icon: ShieldCheck },
   { label: "Slider ", href: "/admin-dashboard/Slider", icon: Images },
-  { label: "users", href: "/admin-dashboard/users", icon: CreditCard },
-  { label: "Support Tickets", href: "/admin-dashboard/support", icon: MessageSquare },
+  { label: "users", href: "/admin-dashboard/users", icon: UserCheck },
+  { label: "Contact Messages", href: "/admin-dashboard/ContactMessagesTable", icon: MessageSquare },
   { label: "Site Settings", href: "/admin-dashboard/settings", icon: Settings },
   { label: "Notifications", href: "/admin-dashboard/notices", icon: Bell },
   { label: "Reports", href: "/admin-dashboard/reports", icon: FileText },
