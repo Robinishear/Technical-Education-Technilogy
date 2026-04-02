@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
@@ -16,7 +18,7 @@ export default function AdminSliderPage() {
   const [sliders, setSliders] = useState<Slider[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const API = "http://localhost:5000/api/v1/slider";
+  const API = "https://apple-assignment-five-your-backend.onrender.com/api/v1/slider";
 
   // 🔄 Fetch Sliders (SAFE)
   const fetchSliders = async () => {
@@ -82,7 +84,7 @@ export default function AdminSliderPage() {
     setLoading(false);
   };
 
-  // ❌ Delete
+  //  Delete
   const handleDelete = async (id: string) => {
     try {
       await fetch(`${API}/${id}`, {

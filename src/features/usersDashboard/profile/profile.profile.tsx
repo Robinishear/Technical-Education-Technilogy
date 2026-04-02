@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ProfileUpdateForm } from "./ProfileUpdateForm";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://apple-assignment-five-your-backend.onrender.com";
 
 const getImageUrl = (src?: string | null) =>
   src ? (src.startsWith("http") ? src : `${BASE_URL}/uploads/${src}`) : null;
