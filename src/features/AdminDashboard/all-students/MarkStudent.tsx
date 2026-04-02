@@ -7,6 +7,7 @@ import { X, Trash2, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { getAdminStudentsAction } from "./-actions";
 // import { adminAddMarksAction } from "./-actions"; 
 
 interface MarkStudentProps {
@@ -89,31 +90,33 @@ export default function MarkStudent({ student, onClose, onUpdated }: MarkStudent
     setAcademicRecords(updated);
   };
 
-  const handleFinalSubmit = async () => {
-    setIsSaving(true);
-    const payload = {
-      ...finalResult,
-      subjects: tempSubjects,
-      academicRecords: academicRecords,
-    };
-
-    try {
-      const res = await getAdminStudentsAction(student.id, payload);
-      if (res.success) {
-        toast.success(res.message || "Data Saved Successfully!");
-        
-        if (onUpdated) {
-          onUpdated(res.studentData || res);
-        }
-      } else {
-        toast.error(res.message || "Failed to save");
-      }
-    } catch (error: any) {
-      toast.error("Network or Server Error");
-    } finally {
-      setIsSaving(false);
-    }
+ const handleFinalSubmit = async () => {
+  setIsSaving(true);
+  const payload = {
+    ...finalResult,
+    subjects: tempSubjects,
+    academicRecords: academicRecords,
   };
+
+  try {
+    const res = await getAdminStudentsAction(student.id, payload as any); 
+
+    if (res.success) {
+      toast.success(res.message || "Data Saved Successfully!");
+      
+      if (onUpdated) {
+        const updatedData = (res as any).studentData || res;
+        onUpdated(updatedData);
+      }
+    } else {
+      toast.error(res.message || "Failed to save");
+    }
+  } catch (error: any) {
+    toast.error("Network or Server Error");
+  } finally {
+    setIsSaving(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 overflow-hidden backdrop-blur-sm">
