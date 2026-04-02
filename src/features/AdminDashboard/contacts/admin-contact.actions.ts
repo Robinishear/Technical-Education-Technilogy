@@ -19,3 +19,11 @@ export const getUnreadCountAction = async () => {
     return { success: false, message: error.message };
   }
 };
+export const deleteContactMessageAction = async (id: string) => {
+  try {
+    const result = await httpClient.delete(`/contact/${id}`);
+    return { success: true, data: result };
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+};

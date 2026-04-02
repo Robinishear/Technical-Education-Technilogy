@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { User, Bell, Loader2, Search, Menu } from "lucide-react";
 import { ModeToggle } from "../ModeToggle";
@@ -13,6 +13,17 @@ import Link from "next/link";
 export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: () => void }) => {
   const [adminData, setAdminData] = useState<{ name: string; role: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const prevCountRef = useRef(0);
+  const [userInteracted, setUserInteracted] = useState(false);
+
+  //  unread count
+  const { data: unreadData } = useQuery({
+    queryKey: ["unread-count"],
+    queryFn: getUnreadCountAction,
+    refetchInterval: 5000,
+  });
+
+  const unreadCount = (unreadData?.data as any)?.data?.count ?? 0;
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -29,14 +40,28 @@ export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: (
     fetchAdmin();
   }, []);
 
-  // unread count
-  const { data: unreadData } = useQuery({
-    queryKey: ["unread-count"],
-    queryFn: getUnreadCountAction,
-    refetchInterval: 30000,
-  });
 
-  const unreadCount = (unreadData?.data as any)?.data?.count ?? 0;
+useEffect(() => {
+  const handleInteraction = () => setUserInteracted(true);
+  document.addEventListener("click", handleInteraction, { once: true });
+  return () => document.removeEventListener("click", handleInteraction);
+}, []);
+
+// sound useEffect এ check করো
+useEffect(() => {
+  if (unreadCount > prevCountRef.current && userInteracted) {
+    const audio = new Audio("/notification.mp3");
+    audio.play();
+
+    if (Notification.permission === "granted") {
+      new Notification("New Contact Message 🔔", {
+        body: "Someone sent you a message!",
+        icon: "/favicon.ico",
+      });
+    }
+  }
+  prevCountRef.current = unreadCount;
+}, [unreadCount, userInteracted]);
 
   return (
     <header className="h-16 border-b bg-background/50 backdrop-blur-md sticky top-0 z-30 flex items-center px-4 md:px-6 justify-between">
@@ -65,7 +90,6 @@ export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: (
       <div className="flex items-center gap-3">
         <ModeToggle />
         
-        {/* ✅ Bell with real count */}
         <Link href="/admin-dashboard/ContactMessagesTable">
           <button className="p-2 hover:bg-accent rounded-full transition relative text-muted-foreground">
             <Bell className="h-5 w-5" />
