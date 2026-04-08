@@ -9,15 +9,14 @@ import {
   Trash2, Pencil, ChevronLeft, ChevronRight,
   Download,
   SquarePen,
-  PenOff
 } from "lucide-react";
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
 import MarkStudent from "./MarkStudent";
 
 import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
-import { downloadCertificateCard } from "./student-utils/downloadCertificateCard";
 import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
+import { Certificate } from "./student-utils/Certificate";
 interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
   motherName: string; dob: string; gender: string; passport: string;
@@ -35,7 +34,7 @@ interface Meta {
   limit: number;
 }
 
-// 📱 Mobile Card Component
+//  Mobile Card Component
 const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: { 
   student: Student; 
   onView: (s: Student) => void;
@@ -69,7 +68,7 @@ const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: {
   </div>
 );
 
-// 🔍 Full Detailed View Modal
+//  Full Detailed View Modal
 const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => void }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/30 backdrop-blur-sm p-4 animate-in fade-in duration-200">
     <div className="bg-white border border-stone-200 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl no-scrollbar relative">
@@ -179,7 +178,7 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
   </button>
 
 <button
-    onClick={() => downloadCertificateCard({
+    onClick={() => Certificate({
       studentId: student.studentId,
       name: student.name,
       fatherName: student.fatherName,
@@ -194,11 +193,11 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
       gender: student.gender,
       educationQualification: student.educationQualification,
       institute: student.institute,
-      photoUrl: student.picture,
+      // photoUrl: student.picture,
     })}
     className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
   >
-    <Download size={15} /> download Cert Card
+    <Download size={15} /> Certificate
 </button>
   <button
     className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"

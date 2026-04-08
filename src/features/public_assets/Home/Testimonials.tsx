@@ -60,8 +60,7 @@ export default function Testimonials() {
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 max-w-sm text-lg font-medium leading-relaxed">
-            হাজারো শিক্ষার্থীর স্বপ্ন জয়ের গল্প এবং আমাদের প্রতি তাদের আস্থার প্রতিফলন।
-          </p>
+A story of thousands of students achieving their dreams and a reflection of their trust in us.          </p>
         </div>
 
         {loading ? (

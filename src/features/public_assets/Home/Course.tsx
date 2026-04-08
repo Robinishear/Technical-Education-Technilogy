@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
@@ -7,24 +8,64 @@ import {
   Calendar, 
   Clock, 
   Users, 
-  MapPin, 
   Sparkles, 
   ArrowRight, 
   Play, 
-  CheckCircle 
+  X,
+  Layers,
 } from 'lucide-react';
 
 const Course = () => {
   const [mounted, setMounted] = useState(false);
+  const [videoOpen, setVideoOpen] = useState(false); 
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const handleEsc = (e: { key: string; }) => e.key === "Escape" && setVideoOpen(false);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
   if (!mounted) return null;
 
   return (
-    <div className=" dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans">
+    <div className="dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans">
+
+      {videoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={() => setVideoOpen(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.25 }}
+            className="relative w-full max-w-3xl mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setVideoOpen(false)}
+              className="absolute -top-10 right-0 text-white/70 hover:text-white flex items-center gap-1 text-sm font-bold transition"
+            >
+              <X size={18} /> Close
+            </button>
+
+            <div className="aspect-video w-full rounded-3xl overflow-hidden bg-black shadow-2xl">
+              <video
+                src="/videos/intro.mp4"
+                className="w-full h-full"
+                controls
+                autoPlay
+              />
+            </div>
+          </motion.div>
+        </div>
+      )}
       
       {/* 1. Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-20 pb-12 px-6 md:px-24 overflow-hidden">
@@ -58,15 +99,10 @@ const Course = () => {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-5 rounded-2xl font-bold flex items-center space-x-3 shadow-2xl shadow-indigo-200 dark:shadow-none transition-all"
+              <button
+                onClick={() => setVideoOpen(true)}
+                className="flex items-center space-x-3 px-8 py-5 rounded-2xl font-bold border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all"
               >
-                <span>Get Started Now</span>
-                <ArrowRight size={20} />
-              </motion.button>
-              <button className="flex items-center space-x-3 px-8 py-5 rounded-2xl font-bold border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all">
                 <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600">
                   <Play size={18} fill="currentColor" />
                 </div>
@@ -74,6 +110,7 @@ const Course = () => {
               </button>
             </div>
           </motion.div>
+
 
           <motion.div 
             initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
@@ -83,7 +120,7 @@ const Course = () => {
           >
             <div className="relative group">
               <div className="absolute inset-0 bg-linear-to-br from-indigo-500 to-cyan-500 blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity" />
-              <div className="w-80 h-80 md:w-125 md:h-125 bg-slate-100 dark:bg-slate-900 rounded-[60px] overflow-hidden border-12 border-white dark:border-slate-800 shadow-2xl flex items-center justify-center">
+              <div className="w-80 h-80 md:w-125 md:h-125 bg-slate-100 dark:bg-slate-900 rounded-[60px] overflow-hidden border-12 border-white dark:border-slate-800  flex items-center justify-center">
                  <motion.img 
                   animate={{ y: [0, -20, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -95,7 +132,7 @@ const Course = () => {
               <motion.div 
                 animate={{ y: [0, 15, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700 hidden md:block"
+                className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 p-6 rounded-3xl  border border-slate-100 dark:border-slate-700 hidden md:block"
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/50 rounded-full flex items-center justify-center text-cyan-600 dark:text-cyan-400">
@@ -123,7 +160,7 @@ const Course = () => {
             <motion.div 
               key={i}
               whileHover={{ y: -10 }}
-              className="p-8 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-[32px] border border-slate-200/50 dark:border-slate-800/50 shadow-xl"
+              className="p-8 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-[15px] border border-slate-200/50 dark:border-slate-800/50 "
             >
               <div className="mb-4">{item.icon}</div>
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">{item.label}</p>
@@ -134,7 +171,7 @@ const Course = () => {
           
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="bg-linear-to-br from-cyan-400 to-blue-600 dark:from-cyan-600 dark:to-blue-800 p-8 rounded-[32px] text-white shadow-2xl flex flex-col justify-between relative overflow-hidden"
+            className="bg-linear-to-br from-cyan-400 to-blue-600 dark:from-cyan-600 dark:to-blue-800 p-8 rounded-[15px] text-white  flex flex-col justify-between relative overflow-hidden"
           >
             <div className="relative z-10">
               <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-2">Investment</p>
@@ -147,7 +184,7 @@ const Course = () => {
       </section>
 
       {/* 3. About Section */}
-      <section className="py-24 px-6 md:px-24 bg-slate-50/50 dark:bg-slate-900/10">
+      {/* <section className="py-24 px-6 md:px-24 bg-slate-50/50 dark:bg-slate-900/10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div className="relative">
             <motion.div 
@@ -201,7 +238,97 @@ const Course = () => {
             </motion.button>
           </div>
         </div>
-      </section>
+      </section> */}
+      <section className="py-24 px-6 md:px-12 lg:px-24 bg-white dark:bg-slate-950">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        {/* --- Left Card Section (No Shadow, Pure Border Focus) --- */}
+        <div className="relative group">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-slate-700 dark:bg-slate-900 border-[3px] border-indigo-600 p-12 md:p-16 rounded-[40px] text-white relative z-10 overflow-hidden"
+          >
+            {/* Minimal Decorative Element */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 rounded-bl-[100px]" />
+            
+            <div className="space-y-8 relative z-20">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center">
+                  <Sparkles size={32} className="text-white" />
+                </div>
+                <span className="text-xs font-black tracking-[0.4em] uppercase text-indigo-400">Premium Course</span>
+              </div>
+
+              <div className="space-y-2">
+                <h2 className="text-8xl font-black tracking-tighter leading-none flex items-baseline">
+                  24 <span className="text-2xl font-bold ml-2 text-indigo-400 uppercase tracking-widest italic">Hours</span>
+                </h2>
+                <div className="h-2 w-24 bg-indigo-600" />
+              </div>
+
+              <p className="text-xl font-bold leading-tight tracking-tight text-slate-300">
+                &quot;The most comprehensive SEO data science curriculum designed for modern marketers.&quot;
+              </p>
+
+              <div className="flex flex-wrap gap-3 pt-6">
+                <div className="px-5 py-2 border-2 border-slate-700 rounded-xl text-[10px] font-black tracking-widest uppercase hover:border-indigo-500 transition-colors">
+                  INTERMEDIATE LEVEL
+                </div>
+                <div className="px-5 py-2 border-2 border-slate-700 rounded-xl text-[10px] font-black tracking-widest uppercase hover:border-rose-500 transition-colors">
+                  CERTIFIED
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Simple Solid Offset Frame (No Shadow) */}
+          <div className="absolute -bottom-6 -right-6 w-full h-full border-[3px] border-slate-200 dark:border-slate-800 rounded-[40px] -z-10" />
+        </div>
+
+        {/* --- Right Content Section --- */}
+        <div className="space-y-10 lg:pl-10">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
+               <div className="w-10 h-0.5 bg-rose-500" />
+               <span className="text-rose-500 font-black tracking-[0.3em] text-xs uppercase">Science of Search</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tighter">
+              Master the science <br /> 
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-cyan-500">behind the search</span>
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-lg font-medium max-w-xl">
+              Stop guessing. Start measuring. Every day, search engines collect billions of data rows. It&apos;s time to dive deep into the causes and consequences.
+            </p>
+          </div>
+          
+          <ul className="grid grid-cols-1 gap-4">
+            {['Advanced BigQuery Integration', 'Predictive SEO Modeling', 'Automated Traffic Analysis'].map((item, i) => (
+              <li key={i} className="flex items-center space-x-4 p-4 border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                  <Layers size={18} />
+                </div>
+                <span className="text-slate-800 dark:text-slate-200 font-bold tracking-tight">{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="pt-4">
+            <motion.button 
+              whileTap={{ scale: 0.95 }}
+              className="group relative inline-flex items-center px-10 py-5 bg-rose-500 text-white font-black text-sm tracking-[0.2em] uppercase overflow-hidden transition-all hover:bg-rose-600"
+            >
+              <span className="relative z-10 flex items-center">
+                CLAIM YOUR SEAT NOW
+                <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" size={20} />
+              </span>
+            </motion.button>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
       {/* 4. Tutors Section */}
       <section className="py-32 px-6 md:px-24">
@@ -232,33 +359,6 @@ const Course = () => {
               </div>
             </motion.div>
           ))}
-        </div>
-      </section>
-
-      {/* 5. Venue Section */}
-      <section className="py-24 px-6 md:px-24">
-        <div className="bg-slate-950 rounded-[60px] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl border border-slate-800">
-          <div className="relative h-100 lg:h-full group">
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent z-10" />
-            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80" alt="Venue" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-            <div className="absolute bottom-10 left-10 z-20">
-               <div className="flex items-center space-x-2 text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
-                  <MapPin size={16} />
-                  <span className="text-sm font-bold tracking-widest">NEW YORK HUB</span>
-               </div>
-            </div>
-          </div>
-          <div className="p-12 md:p-20 flex flex-col justify-center space-y-8 bg-white dark:bg-slate-900">
-            <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">The Venue</h2>
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
-              Experience learning in our state-of-the-art SEO Solutions Education Hub. A premier facility designed to foster collaboration and innovation.
-            </p>
-            <div className="space-y-2">
-              <div className="w-full h-px bg-slate-200 dark:bg-slate-800" />
-              <p className="text-rose-500 dark:text-rose-400 font-black text-2xl pt-4">173 West 27th St, Suite 527</p>
-              <p className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest text-sm">New York, NY 10012</p>
-            </div>
-          </div>
         </div>
       </section>
 

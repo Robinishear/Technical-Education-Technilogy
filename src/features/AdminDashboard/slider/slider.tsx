@@ -18,7 +18,7 @@ export default function AdminSliderPage() {
   const [sliders, setSliders] = useState<Slider[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const API = "https://apple-assignment-five-your-backend.onrender.com/api/v1/slider";
+  const API = "http://localhost:5000/api/v1/slider";
 
   // 🔄 Fetch Sliders (SAFE)
   const fetchSliders = async () => {

@@ -1,21 +1,24 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { sendContactMessageAction } from "./contact.actions";
 import { 
   Mail, 
   Phone, 
-  User, 
-  MessageSquare, 
-  BookOpen, 
+
   Loader2,
   Zap,
   Shield,
   Headphones,
-  Globe
+  Globe,
+  MapPin,
+  Linkedin,
+  Instagram,
+  Twitter,
+  Facebook
 } from "lucide-react";
 
 export default function ContactForm() {
@@ -111,91 +114,203 @@ We are here to help you. For any needs, please leave a message or call us direct
       </div>
 
       {/* --- YOUR ORIGINAL FORM (100% UNCHANGED) --- */}
-      <div className="max-w-2xl mx-auto py-15 p-6">
-        <div className="border rounded-2xl p-8 space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold">Contact Us</h1>
-            <p className="text-gray-500 mt-1 text-sm">আমাদের সাথে যোগাযোগ করুন</p>
+    <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#E0F2F7] dark:bg-slate-950 min-h-screen flex items-center justify-center">
+      <div className="max-w-6xl w-full mx-auto">
+        
+        {/* --- Header Section --- */}
+        <div className="text-center mb-12 space-y-2">
+          <div className="flex items-center justify-center space-x-4">
+             <div className="h-px w-12 bg-slate-400" />
+             <h2 className="text-4xl md:text-6xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">
+                Contact Us
+             </h2>
+             <div className="h-px w-12 bg-slate-400" />
+          </div>
+          <p className="text-slate-500 font-bold tracking-widest text-sm uppercase">Get in touch with our team</p>
+        </div>
+
+        {/* --- Main Creative Container --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden rounded-[40px]">
+          
+          {/* LEFT COLUMN: The Form (Dark Slate Part) */}
+          <div className="lg:col-span-7 bg-[#547585] dark:bg-slate-900 p-10 md:p-16 relative">
+            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Name */}
+                <div className="space-y-2">
+                  <label className="text-white text-xs font-bold uppercase ml-1">Name</label>
+                  <div className="relative">
+                    <input
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-white dark:bg-slate-800 px-4 py-3 rounded-none border-0 text-slate-900 dark:text-white focus:ring-4 focus:ring-cyan-400/30 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <label className="text-white text-xs font-bold uppercase ml-1">Email</label>
+                  <input
+                    name="email"
+                    type="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-white dark:bg-slate-800 px-4 py-3 rounded-none border-0 text-slate-900 dark:text-white focus:ring-4 focus:ring-cyan-400/30 outline-none transition-all"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div className="space-y-2">
+                  <label className="text-white text-xs font-bold uppercase ml-1">Phone</label>
+                  <input
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="w-full bg-white dark:bg-slate-800 px-4 py-3 rounded-none border-0 text-slate-900 dark:text-white focus:ring-4 focus:ring-cyan-400/30 outline-none transition-all"
+                  />
+                </div>
+
+                {/* Subject */}
+                <div className="space-y-2">
+                  <label className="text-white text-xs font-bold uppercase ml-1">Subject</label>
+                  <input
+                    name="subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                    className="w-full bg-white dark:bg-slate-800 px-4 py-3 rounded-none border-0 text-slate-900 dark:text-white focus:ring-4 focus:ring-cyan-400/30 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="space-y-2">
+                <label className="text-white text-xs font-bold uppercase ml-1">Your Message</label>
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  required
+                  rows={4}
+                  className="w-full bg-white dark:bg-slate-800 px-4 py-3 rounded-none border-0 text-slate-900 dark:text-white focus:ring-4 focus:ring-cyan-400/30 outline-none transition-all resize-none"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={loading} 
+                className="bg-cyan-200 hover:bg-cyan-300 text-slate-800 font-black px-10 py-4 uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+              >
+                {loading ? <Loader2 className="animate-spin" /> : "Send Message"}
+              </button>
+            </form>
+
+            {/* Wavy Bottom Decoration (Image-er moto) */}
+            <div className="absolute bottom-0 left-0 right-0 flex overflow-hidden h-6 translate-y-full">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="min-w-12.5 h-12.5 bg-[#547585] dark:bg-slate-900 rounded-full -translate-y-1/2" />
+              ))}
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              {/* Name */}
-              <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <input
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Your Name"
-                  required
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary"
-                />
+          {/* RIGHT COLUMN: Info Panel (White/Paper Part) */}
+          <div className="lg:col-span-5 bg-white dark:bg-slate-800 p-10 md:p-16 flex flex-col justify-between relative">
+            <div className="space-y-8">
+              <div className="inline-block border-2 border-slate-900 dark:border-white px-6 py-2 rounded-full">
+                <p className="font-black text-sm uppercase tracking-tighter italic">Drop in our office</p>
               </div>
 
-              {/* Email */}
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="Your Email"
-                  required
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
+              <div className="space-y-6 text-slate-600 dark:text-slate-300">
+                <p className="text-sm font-medium leading-relaxed italic border-l-4 border-cyan-400 pl-4">
+                  "Building digital experiences that matter. Connect with us to start your next big project."
+                </p>
 
-              {/* Phone */}
-              <div className="relative">
-                <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="Phone Number"
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-
-              {/* Subject */}
-              <div className="relative">
-                <BookOpen className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <input
-                  name="subject"
-                  value={form.subject}
-                  onChange={handleChange}
-                  placeholder="Subject"
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary"
-                />
+                <div className="space-y-4 pt-4">
+                   <div className="flex items-center space-x-4 group">
+                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 flex items-center justify-center rounded-full group-hover:bg-cyan-400 group-hover:text-white transition-all">
+                        <Phone size={18} />
+                      </div>
+                      <span className="font-bold">+880 1334757898</span>
+                   </div>
+                   <div className="flex items-center space-x-4 group">
+                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 flex items-center justify-center rounded-full group-hover:bg-rose-400 group-hover:text-white transition-all">
+                        <Mail size={18} />
+                      </div>
+                      <span className="font-bold ">mdrobinahmed57898@gmail.com
+</span>
+                   </div>
+                   <div className="flex items-center space-x-4 group">
+                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 flex items-center justify-center rounded-full group-hover:bg-indigo-400 group-hover:text-white transition-all">
+                        <MapPin size={18} />
+                      </div>
+                      <span className="font-bold">Mymensingh, Bangladesh</span>
+                   </div>
+                </div>
               </div>
             </div>
 
-            {/* Message */}
-            <div className="relative">
-              <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Your Message"
-                required
-                rows={5}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary resize-none"
-              />
-            </div>
+            {/* Social Links */}
+            {/* <div className="pt-12">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-slate-400">Follow Us</p>
+              <div className="flex space-x-4">
+                {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
+                  <button key={i} className="p-3 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-cyan-400 hover:text-cyan-400 transition-all">
+                    <Icon size={20} />
+                  </button>
+                ))}
+              </div>
+            </div> */}
 
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? (
-                <><Loader2 className="animate-spin mr-2 h-4 w-4" /> Sending...</>
-              ) : (
-                "Send Message"
-              )}
-            </Button>
-          </form>
+            {/* --- Social Links Section --- */}
+<div className="pt-12">
+  <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-slate-400">
+    Follow Us
+  </p>
+  
+  <div className="flex space-x-4">
+    {[
+      { Icon: Facebook, url: "https://www.facebook.com/md.robin.ahmed.548869", color: "hover:text-blue-600 hover:border-blue-600" },
+      { Icon: Twitter, url: "https://twitter.com/your-profile", color: "hover:text-sky-500 hover:border-sky-500" },
+      { Icon: Instagram, url: "https://instagram.com/your-profile", color: "hover:text-pink-500 hover:border-pink-500" },
+      { Icon: Linkedin, url: "https://www.linkedin.com/in/md-robin1/", color: "hover:text-indigo-600 hover:border-indigo-600" }
+    ].map((social, i) => (
+      <a
+        key={i}
+        href={social.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`p-3 border-2 border-slate-100 dark:border-slate-700 rounded-xl transition-all duration-300 transform hover:-translate-y-1 ${social.color}`}
+      >
+        <social.Icon size={20} />
+      </a>
+    ))}
+  </div>
+</div>
+
+            {/* Bottom Wavy Effect for Right Side */}
+            <div className="absolute bottom-0 left-0 right-0 flex overflow-hidden h-6 translate-y-full">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="min-w-15 h-15 bg-white dark:bg-slate-800 rounded-full -translate-y-1/2" />
+              ))}
+            </div>
+          </div>
         </div>
+
+        {/* Background Decorative Text (Optional) */}
+        <div className="mt-20 justify-between items-center px-10 opacity-20 hidden md:flex">
+           <span className="text-8xl font-black tracking-tighter text-slate-400">CONNECT</span>
+           <div className="flex space-x-2">
+             <div className="w-3 h-3 bg-slate-400 rounded-full" />
+             <div className="w-3 h-3 bg-slate-400 rounded-full" />
+             <div className="w-3 h-3 bg-slate-400 rounded-full" />
+           </div>
+        </div>
+
       </div>
+    </section>
     </div>
   );
 }

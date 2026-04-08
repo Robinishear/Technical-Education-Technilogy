@@ -2,7 +2,7 @@
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://apple-assignment-five-your-backend.onrender.com/api/v1";
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const handleFullRegistration = async (data: any) => {
   try {

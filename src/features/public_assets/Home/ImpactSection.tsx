@@ -141,8 +141,10 @@ export default function ImpactSection() {
             Subscribe & get the latest news and growth opportunities!
           </p>
           <button className="bg-white/20 hover:bg-white/10 text-white px-12 py-3 rounded font-bold text-lg transition shadow-sm">
+
             Apply Now
-          </button>
+
+  </button>
         </div>
       </div>
     </section>
