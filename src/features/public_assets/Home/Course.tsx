@@ -57,7 +57,7 @@ const Course = () => {
 
             <div className="aspect-video w-full rounded-3xl overflow-hidden bg-black shadow-2xl">
               <video
-                src="/videos/intro.mp4"
+                src="https://www.youtube.com/watch?v=GoXElYnkgtE"
                 className="w-full h-full"
                 controls
                 autoPlay
