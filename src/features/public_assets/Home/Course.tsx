@@ -12,28 +12,29 @@ import {
   ArrowRight, 
   Play, 
   Layers,
+  X,
 } from 'lucide-react';
 
 const Course = () => {
   const [mounted, setMounted] = useState(false);
-  // const [videoOpen, setVideoOpen] = useState(false); 
+  const [videoOpen, setVideoOpen] = useState(false); 
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // useEffect(() => {
-  //   const handleEsc = (e: { key: string; }) => e.key === "Escape" && setVideoOpen(false);
-  //   window.addEventListener("keydown", handleEsc);
-  //   return () => window.removeEventListener("keydown", handleEsc);
-  // }, []);
+  useEffect(() => {
+    const handleEsc = (e: { key: string; }) => e.key === "Escape" && setVideoOpen(false);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   if (!mounted) return null;
 
   return (
     <div className="dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans">
 
-      {/* {videoOpen && (
+      {videoOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           onClick={() => setVideoOpen(false)}
@@ -46,8 +47,7 @@ const Course = () => {
             className="relative w-full max-w-3xl mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
-            {/* <button
+          <button
               onClick={() => setVideoOpen(false)}
               className="absolute -top-10 right-0 text-white/70 hover:text-white flex items-center gap-1 text-sm font-bold transition"
             >
@@ -56,7 +56,7 @@ const Course = () => {
 
             <div className="aspect-video w-full rounded-3xl overflow-hidden bg-black shadow-2xl">
               <video
-                src="/videos/intro.mp4"
+                src=""
                 className="w-full h-full"
                 controls
                 autoPlay
@@ -64,7 +64,7 @@ const Course = () => {
             </div>
           </motion.div>
         </div>
-      )} */} 
+      )} 
       
       {/* 1. Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-20 pb-12 px-6 md:px-24 overflow-hidden">
@@ -99,7 +99,7 @@ const Course = () => {
 
             <div className="flex flex-wrap gap-4">
               <button
-                // onClick={() => setVideoOpen(true)}
+                onClick={() => setVideoOpen(true)}
                 className="flex items-center space-x-3 px-8 py-5 rounded-2xl font-bold border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all"
               >
                 <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600">

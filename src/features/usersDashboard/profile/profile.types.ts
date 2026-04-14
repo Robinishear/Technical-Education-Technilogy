@@ -1,7 +1,6 @@
 export interface IUserProfile {
-  id: string;
-
-     name: string,
+      id: string;
+      name: string,
       instituteName: string,
       directorName: string,
       email: string,
