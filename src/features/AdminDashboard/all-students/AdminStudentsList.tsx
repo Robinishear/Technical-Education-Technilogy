@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
-import MarkStudent from "./MarkStudent";
 
 import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
 import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
 import { Certificate } from "./student-utils/Certificate";
+import MarkStudent from "./markStudent/MarkStudent";
 interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
   motherName: string; dob: string; gender: string; passport: string;

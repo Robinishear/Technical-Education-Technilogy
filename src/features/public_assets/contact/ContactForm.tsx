@@ -64,7 +64,7 @@ export default function ContactForm() {
       alt="Contact Support Background"
       className="w-full h-full object-cover object-center"
     />
-    <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+    <div className="absolute  inset-0 bg-slate-800/20 dark:bg-slate-950/80 backdrop-blur-sm"></div>
   </div>
 
   {/* --- Content Container --- */}

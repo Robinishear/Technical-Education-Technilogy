@@ -120,13 +120,13 @@ const Course = () => {
           >
             <div className="relative group">
               <div className="absolute inset-0 bg-linear-to-br from-indigo-500 to-cyan-500 blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity" />
-              <div className="w-80 h-80 md:w-125 md:h-125 bg-slate-100 dark:bg-slate-900 rounded-[60px] overflow-hidden border-12 border-white dark:border-slate-800  flex items-center justify-center">
+              <div className=" w-80 h-80 md:w-125 md:h-125 bg-slate-100 dark:bg-slate-900 rounded-[60px] overflow-hidden border-12 border-white dark:border-slate-800  flex items-center justify-center">
                  <motion.img 
                   animate={{ y: [0, -20, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   src="https://img.freepik.com/free-vector/rocket-space-concept-illustration_114360-1065.jpg" 
                   alt="Rocket" 
-                  className="w-4/5 object-contain" 
+                  className="w-4/5 object-contain " 
                 />
               </div>
               <motion.div 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 "use client";
@@ -20,7 +21,6 @@ export default function AdminSliderPage() {
 
   const API = "http://localhost:5000/api/v1/slider";
 
-  // 🔄 Fetch Sliders (SAFE)
   const fetchSliders = async () => {
     try {
       const res = await fetch(`${API}/get-slider`);

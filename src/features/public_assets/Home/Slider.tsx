@@ -55,7 +55,7 @@ export default function Slider() {
                 transition={{ duration: 5, ease: "linear" }}
                 src={item.image}
                 alt="Slider Image"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover "
               />
 
               <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent flex items-center">
