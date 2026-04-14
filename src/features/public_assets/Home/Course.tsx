@@ -10,8 +10,8 @@ import {
   Users, 
   Sparkles, 
   ArrowRight, 
+  Play, 
   Layers,
-  Play,
 } from 'lucide-react';
 
 const Course = () => {
@@ -56,7 +56,7 @@ const Course = () => {
 
             <div className="aspect-video w-full rounded-3xl overflow-hidden bg-black shadow-2xl">
               <video
-                src="https://www.youtube.com/watch?v=GoXElYnkgtE"
+                src="/videos/intro.mp4"
                 className="w-full h-full"
                 controls
                 autoPlay
