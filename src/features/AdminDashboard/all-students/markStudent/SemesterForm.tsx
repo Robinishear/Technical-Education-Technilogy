@@ -40,7 +40,7 @@ export default function SemesterForm({
               <th className="p-2 border-b-2 border-zinc-800">Practical</th>
               <th className="p-2 border-b-2 border-zinc-800">Viva</th>
               <th className="p-2 border-b-2 border-zinc-800 bg-blue-700 italic">Total</th>
-              <th className="p-2 border-b-2 border-zinc-800">GP</th>
+              <th className="p-2 border-b-2 border-zinc-800">CGPA</th>
               <th className="p-2 border-b-2 border-zinc-800">Grade</th>
               <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]">Written(T)</th>
               <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]">Practical(T)</th>

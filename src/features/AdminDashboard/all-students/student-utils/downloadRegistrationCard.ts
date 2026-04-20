@@ -63,7 +63,7 @@ export async function downloadRegistrationCard(student: {
   pdf.setTextColor(0, 0, 0);
 
   const fields: [string, number, number][] = [
-    [student.studentId ?? "",                                                       370, 295],
+    [student.studentId ?? "",                                                        370, 295],
     [student.institute ?? "",                                                        340, 335],
     [student.name ?? "",                                                             310, 375],
     [student.fatherName ?? "",                                                       310, 415],
@@ -94,7 +94,6 @@ export async function downloadRegistrationCard(student: {
 
       pdf.addImage(photoDataUrl, "JPEG", 650, 320, 100, 120);
     } catch {
-      // photo না থাকলে skip
     }
   }
 

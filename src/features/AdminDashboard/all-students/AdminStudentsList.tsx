@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -9,6 +10,7 @@ import {
   Trash2, Pencil, ChevronLeft, ChevronRight,
   Download,
   SquarePen,
+  Fullscreen,
 } from "lucide-react";
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
@@ -18,6 +20,7 @@ import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCa
 import { Certificate } from "./student-utils/Certificate";
 import { Meta, Student } from "./type-utils";
 import MarkStudent from "./markStudent/MarkStudent";
+import ViewMarks from "./markStudent/ViewMarks";
 
 
 //  Mobile Card Component
@@ -179,7 +182,6 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
       gender: student.gender,
       educationQualification: student.educationQualification,
       institute: student.institute,
-      // photoUrl: student.picture,
     })}
     className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
   >
@@ -216,6 +218,8 @@ export default function AdminStudentsList() {
   const [meta, setMeta] = useState<Meta>({ total: 0, totalPages: 1, page: 1, limit: 10 });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchRoll, setSearchRoll] = useState("");
+  const [viewingStudent, setViewingStudent] = useState<any>(null);
+
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -389,7 +393,10 @@ const handleMarkUpdated = () => {
                       >
                         <SquarePen size={13} className="text-blue-400" />
                       </button>
-              
+              <button className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
+              onClick={() => setViewingStudent(student)}>
+  <Fullscreen size={13} />
+</button>
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
                         onClick={() => handleDelete(student.id)}
@@ -467,7 +474,13 @@ const handleMarkUpdated = () => {
     onUpdated={handleMarkUpdated}
   />
 )};
-
+{viewingStudent && (
+  <ViewMarks
+    studentId={viewingStudent.id}
+    student={viewingStudent}
+    onClose={() => setViewingStudent(null)}
+  />
+)}
     </div>
   );
 }

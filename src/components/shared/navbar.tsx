@@ -66,7 +66,7 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-2">
           {PUBLIC_NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
             return (
