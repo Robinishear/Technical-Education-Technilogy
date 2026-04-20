@@ -137,7 +137,7 @@ export default function UsersTable() {
                         onClick={() => block.mutate(user.id)}
                         className="p-2 rounded-lg border border-red-200 hover:bg-red-50 text-red-400"
                       >
-                        <Ban size={15} />
+                        <Check size={15} />
                       </button>
                     )}
 {user.status === "BLOCKED" && (
@@ -145,7 +145,7 @@ export default function UsersTable() {
     onClick={() => unblock.mutate(user.id)}
     className="p-2 rounded-lg border border-green-200 hover:bg-green-50 text-green-500"
   >
-    <Check size={15} />
+    < Ban size={15} />
   </button>
 )}
                     {/* Delete */}

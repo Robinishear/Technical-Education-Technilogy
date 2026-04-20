@@ -16,23 +16,9 @@ import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
 import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
 import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
 import { Certificate } from "./student-utils/Certificate";
+import { Meta, Student } from "./type-utils";
 import MarkStudent from "./markStudent/MarkStudent";
-interface Student {
-  id: string; name: string; email: string; picture: string; fatherName: string;
-  motherName: string; dob: string; gender: string; passport: string;
-  guardianPhone: string; studentAddress: string; district: string;
-  thana: string; duration: string; year1: string; month1: string;
-  year2: string; month2: string; educationQualification: string;
-  institute: string; directorName: string; issueDate: string;
-  expireDate: string; studentId: string; roll: string; regNumber: string;
-}
 
-interface Meta {
-  total: number;
-  totalPages: number;
-  page: number;
-  limit: number;
-}
 
 //  Mobile Card Component
 const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: { 
@@ -271,7 +257,9 @@ export default function AdminStudentsList() {
   const handleUpdated = (updated: Student) => {
     setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
   };
-
+const handleMarkUpdated = () => {
+  setMarkStudent(null);
+};
   if (isLoading) return (
     <div className="flex flex-col justify-center items-center h-[60vh] gap-3">
       <Loader2 className="animate-spin text-amber-500" size={44} />
@@ -469,13 +457,16 @@ export default function AdminStudentsList() {
           onUpdated={handleUpdated}
         />
       )};
-      {markStudent && (
+
+{markStudent && (
   <MarkStudent
     student={markStudent}
+        studentId={markStudent.id} 
+
     onClose={() => setMarkStudent(null)}
-    onUpdated={handleUpdated}
+    onUpdated={handleMarkUpdated}
   />
-)}
+)};
 
     </div>
   );
