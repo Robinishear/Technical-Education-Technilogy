@@ -1,10 +1,10 @@
 import { 
   LayoutDashboard, Users, BookOpen,  
   Settings, Bell, MessageSquare, ShieldCheck, 
-  GraduationCap, History, FileText, Home, 
+  GraduationCap, History, FileText,  
   Images,
-  Webhook,
-  UserCheck
+  UserCheck,
+  Webhook
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
@@ -31,7 +31,7 @@ export const USER_NAV_LINKS = [
 ];
 
 export const PUBLIC_NAV_LINKS = [
-  { label: "Home", href: "/", icon: Home },
+  { label: "Home", href: "/",  },
   { label: "Our Courses", href: "/courses", icon: BookOpen },
   { label: "About Us", href: "/about", icon: FileText },
   { label: "All Branches", href: "/AllBranches", icon: Webhook },
