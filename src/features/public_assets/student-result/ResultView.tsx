@@ -8,23 +8,21 @@ export default function ResultView({ result }: { result: any }) {
     <div className="space-y-6 w-full font-mono">
 
       {/* Student Profile */}
-      <div className="relative overflow-hidden rounded-2xl border border-blue-900/40 bg-gradient-to-br from-[#0f1f5c] via-[#1a2d7a] to-[#0f172a] shadow-2xl">
-        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl border  bg-linear-to-br dark-bg-white bg-white dark:bg-white/5 shadow-sm">    
         <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-indigo-500/10 blur-2xl pointer-events-none" />
 
         <div className="relative px-4 sm:px-6 py-4 sm:py-5 border-b border-white/10 flex items-center gap-3">
           <div className="w-2 h-8 rounded-full bg-blue-400 shrink-0" />
-          <h2 className="text-base sm:text-lg font-black uppercase tracking-[0.2em] text-white">
+          <h2 className="text-base sm:text-lg font-black uppercase tracking-[0.2em] ">
             Student Profile
           </h2>
         </div>
 
-  {/* hu */}
-        <div className="relative p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-5">
+        <div className="relative p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-5 ">
           <Field label="Full Name" value={result.name} highlight />
           <Field label="Student ID" value={result.studentId} highlight />
           <Field label="Roll No." value={result.roll} highlight />
-          <Field label="Registration" value={result.regNumber} />
+          <Field  label="Registration" value={result.regNumber} />
           <Field label="Father's Name" value={result.fatherName} />
           <Field label="Mother's Name" value={result.motherName} />
           <Field label="Gender" value={result.gender} />
@@ -42,7 +40,8 @@ export default function ResultView({ result }: { result: any }) {
       {/* No marks */}
       {marks.length === 0 && (
         <div className="text-center py-16 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest text-sm">
-          কোনো Result পাওয়া যায়নি
+
+No results found.
         </div>
       )}
 
@@ -89,7 +88,7 @@ export default function ResultView({ result }: { result: any }) {
                 <thead>
                   <tr className="bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-300 uppercase font-black tracking-widest text-[9px]">
                     <th className="px-3 py-2 text-left border-b border-r border-slate-200 dark:border-slate-600">Code</th>
-                    <th className="px-3 py-2 text-left border-b border-r border-slate-200 dark:border-slate-600 min-w-[140px]">Subject</th>
+                    <th className="px-3 py-2 text-left border-b border-r border-slate-200 dark:border-slate-600 min-w-35">Subject</th>
                     <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">CR</th>
                     <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">W</th>
                     <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">P</th>
@@ -158,7 +157,7 @@ function Field({ label, value, highlight }: { label: string; value?: string | nu
       <span className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-300/70">
         {label}
       </span>
-      <span className={`leading-tight break-words ${highlight ? "text-white font-black text-sm sm:text-base" : "text-slate-300 font-semibold text-xs sm:text-sm"}`}>
+      <span className={`leading-tight wrap-break-word ${highlight ? "text-white font-black text-sm sm:text-base" : "text-slate-300 font-semibold text-xs sm:text-sm"}`}>
         {value || "—"}
       </span>
     </div>
