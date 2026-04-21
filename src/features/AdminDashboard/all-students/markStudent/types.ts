@@ -7,6 +7,7 @@ export interface SubjectPayload {
   practical: number;
   viva: number;
   totalMarks: number;
+  fullMark: number;
   gradePoint: number;
   grade: string;
 }
@@ -44,6 +45,7 @@ export interface Subject {
   practical: number;
   viva: number;
   totalMarks: number;
+  fullMark: number;
   gradePoint: number;
   grade: string;
   markId: string;

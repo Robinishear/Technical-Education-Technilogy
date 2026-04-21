@@ -24,6 +24,7 @@ function createInitialSubjects() {
     gp: 0,
     cgp: 0,
     grade: "",
+    fullMark: 0,
   }));
 }
 
@@ -67,7 +68,10 @@ export default function MarkStudent({
   };
 
   const getSemesterSummary = (subjects: any[]) => {
-    let totalWritten = 0, totalPractical = 0, totalViva = 0, totalCredit = 0, totalPoints = 0;
+   // ঠিক — একবারেই সব declare করো
+let totalWritten = 0, totalPractical = 0, totalViva = 0, 
+    totalCredit = 0, totalPoints = 0, totalFullMark = 0; 
+
     let hasFailed = false;
     subjects.filter(s => s.code.trim() !== "").forEach(sub => {
       totalWritten += parseFloat(sub.w) || 0;
@@ -75,12 +79,14 @@ export default function MarkStudent({
       totalViva += parseFloat(sub.v) || 0;
       totalCredit += parseFloat(sub.credit) || 0;
       totalPoints += parseFloat(sub.cgp) || 0;
+          totalFullMark += parseFloat(String(sub.fullMark)) || 0; // ✅ যোগ করো
+
       if (sub.grade === "F") hasFailed = true;
     });
     const calculatedCgpa = totalCredit > 0 ? parseFloat((totalPoints / totalCredit).toFixed(2)) : 0.00;
     const cgpa = isNaN(calculatedCgpa) ? 0.00 : calculatedCgpa;
     const finalGrade = hasFailed ? "FAIL" : getSemesterGrade(cgpa);
-    return { totalWritten, totalPractical, totalViva, totalMarks: totalWritten + totalPractical + totalViva, totalCredit, totalPoints: parseFloat(totalPoints.toFixed(2)), cgpa, finalGrade };
+    return { totalWritten, totalPractical, totalViva,totalFullMark, totalMarks: totalWritten + totalPractical + totalViva, totalCredit, totalPoints: parseFloat(totalPoints.toFixed(2)), cgpa, finalGrade };
   };
 
   const handleTitleChange = (semIdx: number, value: string) => {
@@ -121,13 +127,13 @@ export default function MarkStudent({
             totalMarks: Number(s.marks) || 0,
             gradePoint: Number(s.gp) || 0,
             grade: s.grade || "N/A",
+            fullMark: Number(s.fullMark) || 0, 
           })),
         };
         await saveMarksAction(studentId, payload);
       }
       toast.success("All Results Saved Successfully!");
       onUpdated?.();
-      //  onClose() নেই — form clear হবে না
     } catch (error: any) {
       toast.error(error?.message || error?.error || "Failed to save data");
     } finally {
