@@ -4,7 +4,8 @@ import {
   GraduationCap, History, FileText,  
   Images,
   UserCheck,
-  Webhook
+  Webhook,
+  Home
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
@@ -31,7 +32,7 @@ export const USER_NAV_LINKS = [
 ];
 
 export const PUBLIC_NAV_LINKS = [
-  { label: "Home", href: "/",  },
+  { label: "Home", href: "/", icon: Home },
   { label: "Our Courses", href: "/courses", icon: BookOpen },
   { label: "About Us", href: "/about", icon: FileText },
   { label: "All Branches", href: "/AllBranches", icon: Webhook },
