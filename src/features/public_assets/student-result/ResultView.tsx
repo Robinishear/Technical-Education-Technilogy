@@ -19,7 +19,7 @@ export default function ResultView({ result }: { result: any }) {
           </h2>
         </div>
 
-  
+  {/* hu */}
         <div className="relative p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-5">
           <Field label="Full Name" value={result.name} highlight />
           <Field label="Student ID" value={result.studentId} highlight />
