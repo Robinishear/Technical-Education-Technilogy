@@ -4,8 +4,8 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { 
-  Loader2, Eye, Phone, Hash, User, 
+import {
+  Loader2, Eye, Phone, Hash, User,
   MapPin, BookOpen, Calendar, ShieldCheck, X,
   Trash2, Pencil, ChevronLeft, ChevronRight,
   Download,
@@ -24,8 +24,8 @@ import ViewMarks from "./markStudent/ViewMarks";
 
 
 //  Mobile Card Component
-const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: { 
-  student: Student; 
+const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: {
+  student: Student;
   onView: (s: Student) => void;
   onEdit: (s: Student) => void;
   onDelete: (id: string) => void;
@@ -51,8 +51,8 @@ const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: {
       </div>
     </div>
     <div className="grid grid-cols-2 gap-3 text-[11px] text-stone-500 bg-stone-50 p-3 rounded-xl border border-stone-100">
-      <div className="flex items-center gap-1.5"><Hash size={11} className="text-amber-500"/> Roll: {student.roll}</div>
-      <div className="flex items-center gap-1.5"><Phone size={11} className="text-amber-500"/> {student.guardianPhone}</div>
+      <div className="flex items-center gap-1.5"><Hash size={11} className="text-amber-500" /> Roll: {student.roll}</div>
+      <div className="flex items-center gap-1.5"><Phone size={11} className="text-amber-500" /> {student.guardianPhone}</div>
     </div>
   </div>
 );
@@ -85,7 +85,7 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-amber-600 font-black uppercase text-[10px] tracking-widest border-b border-amber-100 pb-2"><BookOpen size={13}/> Academic Profile</h4>
+            <h4 className="flex items-center gap-2 text-amber-600 font-black uppercase text-[10px] tracking-widest border-b border-amber-100 pb-2"><BookOpen size={13} /> Academic Profile</h4>
             <DataRow label="Institute" value={student.institute} />
             <DataRow label="Qualification" value={student.educationQualification} />
             <DataRow label="Director" value={student.directorName} />
@@ -93,7 +93,7 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
             <DataRow label="Session" value={`${student.month1}/${student.year1} - ${student.month2}/${student.year2}`} />
           </div>
           <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-blue-500 font-black uppercase text-[10px] tracking-widest border-b border-blue-100 pb-2"><User size={13}/> Personal & Family</h4>
+            <h4 className="flex items-center gap-2 text-blue-500 font-black uppercase text-[10px] tracking-widest border-b border-blue-100 pb-2"><User size={13} /> Personal & Family</h4>
             <DataRow label="Father's Name" value={student.fatherName} />
             <DataRow label="Mother's Name" value={student.motherName} />
             <DataRow label="Date of Birth" value={student.dob} />
@@ -101,14 +101,14 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
             <DataRow label="Passport/NID" value={student.passport} />
           </div>
           <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-rose-500 font-black uppercase text-[10px] tracking-widest border-b border-rose-100 pb-2"><MapPin size={13}/> Location & Contact</h4>
+            <h4 className="flex items-center gap-2 text-rose-500 font-black uppercase text-[10px] tracking-widest border-b border-rose-100 pb-2"><MapPin size={13} /> Location & Contact</h4>
             <DataRow label="Phone" value={student.guardianPhone} highlight />
             <DataRow label="District" value={student.district} />
             <DataRow label="Thana" value={student.thana} />
             <DataRow label="Address" value={student.studentAddress} />
           </div>
           <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-emerald-600 font-black uppercase text-[10px] tracking-widest border-b border-emerald-100 pb-2"><Calendar size={13}/> Validity Dates</h4>
+            <h4 className="flex items-center gap-2 text-emerald-600 font-black uppercase text-[10px] tracking-widest border-b border-emerald-100 pb-2"><Calendar size={13} /> Validity Dates</h4>
             <DataRow label="Issue Date" value={student.issueDate} />
             <DataRow label="Expire Date" value={student.expireDate} />
             <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
@@ -118,82 +118,82 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
           </div>
         </div>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
-{/*1 downloadAdmitCard */}
-  <button
-    onClick={() => downloadAdmitCard({
-      studentId: student.studentId,
-      name: student.name,
-      fatherName: student.fatherName,
-      motherName: student.motherName,
-      dob: student.dob,
-      month1: student.month1,
-      year1: student.year1,
-      month2: student.month2,
-      year2: student.year2,
-      roll: student.roll,
-      regNumber: student.regNumber,
-      gender: student.gender,
-      educationQualification: student.educationQualification,
-      institute: student.institute,
-      photoUrl: student.picture,
-    })}
-    className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
-  >
-    <Download size={15} /> Download Admit Card
-  </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+          {/*1 downloadAdmitCard */}
+          <button
+            onClick={() => downloadAdmitCard({
+              studentId: student.studentId,
+              name: student.name,
+              fatherName: student.fatherName,
+              motherName: student.motherName,
+              dob: student.dob,
+              month1: student.month1,
+              year1: student.year1,
+              month2: student.month2,
+              year2: student.year2,
+              roll: student.roll,
+              regNumber: student.regNumber,
+              gender: student.gender,
+              educationQualification: student.educationQualification,
+              institute: student.institute,
+              photoUrl: student.picture,
+            })}
+            className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+          >
+            <Download size={15} /> Download Admit Card
+          </button>
 
-  <button
-    onClick={() => downloadRegistrationCard({
-      studentId: student.studentId,
-      name: student.name,
-      fatherName: student.fatherName,
-      motherName: student.motherName,
-      dob: student.dob,
-      month1: student.month1,
-      year1: student.year1,
-      month2: student.month2,
-      year2: student.year2,
-      roll: student.roll,
-      regNumber: student.regNumber,
-      gender: student.gender,
-      educationQualification: student.educationQualification,
-      institute: student.institute,
-      photoUrl: student.picture,
-    })}
-    className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
-  >
-    <Download size={15} /> download Reg Card
-  </button>
+          <button
+            onClick={() => downloadRegistrationCard({
+              studentId: student.studentId,
+              name: student.name,
+              fatherName: student.fatherName,
+              motherName: student.motherName,
+              dob: student.dob,
+              month1: student.month1,
+              year1: student.year1,
+              month2: student.month2,
+              year2: student.year2,
+              roll: student.roll,
+              regNumber: student.regNumber,
+              gender: student.gender,
+              educationQualification: student.educationQualification,
+              institute: student.institute,
+              photoUrl: student.picture,
+            })}
+            className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+          >
+            <Download size={15} /> download Reg Card
+          </button>
 
-<button
-    onClick={() => Certificate({
-      studentId: student.studentId,
-      name: student.name,
-      fatherName: student.fatherName,
-      motherName: student.motherName,
-      dob: student.dob,
-      month1: student.month1,
-      year1: student.year1,
-      month2: student.month2,
-      year2: student.year2,
-      roll: student.roll,
-      regNumber: student.regNumber,
-      gender: student.gender,
-      educationQualification: student.educationQualification,
-      institute: student.institute,
-    })}
-    className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
-  >
-    <Download size={15} /> Certificate
-</button>
-  <button
-    className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
-    onClick={onClose}
-  >
-    Close Profile
-  </button>
-</div>
+          <button
+            onClick={() => Certificate({
+              studentId: student.studentId,
+              name: student.name,
+              fatherName: student.fatherName,
+              motherName: student.motherName,
+              dob: student.dob,
+              month1: student.month1,
+              year1: student.year1,
+              month2: student.month2,
+              year2: student.year2,
+              roll: student.roll,
+              regNumber: student.regNumber,
+              gender: student.gender,
+              educationQualification: student.educationQualification,
+              institute: student.institute,
+            })}
+            className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+          >
+            <Download size={15} /> Certificate
+          </button>
+          <button
+            className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
+            onClick={onClose}
+          >
+            Close Profile
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -213,7 +213,7 @@ export default function AdminStudentsList() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  const [markStudent, setMarkStudent] = useState<Student | null>(null);     
+  const [markStudent, setMarkStudent] = useState<Student | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [meta, setMeta] = useState<Meta>({ total: 0, totalPages: 1, page: 1, limit: 10 });
   const [currentPage, setCurrentPage] = useState(1);
@@ -237,8 +237,8 @@ export default function AdminStudentsList() {
   }, [currentPage]);
 
   const filteredStudents = students.filter((s) =>
-  s.roll.toLowerCase().includes(searchRoll.toLowerCase())
-);
+    s.roll.toLowerCase().includes(searchRoll.toLowerCase())
+  );
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this student?")) return;
@@ -261,9 +261,9 @@ export default function AdminStudentsList() {
   const handleUpdated = (updated: Student) => {
     setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
   };
-const handleMarkUpdated = () => {
-  setMarkStudent(null);
-};
+  const handleMarkUpdated = () => {
+    setMarkStudent(null);
+  };
   if (isLoading) return (
     <div className="flex flex-col justify-center items-center h-[60vh] gap-3">
       <Loader2 className="animate-spin text-amber-500" size={44} />
@@ -273,38 +273,38 @@ const handleMarkUpdated = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 bg-stone-50 dark:bg-gray-900 min-h-screen">
-    
-<header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-5">
 
-  {/* LEFT SIDE (TITLE + COUNT) */}
-  <div className="flex flex-col">
-    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight dark:text-white text-stone-800">
-      Student Directory
-    </h2>
+      <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-5">
 
-    <p className="text-stone-400 text-sm font-medium mt-2">
-      {meta.total} records found
-    </p>
-  </div>
+        {/* LEFT SIDE (TITLE + COUNT) */}
+        <div className="flex flex-col">
+          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight dark:text-white text-stone-800">
+            Student Directory
+          </h2>
 
-  <input
-    type="text"
-    placeholder="Search by Roll No..."
-    value={searchRoll}
-    onChange={(e) => setSearchRoll(e.target.value)}
-    className="border border-stone-200 rounded-xl px-4 py-2 text-sm 
+          <p className="text-stone-400 text-sm font-medium mt-2">
+            {meta.total} records found
+          </p>
+        </div>
+
+        <input
+          type="text"
+          placeholder="Search by Roll No..."
+          value={searchRoll}
+          onChange={(e) => setSearchRoll(e.target.value)}
+          className="border border-stone-200 rounded-xl px-4 py-2 text-sm 
     focus:outline-none focus:ring-1 focus:ring-amber-400 
     transition-all w-full md:w-64"
-  />
+        />
 
-  <div className="bg-white border dark:bg-gray-800 border-stone-200 shadow-sm px-5 py-2 rounded-xl 
+        <div className="bg-white border dark:bg-gray-800 border-stone-200 shadow-sm px-5 py-2 rounded-xl 
   text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
 
-    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
-    Database Online
-  </div>
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
+          Database Online
+        </div>
 
-</header>
+      </header>
 
       {/* 📱 Mobile View */}
       <div className="md:hidden space-y-3">
@@ -361,7 +361,7 @@ const handleMarkUpdated = () => {
                   </td>
                   <td className="px-6 py-4 text-stone-600 text-xs">
                     <div className="flex items-center gap-1">
-                      <Phone size={11} className="text-amber-500"/> {student.guardianPhone}
+                      <Phone size={11} className="text-amber-500" /> {student.guardianPhone}
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -377,7 +377,7 @@ const handleMarkUpdated = () => {
                       >
                         <Eye size={14} className="text-stone-500 group-hover:text-amber-500" />
                       </button>
-                {/* Edit data */}
+                      {/* Edit data */}
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
                         onClick={() => setEditingStudent(student)}
@@ -385,18 +385,18 @@ const handleMarkUpdated = () => {
                       >
                         <Pencil size={13} className="text-blue-400" />
                       </button>
-                 {/* Edit Mark */}
-                       <button
+                      {/* Edit Mark */}
+                      <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
                         onClick={() => setMarkStudent(student)}
                         title="Edit"
                       >
                         <SquarePen size={13} className="text-blue-400" />
                       </button>
-              <button className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
-              onClick={() => setViewingStudent(student)}>
-  <Fullscreen size={13} />
-</button>
+                      <button className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
+                        onClick={() => setViewingStudent(student)}>
+                        <Fullscreen size={13} />
+                      </button>
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
                         onClick={() => handleDelete(student.id)}
@@ -433,11 +433,10 @@ const handleMarkUpdated = () => {
           {Array.from({ length: meta.totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
-              className={`h-8 w-8 rounded-lg text-xs font-bold border transition-colors ${
-                currentPage === page
+              className={`h-8 w-8 rounded-lg text-xs font-bold border transition-colors ${currentPage === page
                   ? "bg-amber-500 text-white border-amber-500 shadow-sm"
                   : "bg-white text-stone-500 border-stone-200 hover:bg-stone-50"
-              }`}
+                }`}
               onClick={() => setCurrentPage(page)}
             >
               {page}
@@ -465,22 +464,22 @@ const handleMarkUpdated = () => {
         />
       )};
 
-{markStudent && (
-  <MarkStudent
-    student={markStudent}
-        studentId={markStudent.id} 
+      {markStudent && (
+        <MarkStudent
+          student={markStudent}
+          studentId={markStudent.id}
 
-    onClose={() => setMarkStudent(null)}
-    onUpdated={handleMarkUpdated}
-  />
-)};
-{viewingStudent && (
-  <ViewMarks
-    studentId={viewingStudent.id}
-    student={viewingStudent}
-    onClose={() => setViewingStudent(null)}
-  />
-)}
+          onClose={() => setMarkStudent(null)}
+          onUpdated={handleMarkUpdated}
+        />
+      )};
+      {viewingStudent && (
+        <ViewMarks
+          studentId={viewingStudent.id}
+          student={viewingStudent}
+          onClose={() => setViewingStudent(null)}
+        />
+      )}
     </div>
   );
 }

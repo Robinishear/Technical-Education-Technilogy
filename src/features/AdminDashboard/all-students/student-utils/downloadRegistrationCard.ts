@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { default as  jspdf} from "jspdf";
+import { default as jspdf } from "jspdf";
+import QRCode from "qrcode";
 
 export async function downloadRegistrationCard(student: {
   studentId?: string;
@@ -20,7 +20,6 @@ export async function downloadRegistrationCard(student: {
   institute?: string;
   photoUrl?: string;
 }) {
-  // Next.js dynamic import — browser only
   const { default: jsPDF } = await import("jspdf");
 
   const pdf = new jsPDF({
@@ -29,7 +28,6 @@ export async function downloadRegistrationCard(student: {
     format: [794, 1123],
   });
 
-  // Helper: Image load করো
   const loadImage = (src: string): Promise<HTMLImageElement> =>
     new Promise((resolve) => {
       const img = new Image();
@@ -39,48 +37,53 @@ export async function downloadRegistrationCard(student: {
       img.src = src;
     });
 
-  // Helper: Image → base64 dataURL
   const imageToDataURL = (img: HTMLImageElement): string => {
     const canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth || 304;
-    canvas.height = img.naturalHeight || 523;
+    canvas.width = img.naturalWidth || 300;
+    canvas.height = img.naturalHeight || 300;
     const ctx = canvas.getContext("2d")!;
     ctx.drawImage(img, 0, 0);
     return canvas.toDataURL("image/png");
   };
 
-  // ১. Background template
   try {
     const templateImg = await loadImage("/Reg.png");
     const templateDataUrl = imageToDataURL(templateImg);
     pdf.addImage(templateDataUrl, "PNG", 0, 0, 794, 1123);
-  } catch {
-  }
+  } catch {}
 
-  // ২. Text fields
-  pdf.setFont("times", "normal");
-  pdf.setFontSize(14);
+  pdf.setFont("times", "bold");
+  pdf.setFontSize(16);
   pdf.setTextColor(0, 0, 0);
 
-  const fields: [string, number, number][] = [
-    [student.studentId ?? "",                                                        370, 295],
-    [student.institute ?? "",                                                        340, 335],
-    [student.name ?? "",                                                             310, 375],
-    [student.fatherName ?? "",                                                       310, 415],
-    [student.motherName ?? "",                                                       310, 455],
-    [student.dob ?? "",                                                              310, 495],
-    [`${student.month1 ?? ""} ${student.year1 ?? ""} - ${student.month2 ?? ""} ${student.year2 ?? ""}`, 310, 535],
-    [student.roll ?? "",                                                             310, 575],
-    [student.regNumber ?? "",                                                        310, 615],
-    [student.gender ?? "",                                                           310, 655],
-    [student.educationQualification ?? "",                                           310, 695],
-  ];
+  const labelX = 140;
+  const valueX = 280;
+  let currentY = 380;
+  const rowGap = 32;
 
-  for (const [text, x, y] of fields) {
-    pdf.text(text, x, y);
-  }
+  const drawField = (label: string, value: string) => {
+    pdf.setFont("times", "bold");
+    pdf.text(label, labelX, currentY);
+    pdf.text(":", valueX - 20, currentY);
+    pdf.setFont("times", "normal");
+    pdf.text(value || "N/A", valueX, currentY);
+    currentY += rowGap;
+  };
 
-  // ৩. Student photo
+  const formattedDob = student.dob ? new Date(student.dob).toLocaleDateString() : "N/A";
+
+  drawField("Student ID", student.studentId!);
+  drawField("Name of Student", student.name!.toUpperCase());
+  drawField("Father's Name", student.fatherName!);
+  drawField("Mother's Name", student.motherName!);
+  drawField("Date of Birth", formattedDob);
+  drawField("Session", `${student.month1} ${student.year1} - ${student.month2} ${student.year2}`);
+  drawField("Roll Number", student.roll!);
+  drawField("Registration No", student.regNumber!);
+  drawField("Gender", student.gender!);
+  drawField("Qualification", student.educationQualification!);
+  drawField("Institute", student.institute || "N/A");
+
   if (student.photoUrl) {
     try {
       const res = await fetch(
@@ -92,11 +95,25 @@ export async function downloadRegistrationCard(student: {
       const photoDataUrl = imageToDataURL(photoImg);
       URL.revokeObjectURL(objectUrl);
 
-      pdf.addImage(photoDataUrl, "JPEG", 650, 320, 100, 120);
-    } catch {
-    }
+      pdf.setDrawColor(0);
+      pdf.setLineWidth(1);
+      pdf.rect(580, 320, 100, 120);
+      pdf.addImage(photoDataUrl, "JPEG", 582, 322, 96, 116);
+    } catch {}
   }
 
-  // ৪. PDF save/download
-  pdf.save(`admit_${student.name ?? "student"}.pdf`);
+  try {
+    const qrData = student.regNumber || "N/A";
+    const qrDataUrl = await QRCode.toDataURL(qrData, { 
+        margin: 1, 
+        width: 200,
+        color: {
+            dark: "#000000",
+            light: "#ffffff"
+        }
+    });
+    pdf.addImage(qrDataUrl, "PNG", 580, 450, 100, 100);
+  } catch (err) {}
+
+  pdf.save(`Registration_${student.name ?? "card"}.pdf`);
 }
