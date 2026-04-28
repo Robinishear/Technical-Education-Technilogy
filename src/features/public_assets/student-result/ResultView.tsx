@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSemesterGrade, Mark } from "@/features/AdminDashboard/all-students/markStudent/types";
 
@@ -5,179 +7,211 @@ export default function ResultView({ result }: { result: any }) {
   const marks: Mark[] = result.marks ?? [];
 
   return (
-    <div className="space-y-6 w-full font-mono">
+    <div className="w-full font-sans print-wrapper">
 
-      {/* Student Profile */}
-      <div className="relative overflow-hidden rounded-2xl border  bg-linear-to-br dark-bg-white bg-white dark:bg-white/5 shadow-sm">    
-        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-indigo-500/10 blur-2xl pointer-events-none" />
+      {/* Print Button */}
+      <div className="flex justify-end mb-4 print:hidden">
+        <button
+          onClick={() => window.print()}
+          className="bg-slate-900 text-white px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-slate-700 transition-all"
+        >
+          Print / Save PDF
+        </button>
+      </div>
 
-        <div className="relative px-4 sm:px-6 py-4 sm:py-5 border-b border-white/10 flex items-center gap-3">
-          <div className="w-2 h-8 rounded-full bg-blue-400 shrink-0" />
-          <h2 className="text-base sm:text-lg font-black uppercase tracking-[0.2em] ">
-            Student Profile
-          </h2>
+      {/* Result Sheet */}
+      <div
+        className="print-area border border-slate-300 rounded-lg overflow-hidden shadow-sm"
+        style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif" }}
+      >
+
+{/* Header */}
+<div style={{ borderBottom: "1px solid #cbd5e1", padding: "24px" }}>
+  <div
+    className="result-header" 
+    style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+  >
+          {/* <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}> */}
+            <img
+              src="https://i.ibb.co.com/r2dVnpdh/Screenshot-from-2026-03-04-16-25-16-removebg-preview.png"
+              alt="Logo"
+              style={{ width: 64, height: 64, objectFit: "contain" }}
+            />
+            <div style={{ flex: 1, textAlign: "center", padding: "0 16px" }}>
+              <p style={{ fontSize: 10, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
+                Government of the People's Republic of Bangladesh
+              </p>
+              <p style={{ fontSize: 16, fontWeight: 900, textTransform: "uppercase", margin: "4px 0 0" }}>
+                Bangladesh Technical Education Institute
+              </p>
+              <p style={{ fontSize: 22, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.15em", margin: "4px 0 0" }}>
+                RESULT SHEET
+              </p>
+            </div>
+            {result.picture ? (
+              <img
+                src={result.picture}
+                alt="Student"
+                style={{ width: 64, height: 80, objectFit: "cover", border: "2px solid #cbd5e1" }}
+              />
+            ) : (
+              <div style={{ width: 64, height: 80, border: "2px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase" }}>
+                Photo
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="relative p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-5 ">
-          <Field label="Full Name" value={result.name} highlight />
-          <Field label="Student ID" value={result.studentId} highlight />
-          <Field label="Roll No." value={result.roll} highlight />
-          <Field  label="Registration" value={result.regNumber} />
-          <Field label="Father's Name" value={result.fatherName} />
-          <Field label="Mother's Name" value={result.motherName} />
-          <Field label="Gender" value={result.gender} />
-          <Field label="Date of Birth" value={result.dob ? new Date(result.dob).toLocaleDateString("en-GB") : undefined} />
-          <Field label="Guardian Phone" value={result.guardianPhone} />
-          <Field label="Address" value={result.studentAddress} />
-          <Field label="District" value={result.district} />
-          <Field label="Duration" value={result.duration} />
-          <Field label="Education" value={result.educationQualification} />
-          <Field label="Institute" value={result.institute} />
-          <Field label="Director" value={result.directorName} />
+        {/* Student Info */}
+        <div style={{ padding: "16px 24px", borderBottom: "1px solid #cbd5e1" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+            <tbody>
+              <InfoRow label="Name of Student" value={result.name} />
+              <InfoRow label="Father's Name" value={result.fatherName} />
+              <InfoRow label="Mother's Name" value={result.motherName} />
+              <InfoRow label="Date of Birth" value={result.dob ? new Date(result.dob).toLocaleDateString("en-GB") : "—"} />
+              <InfoRow label="Institute Name" value={result.institute} />
+              <InfoRow label="Roll" value={result.roll} />
+              <InfoRow label="Registration No" value={result.regNumber} />
+              <InfoRow label="Course Duration" value={result.duration} />
+              <InfoRow label="Education" value={result.educationQualification} />
+              <InfoRow label="Director" value={result.directorName} />
+              <InfoRow label="District" value={result.district} />
+              <InfoRow
+                label="CGPA Result"
+                value={
+                  marks.length > 0
+                    ? getSemesterGrade(marks.reduce((acc, m) => acc + m.cgpa, 0) / marks.length)
+                    : "—"
+                }
+              />
+            </tbody>
+          </table>
+        </div>
+
+        {/* Semester Tables — 2 column */}
+        <div style={{ padding: "16px 24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            {marks.map((mark) => {
+              const totalCredit = mark.subjects.reduce((acc, s) => acc + s.credit, 0);
+              return (
+                <div key={mark.id} style={{ border: "1px solid #cbd5e1" }}>
+                  <div style={{ textAlign: "center", padding: "4px", borderBottom: "1px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+                    <p style={{ fontSize: 9, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#334155", margin: 0 }}>
+                      {mark.semesterTitle}
+                    </p>
+                  </div>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 9 }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+                        <th style={{ padding: "4px 6px", textAlign: "left", borderRight: "1px solid #e2e8f0", fontSize: 8, fontWeight: 900, textTransform: "uppercase", color: "#475569" }}>Code</th>
+                        <th style={{ padding: "4px 6px", textAlign: "left", borderRight: "1px solid #e2e8f0", fontSize: 8, fontWeight: 900, textTransform: "uppercase", color: "#475569" }}>Title</th>
+                        <th style={{ padding: "4px 6px", textAlign: "center", borderRight: "1px solid #e2e8f0", fontSize: 8, fontWeight: 900, textTransform: "uppercase", color: "#475569" }}>CR</th>
+                        <th style={{ padding: "4px 6px", textAlign: "center", borderRight: "1px solid #e2e8f0", fontSize: 8, fontWeight: 900, textTransform: "uppercase", color: "#475569" }}>Grade</th>
+                        <th style={{ padding: "4px 6px", textAlign: "center", fontSize: 8, fontWeight: 900, textTransform: "uppercase", color: "#475569" }}>GP</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mark.subjects.map((sub, idx) => (
+                        <tr key={idx} style={{ borderBottom: "1px solid #f1f5f9", backgroundColor: idx % 2 === 0 ? "#ffffff" : "#f8fafc" }}>
+                          <td style={{ padding: "3px 6px", borderRight: "1px solid #f1f5f9", color: "#64748b" }}>{sub.subjectCode}</td>
+                          <td style={{ padding: "3px 6px", borderRight: "1px solid #f1f5f9", fontWeight: 700, color: "#1e293b" }}>{sub.subjectName}</td>
+                          <td style={{ padding: "3px 6px", borderRight: "1px solid #f1f5f9", textAlign: "center" }}>{sub.credit}</td>
+                          <td style={{ padding: "3px 6px", borderRight: "1px solid #f1f5f9", textAlign: "center", fontWeight: 900, color: sub.grade === "F" ? "#ef4444" : "#1e293b" }}>{sub.grade}</td>
+                          <td style={{ padding: "3px 6px", textAlign: "center", fontWeight: 700 }}>{sub.gradePoint.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr style={{ borderTop: "1px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+                        <td colSpan={2} style={{ padding: "3px 6px", fontWeight: 900, fontSize: 8, textTransform: "uppercase", color: "#475569" }}>
+                          Total Credit: {totalCredit}
+                        </td>
+                        <td colSpan={2} style={{ padding: "3px 6px", textAlign: "right", fontWeight: 900, fontSize: 8, color: "#475569" }}>
+                          GPA:
+                        </td>
+                        <td style={{ padding: "3px 6px", textAlign: "center", fontWeight: 900, color: "#1e293b" }}>
+                          {mark.cgpa.toFixed(2)}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Footer Summary */}
+        {marks.length > 0 && (
+          <div style={{ padding: "12px 24px", borderTop: "1px solid #cbd5e1", backgroundColor: "#f8fafc", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#334155" }}>
+            <span>Total Credit: {marks.reduce((acc, m) => acc + m.totalCredit, 0)}</span>
+            <span>Credit Earned: {marks.reduce((acc, m) => acc + m.totalCredit, 0)}</span>
+            <span>CGPA: {(marks.reduce((acc, m) => acc + m.cgpa, 0) / marks.length).toFixed(2)}</span>
+          </div>
+        )}
+
+        {/* Note */}
+        <div style={{ padding: "10px 24px", borderTop: "1px solid #e2e8f0", textAlign: "center" }}>
+          <p style={{ fontSize: 9, color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
+            Note: This is a computer-generated marksheet and does not require any signature.
+          </p>
         </div>
       </div>
 
-      {/* No marks */}
-      {marks.length === 0 && (
-        <div className="text-center py-16 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest text-sm">
+  <style>{`
+  @media print {
+    .print\\:hidden { display: none !important; }
+    header, footer, nav { display: none !important; }
+    
+    @page { 
+      size: A4 portrait;
+      margin: 8mm;
+    }
+    
+    body { 
+      background: white !important; 
+    }
 
-No results found.
-        </div>
-      )}
+    .print-area > div > div > div {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
 
-      {/* Semester Results */}
-      {marks.map((mark, markIdx) => {
-        const hasFailed = mark.subjects.some(s => s.grade === "F");
-        const finalGrade = hasFailed ? "F" : getSemesterGrade(mark.cgpa);
-        const totalWritten = mark.subjects.reduce((acc, s) => acc + (s.written || 0), 0);
-        const totalPractical = mark.subjects.reduce((acc, s) => acc + (s.practical || 0), 0);
-        const totalViva = mark.subjects.reduce((acc, s) => acc + (s.viva || 0), 0);
-        const grandTotal = totalWritten + totalPractical + totalViva;
-        const totalFullMark = mark.subjects.reduce((acc, s) => acc + (s.fullMark || 0), 0);
+    .print-area > div > div {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 8px !important;
+    }
 
-        return (
-          <div key={mark.id} className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+    .print-area table {
+      font-size: 7px !important;
+    }
 
-            {/* Semester header */}
-            <div className="flex flex-wrap items-center justify-between gap-2 px-4 sm:px-5 py-3 bg-slate-900 dark:bg-slate-950 text-white">
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] font-black bg-blue-500 text-white px-2 py-0.5 rounded-full tracking-widest shrink-0">
-                  #{markIdx + 1}
-                </span>
-                <h3 className="text-xs sm:text-sm font-black uppercase tracking-widest">
-                  {mark.semesterTitle}
-                </h3>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                  CGPA: <span className="text-white">{mark.cgpa.toFixed(2)}</span>
-                </span>
-                <span className={`text-[10px] font-black px-3 py-1 rounded-full border tracking-widest ${
-                  finalGrade === "F" || finalGrade === "FAIL"
-                    ? "bg-red-500/20 text-red-400 border-red-500/30"
-                    : "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
-                }`}>
-                  {finalGrade}
-                </span>
-              </div>
-            </div>
-
-            {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-[11px] border-collapse">
-                <thead>
-                  <tr className="bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-300 uppercase font-black tracking-widest text-[9px]">
-                    <th className="px-3 py-2 text-left border-b border-r border-slate-200 dark:border-slate-600">Code</th>
-                    <th className="px-3 py-2 text-left border-b border-r border-slate-200 dark:border-slate-600 min-w-35">Subject</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">CR</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">W</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">P</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">V</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">Total</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">F.M</th>
-                    <th className="px-3 py-2 border-b border-r border-slate-200 dark:border-slate-600">GP</th>
-                    <th className="px-3 py-2 border-b border-slate-200 dark:border-slate-600">Grade</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mark.subjects.map((sub, idx) => (
-                    <tr key={idx} className={`border-b border-slate-100 dark:border-slate-700 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-700/40 ${
-                      idx % 2 === 0
-                        ? "bg-white dark:bg-slate-800"
-                        : "bg-slate-50/30 dark:bg-slate-700/20"
-                    }`}>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 font-bold text-slate-400 dark:text-slate-400">{sub.subjectCode}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-100 text-left">{sub.subjectName}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center text-slate-600 dark:text-slate-300">{sub.credit}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center text-slate-600 dark:text-slate-300">{sub.written}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center text-slate-600 dark:text-slate-300">{sub.practical}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center text-slate-600 dark:text-slate-300">{sub.viva}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center font-black text-blue-700 dark:text-blue-300 bg-blue-50/40 dark:bg-blue-900/20">{sub.totalMarks}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center font-bold text-purple-700 dark:text-purple-300 bg-purple-50/40 dark:bg-purple-900/20">{sub.fullMark}</td>
-                      <td className="px-3 py-2 border-r border-slate-100 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">{sub.gradePoint.toFixed(2)}</td>
-                      <td className={`px-3 py-2 text-center font-black ${sub.grade === "F" ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}>
-                        {sub.grade}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr className="bg-slate-900 dark:bg-slate-950 text-white text-[9px] font-black uppercase tracking-widest">
-                    <td colSpan={3} className="px-3 py-2 text-slate-400">Semester Total</td>
-                    <td className="px-3 py-2 text-center">{totalWritten}</td>
-                    <td className="px-3 py-2 text-center">{totalPractical}</td>
-                    <td className="px-3 py-2 text-center">{totalViva}</td>
-                    <td className="px-3 py-2 text-center text-blue-300">{grandTotal}</td>
-                    <td className="px-3 py-2 text-center text-purple-300">{totalFullMark}</td>
-                    <td className="px-3 py-2 text-center text-slate-400">—</td>
-                    <td className="px-3 py-2 text-center text-slate-400">—</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-
-            {/* Stat pills */}
-            <div className="px-4 sm:px-5 py-4 bg-slate-50 dark:bg-slate-700/30 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-2 sm:gap-3">
-              <Pill label="Credit" value={mark.totalCredit} color="slate" />
-              <Pill label="Points" value={mark.totalPoints.toFixed(2)} color="blue" />
-              <Pill label="CGPA" value={mark.cgpa.toFixed(2)} color="indigo" />
-              <Pill label="Full Mark" value={totalFullMark} color="purple" />
-              <Pill label="Grade" value={finalGrade} color={finalGrade === "F" || finalGrade === "FAIL" ? "red" : "green"} />
-            </div>
-          </div>
-        );
-      })}
+    .print-area .result-header {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+    .print-area {
+      width: 100% !important;
+    }
+  }
+`}</style>
     </div>
   );
 }
 
-function Field({ label, value, highlight }: { label: string; value?: string | null; highlight?: boolean }) {
+function InfoRow({ label, value }: { label: string; value?: string | null }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-300/70">
+    <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
+      <td style={{ padding: "4px 16px 4px 0", fontWeight: 700, color: "#475569", fontSize: 11, whiteSpace: "nowrap", width: 160 }}>
         {label}
-      </span>
-      <span className={`leading-tight wrap-break-word ${highlight ? "text-white font-black text-sm sm:text-base" : "text-slate-300 font-semibold text-xs sm:text-sm"}`}>
+      </td>
+      <td style={{ padding: "4px 0", color: "#1e293b", fontWeight: 600, fontSize: 11 }}>
         {value || "—"}
-      </span>
-    </div>
+      </td>
+    </tr>
   );
-}
-
-function Pill({ label, value, color }: { label: string; value: string | number; color: string }) {
-  const colors: Record<string, string> = {
-    slate:  "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600",
-    blue:   "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700",
-    indigo: "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-700",
-    purple: "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700",
-    green:  "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700",
-    red:    "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-700",
-  };
-
-  return (
-    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-widest ${colors[color]}`}>
-      <span className="opacity-60">{label}:</span>
-      <span>{value}</span>
-    </div>
-  );
-}
+};  
