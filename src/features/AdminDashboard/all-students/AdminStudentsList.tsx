@@ -15,12 +15,10 @@ import {
 import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
 
-import { downloadAdmitCard } from "./student-utils/downloadAdmitCard";
-import { downloadRegistrationCard } from "./student-utils/downloadRegistrationCard";
-import { Certificate } from "./student-utils/Certificate";
 import { Meta, Student } from "./type-utils";
 import MarkStudent from "./markStudent/MarkStudent";
 import ViewMarks from "./markStudent/ViewMarks";
+import { AdmitCardModal } from "./student-utils/AdmitCardModal";
 
 
 //  Mobile Card Component
@@ -58,7 +56,13 @@ const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: {
 );
 
 //  Full Detailed View Modal
-const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => void }) => (
+const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => void }) => {
+  const [showAdmit, setShowAdmit] = useState(false);
+  // const [showReg, setShowReg] = useState(false);
+  // const [showCertificate, setShowCertificate] = useState(false);
+    return (
+
+<>
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/30 backdrop-blur-sm p-4 animate-in fade-in duration-200">
     <div className="bg-white border border-stone-200 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl no-scrollbar relative">
       <button onClick={onClose} className="absolute top-5 right-5 p-2 bg-stone-100 hover:bg-stone-200 rounded-full transition-colors z-10 text-stone-500">
@@ -118,87 +122,52 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
-          {/*1 downloadAdmitCard */}
-          <button
-            onClick={() => downloadAdmitCard({
-              studentId: student.studentId,
-              name: student.name,
-              fatherName: student.fatherName,
-              motherName: student.motherName,
-              dob: student.dob,
-              month1: student.month1,
-              year1: student.year1,
-              month2: student.month2,
-              year2: student.year2,
-              roll: student.roll,
-              regNumber: student.regNumber,
-              gender: student.gender,
-              educationQualification: student.educationQualification,
-              institute: student.institute,
-              photoUrl: student.picture,
-            })}
-            className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
-          >
-            <Download size={15} /> Download Admit Card
-          </button>
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+              <button
+                onClick={() => setShowAdmit(true)}
+                className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+              >
+                <Download size={15} /> Admit Card
+              </button>
 
-          <button
-            onClick={() => downloadRegistrationCard({
-              studentId: student.studentId,
-              name: student.name,
-              fatherName: student.fatherName,
-              motherName: student.motherName,
-              dob: student.dob,
-              month1: student.month1,
-              year1: student.year1,
-              month2: student.month2,
-              year2: student.year2,
-              roll: student.roll,
-              regNumber: student.regNumber,
-              gender: student.gender,
-              educationQualification: student.educationQualification,
-              institute: student.institute,
-              photoUrl: student.picture,
-            })}
-            className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
-          >
-            <Download size={15} /> download Reg Card
-          </button>
+              <button
+                onClick={() => setShowReg(true)}
+                className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+              >
+                <Download size={15} /> Reg Card
+              </button>
 
-          <button
-            onClick={() => Certificate({
-              studentId: student.studentId,
-              name: student.name,
-              fatherName: student.fatherName,
-              motherName: student.motherName,
-              dob: student.dob,
-              month1: student.month1,
-              year1: student.year1,
-              month2: student.month2,
-              year2: student.year2,
-              roll: student.roll,
-              regNumber: student.regNumber,
-              gender: student.gender,
-              educationQualification: student.educationQualification,
-              institute: student.institute,
-            })}
-            className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
-          >
-            <Download size={15} /> Certificate
-          </button>
-          <button
-            className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
-            onClick={onClose}
-          >
-            Close Profile
-          </button>
+              <button
+                onClick={() => setShowCertificate(true)}
+                className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+              >
+                <Download size={15} /> Certificate
+              </button>
+
+              <button
+                className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
+                onClick={onClose}
+              >
+                Close Profile
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-);
+ {showAdmit && (
+        <AdmitCardModal student={student} onClose={() => setShowAdmit(false)} />
+      )}
 
+      {/* {showReg && (
+        <RegCardModal student={student} onClose={() => setShowReg(false)} />
+      )}
+
+      {showCertificate && (
+        <CertificateModal student={student} onClose={() => setShowCertificate(false)} />
+      )}  */}
+    </>
+  );
+};
 const DataRow = ({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) => (
   <div className="flex flex-col gap-0.5">
     <span className="text-[10px] text-stone-400 uppercase font-semibold tracking-wider">{label}</span>
