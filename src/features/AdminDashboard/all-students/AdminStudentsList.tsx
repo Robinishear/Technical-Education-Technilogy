@@ -18,8 +18,9 @@ import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
 import { Meta, Student } from "./type-utils";
 import MarkStudent from "./markStudent/MarkStudent";
 import ViewMarks from "./markStudent/ViewMarks";
-import { AdmitCardModal } from "./student-utils/AdmitCardModal";
-import { RegCardModal } from "./student-utils/RegCardModal";
+import { AdmitCardModal } from "./student-Print-PDF/AdmitCardModal";
+import { RegCardModal } from "./student-Print-PDF/RegCardModal";
+
 
 
 //  Mobile Card Component

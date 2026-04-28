@@ -1,6 +1,6 @@
 import { 
   LayoutDashboard, Users, BookOpen,  
-  Settings, Bell, MessageSquare, ShieldCheck, 
+   MessageSquare, ShieldCheck, 
   GraduationCap, History, FileText,  
   Images,
   UserCheck,
@@ -16,9 +16,7 @@ export const ADMIN_NAV_LINKS = [
   { label: "Slider ", href: "/admin-dashboard/Slider", icon: Images },
   { label: "users", href: "/admin-dashboard/users", icon: UserCheck },
   { label: "Contact Messages", href: "/admin-dashboard/ContactMessagesTable", icon: MessageSquare },
-  { label: "Site Settings", href: "/admin-dashboard/settings", icon: Settings },
-  { label: "Notifications", href: "/admin-dashboard/notices", icon: Bell },
-  { label: "Reports", href: "/admin-dashboard/reports", icon: FileText },
+
 ];
 
 export const USER_NAV_LINKS = [
