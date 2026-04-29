@@ -9,12 +9,12 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, CloudUpload, CheckCircle2 } from "lucide-react";
-
-import { createStudentSchema } from "./students.schema";
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
-import { IStudentFormInput } from "./students.type";
-import { addStudentSelfAction } from "./-actions";
-import { STUDENT_FORM_FIELDS } from "./student-form";
+import { IStudentFormInput } from "../students.type";
+import { createStudentSchema } from "../students.schema";
+import { addStudentSelfAction } from "../-actions";
+import { STUDENT_FORM_FIELDS } from "../student-form";
+
 
 export default function StudentAddForm() {
   const [preview, setPreview] = useState<string | null>(null);

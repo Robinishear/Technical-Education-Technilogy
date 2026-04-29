@@ -3,52 +3,13 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader2, Trash2, Pencil, Eye } from "lucide-react"; // Eye icon added 👁️
+import { Loader2, Trash2, Pencil, Eye } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-import { getStudentsAction, deleteStudentAction } from "./-actions";
-import StudentUpdateModal from "./StudentUpdateModal";
+import { deleteStudentAction, getStudentsAction } from "../-actions";
+import { Student } from "../students.type";
 import { showToast } from "@/core/utils/toast-messages";
-
-const ViewDetailsModal = ({ student, onClose }: { student: Student; onClose: () => void }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div className="bg-card border border-white/10 p-6 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-bold text-primary">Student Full Profile 👤</h3>
-        <Button variant="ghost" size="sm" onClick={onClose}>✕</Button>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div className="space-y-2">
-          <p><strong>Father&apos;s Name:</strong> {student.fatherName}</p>
-          <p><strong>Mother&apos;s Name:</strong> {student.motherName}</p>
-          <p><strong>Address:</strong> {student.studentAddress}</p>
-          <p><strong>Thana:</strong> {student.thana}</p>
-          <p><strong>Roll:</strong> {student.roll}</p>
-          <p><strong>Reg Number:</strong> {student.regNumber}</p>
-        </div>
-        <div className="space-y-2">
-          <p><strong>Institute:</strong> {student.institute}</p>
-          <p><strong>Director:</strong> {student.directorName}</p>
-          <p><strong>Start:</strong> {student.month1}/{student.year1}</p>
-          <p><strong>End:</strong> {student.month2}/{student.year2}</p>
-          <p><strong>Issue Date:</strong> {student.issueDate}</p>
-          <p><strong>Expire Date:</strong> {student.expireDate}</p>
-        </div>
-      </div>
-      <Button className="w-full mt-6" onClick={onClose}>Close</Button>
-    </div>
-  </div>
-);
-
-export interface Student {
-  id: string; name: string; email: string; picture: string; fatherName: string;
-  motherName: string; dob: string; gender: string; passport: string;
-  guardianPhone: string; studentAddress: string; district: string;
-  thana: string; duration: string; year1: string; month1: string;
-  year2: string; month2: string; educationQualification: string;
-  institute: string; directorName: string; issueDate: string;
-  expireDate: string; studentId: string; roll: string; regNumber: string;
-}
+import ViewDetailsModal from "./ViewDetailsModal";
+import StudentUpdateModal from "./StudentUpdateModal";
 
 export default function StudentsList() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -111,7 +72,14 @@ export default function StudentsList() {
               <tr key={student.id} className="border-t border-white/5 hover:bg-white/5 transition-colors">
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <img src={student.picture} alt="" className="h-9 w-9 rounded-full ring-2 ring-primary/20" />
+                    {/* <img src={student.picture} alt="" className="h-9 w-9 rounded-full ring-2 ring-primary/20" /> */}
+                    {student.picture ? (
+  <img src={student.picture} alt="" className="h-9 w-9 rounded-full ring-2 ring-primary/20 object-cover" />
+) : (
+  <div className="h-9 w-9 rounded-full ring-2 ring-primary/20 bg-primary/20 flex items-center justify-center text-xs font-bold text-primary uppercase">
+    {student.name?.charAt(0)}
+  </div>
+)}
                     <span className="font-medium">{student.name}</span>
                   </div>
                 </td>
@@ -145,13 +113,26 @@ export default function StudentsList() {
 
       {viewingStudent && <ViewDetailsModal student={viewingStudent} onClose={() => setViewingStudent(null)} />}
       
-      {editingStudent && (
+      {/* {editingStudent && (
         <StudentUpdateModal
           student={editingStudent}
           onClose={() => setEditingStudent(null)}
           onUpdated={(updated) => setStudents(prev => prev.map(s => s.id === updated.id ? updated : s))}
+          
+
+           
         />
-      )}
+      )} */}
+      {editingStudent && (
+   <StudentUpdateModal
+    student={editingStudent}
+    onClose={() => setEditingStudent(null)}
+    onUpdated={(updated) => {
+      setStudents(prev => prev.map(s => s.id === updated.id ? updated : s));
+      setEditingStudent(null); 
+    }}
+  />
+)}
     </div>
   );
 }

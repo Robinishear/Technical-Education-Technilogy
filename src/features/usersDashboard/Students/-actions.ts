@@ -33,10 +33,19 @@ export const getStudentsAction = async () => {
 
 export const updateStudentAction = async (id: string, studentData: any) => {
     try {
+                // console.log(" studentData going to backend:", studentData); 
+
         const res = await StudentService.updateStudent(id, studentData) as ApiResponse<any>;
+                            // console.log(" backend response:", res); 
+
         if (res.success) {
             revalidatePath("/dashboard/students-list");
-            return { success: true, message: res.message || "Student updated!" };
+            return {
+              success: true,
+              message: res.message || "Student updated!",
+              data: res.data
+            };
+
         }
         return { success: false, message: res.message || "Failed to update" };
     } catch (error: any) {

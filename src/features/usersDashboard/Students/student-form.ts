@@ -1,5 +1,5 @@
 export type StudentFormFieldType = 
-  "text" | "email" | "date" | "select";
+  "text" | "email" | "date" | "select" |"file";
 
 export type StudentField = {
   name: string;
@@ -7,11 +7,22 @@ export type StudentField = {
   type: StudentFormFieldType;
   placeholder?: string;
   options?: string[];
+  icon?: string;
+};
+
+
+export const PICTURE_FIELD: StudentField = { 
+  name: "picture", 
+  label: "Student Photo", 
+  type: "file", 
+  icon: "📸"
 };
 
 export const STUDENT_FORM_FIELDS: StudentField[] = [
+  PICTURE_FIELD,
   { name: "name", label: "Full Name", type: "text", placeholder: "John Doe" },
   { name: "email", label: "Email", type: "email", placeholder: "example@mail.com" },
+  // { name: "picture", label: "Picture URL", type: "text", placeholder: "https://example.com/photo.jpg" },
   { name: "fatherName", label: "Father Name", type: "text", placeholder: "Father Name" },
   { name: "motherName", label: "Mother Name", type: "text", placeholder: "Mother Name" },
   { name: "dob", label: "Date of Birth", type: "date" },

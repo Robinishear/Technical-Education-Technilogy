@@ -1,4 +1,4 @@
-import StudentAddForm from '@/features/usersDashboard/Students/students.students';
+import StudentAddForm from '@/features/usersDashboard/Students/Components/students.students';
 import React from 'react';
 
 const page = () => {

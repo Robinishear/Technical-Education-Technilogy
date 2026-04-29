@@ -1,5 +1,5 @@
 import { Student } from "../type-utils";
-import QRCode from "react-qr-code";
+import QRCode from 'react-qr-code';
 
 export const buildRegQRData = (student: Student): string => {
   return JSON.stringify({
@@ -20,6 +20,7 @@ export const buildRegQRData = (student: Student): string => {
 
 export const RegQR = ({ student, size = 60 }: { student: Student; size?: number }) => (
   <QRCode
+  
     value={buildRegQRData(student)}
     size={size}
     bgColor="#ffffff"
