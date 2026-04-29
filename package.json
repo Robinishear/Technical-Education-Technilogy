@@ -41,6 +41,8 @@
     "recharts": "^2.15.4",
     "socket.io-client": "^4.8.3",
     "sonner": "^2.0.7",
+    "sweetalert2": "^11.26.24",
+    "sweetalert2-react-content": "^5.1.2",
     "swiper": "^12.1.2",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",

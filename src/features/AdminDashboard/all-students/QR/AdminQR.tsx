@@ -1,4 +1,3 @@
-import QRCode from "react-qr-code";
 import { Student } from "../type-utils";
 
 export const buildQRData = (student: Student): string => {
