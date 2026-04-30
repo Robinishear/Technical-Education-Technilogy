@@ -5,8 +5,7 @@ import React from "react";
 import {  TestimonialModalProps } from "./type";
 
 
-
-export default function TestimonialModal({
+export default function StudentsModal({
   isOpen,
   onClose,
   formData,
@@ -27,7 +26,7 @@ export default function TestimonialModal({
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-            {isEditing ? "✏️ Update Testimonial" : "➕ Add Testimonial"}
+            {isEditing ? "✏️ Update Students" : "➕ Add Students"}
           </h2>
           <button
             onClick={onClose}

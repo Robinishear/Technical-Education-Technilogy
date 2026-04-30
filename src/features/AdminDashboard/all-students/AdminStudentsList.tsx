@@ -292,10 +292,10 @@ export default function AdminStudentsList() {
       </div>
 
       {/* 🖥️ Desktop Table */}
-      <div className="hidden md:block overflow-hidden rounded border  border-gray-300 dark:bg-gray-900 shadow-sm">
+      <div className="hidden md:block overflow-hidden rounded  dark:bg-gray-900 shadow-sm">
         <div className="">
           <table className="w-full text-sm">
-            <thead className="bg-stone-50 border-b dark:bg-gray-900 ">
+            <thead className="bg-stone-50  dark:bg-gray-900 ">
               <tr className="text-left">
                 <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-black text-stone-400">#</th>
                 <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-black text-stone-400">Student</th>
@@ -308,7 +308,7 @@ export default function AdminStudentsList() {
             </thead>
             <tbody className="divide-y divide-stone-100">
               {filteredStudents.map((student, index) => (
-                <tr key={student.id} className="hover:bg-amber-50/40 transition-colors group">
+                <tr key={student.id} className="transition-colors group">
                   <td className="px-6 py-4 text-stone-400 text-xs font-mono">
                     {(currentPage - 1) * 10 + index + 1}
                   </td>
@@ -366,7 +366,7 @@ export default function AdminStudentsList() {
                       </button>
                       <button className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
                         onClick={() => setViewingStudent(student)}>
-                        <Fullscreen size={13} />
+                        <Fullscreen size={13} className="text-blue-400"/>
                       </button>
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"

@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import InstructorManagement from "@/features/AdminDashboard/institute-gallery/Instructor/InstructorManagement";
-import Students from "@/features/AdminDashboard/institute-gallery/Students";
+import StudentsManagement from "@/features/AdminDashboard/institute-gallery/Students/StudentsManagement";
 import TestimonialsManagement from "@/features/AdminDashboard/institute-gallery/Testimonials/TestimonialsManagement";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Trophy, MessageSquare, LayoutDashboard } from "lucide-react";
@@ -85,7 +85,7 @@ export default function InstructorDirectory() {
       transition={{ duration: 0.3 }}
       className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-sm dark:shadow-primary/5"
     >
-      <Students />
+      <StudentsManagement />
     </motion.div>
   </TabsContent>
 
