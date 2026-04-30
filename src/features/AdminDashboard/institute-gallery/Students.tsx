@@ -5,21 +5,9 @@ import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { uploadToCloudinary } from '@/core/upload-image-function/upload.service';
+import { FormData, Instructor } from './type';
 
-interface Instructor {
-  id: string;
-  name: string;
-  image: string;
-  position: { title: string };
-  items: string[];
-}
 
-interface FormData {
-  name: string;
-  image: string;
-  positionTitle: string;
-  itemsRaw: string;
-}
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/successStudents`;
 

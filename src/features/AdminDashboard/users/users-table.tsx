@@ -70,9 +70,9 @@ export default function UsersTable() {
   className="w-full max-w-sm px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary text-sm mb-4"
 />
       {/* Table */}
-      <div className="rounded-xl border border-gray-200 overflow-hidden">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+          <thead className=" bg-gray-50 dark:bg-gray-800 rounded-2xl uppercase text-xs">
             <tr>
               <th className="px-6 py-4 text-left">User</th>
               <th className="px-6 py-4 text-left">Branch ID</th>
@@ -83,34 +83,29 @@ export default function UsersTable() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {paginated.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                {/* User */}
+              <tr key={user.id} className=" transition-colors">
                 <td className="px-6 py-4">
                   <div className="font-medium text-gray-800">{user.name ?? "—"}</div>
                   <div className="text-gray-400 text-xs">{user.email}</div>
                 </td>
 
-                {/* Branch ID */}
                 <td className="px-6 py-4">
                   <span className="text-orange-500 font-semibold">
                     {user.branchId ?? "—"}
                   </span>
                 </td>
 
-                {/* Institute */}
                 <td className="px-6 py-4">
                   <div className="text-gray-700">{user.instituteName ?? "—"}</div>
                   <div className="text-gray-400 text-xs">{user.district ?? "—"}</div>
                 </td>
 
-                {/* Status */}
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[user.status]}`}>
                     {user.status}
                   </span>
                 </td>
 
-                {/* Actions */}
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
                     {/* View */}
@@ -188,7 +183,7 @@ export default function UsersTable() {
       {/* Detail Modal */}
       {selectedUser && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-lg shadow-xl">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">User Details</h2>
             <div className="grid grid-cols-2 gap-3 text-sm">
               {[

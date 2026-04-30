@@ -113,12 +113,12 @@ export const ProfileUpdateForm = ({ user, onClose }: { user: IUserProfile; onClo
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-black rounded-2xl p-6 w-full max-w-2xl shadow-xl max-h-[90vh] overflow-y-auto">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Update Profile</h2>
 
         <form onSubmit={handleSubmit}>
 
-          <div className="flex items-center gap-5 p-4 bg-gray-50 border border-dashed border-gray-200 rounded-xl mb-5">
+          <div className="flex items-center gap-5 p-4 bg-gray-50 dark:bg-black border border-dashed border-gray-200 rounded-xl mb-5">
             <div className="relative">
               {imagePreview ? (
                 <img
