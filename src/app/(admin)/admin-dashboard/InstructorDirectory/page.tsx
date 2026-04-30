@@ -1,9 +1,9 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import Instructor from "@/features/AdminDashboard/institute-gallery/Instructor";
+import InstructorManagement from "@/features/AdminDashboard/institute-gallery/Instructor/InstructorManagement";
 import Students from "@/features/AdminDashboard/institute-gallery/Students";
-import InstructorManagement from "@/features/AdminDashboard/institute-gallery/Testimonials/InstructorManagement";
+import TestimonialsManagement from "@/features/AdminDashboard/institute-gallery/Testimonials/TestimonialsManagement";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Trophy, MessageSquare, LayoutDashboard } from "lucide-react";
 
@@ -71,9 +71,9 @@ export default function InstructorDirectory() {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-2xl dark:shadow-primary/5"
+      className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-sm dark:shadow-primary/5"
     >
-      <Instructor />
+      <InstructorManagement />
     </motion.div>
   </TabsContent>
 
@@ -83,7 +83,7 @@ export default function InstructorDirectory() {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.3 }}
-      className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-2xl dark:shadow-primary/5"
+      className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-sm dark:shadow-primary/5"
     >
       <Students />
     </motion.div>
@@ -95,9 +95,9 @@ export default function InstructorDirectory() {
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -20 }}
     transition={{ duration: 0.3 }}
-    className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-2xl dark:shadow-primary/5"
+    className="bg-white dark:bg-gray-950/40 rounded-[2.5rem] border border-gray-200 dark:border-white/10 p-6 md:p-10 shadow-sm dark:shadow-primary/5"
   >
-    <InstructorManagement /> 
+    <TestimonialsManagement /> 
   </motion.div>
 </TabsContent>
 

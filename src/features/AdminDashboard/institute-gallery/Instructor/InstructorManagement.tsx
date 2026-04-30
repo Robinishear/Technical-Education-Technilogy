@@ -7,15 +7,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
 import { Instructor, FormData } from "./type";
 import { confirmDelete, showSuccess, showError } from "@/core/utils/swal.utils";
-import {
-  getTestimonialsAction,
-  createTestimonialAction,
-  updateTestimonialAction,
-  deleteTestimonialAction,
-} from "./testimonials.actions";
-import TestimonialModal from "./TestimonialModal";
 
-export default function TestimonialSection() {
+import { createInstructorAction, deleteInstructorAction, getInstructorsAction, updateInstructorAction } from "./instructor.action";
+import InstructorModal from "./InstructorModal";
+
+export default function InstructorManagement() {
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState<FormData>({
@@ -27,20 +23,20 @@ export default function TestimonialSection() {
   const [uploading, setUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: testimonials = [], isLoading, isError } = useQuery({
-    queryKey: ["testimonials"],
+  const { data: instructors = [], isLoading, isError } = useQuery({
+    queryKey: ["instructors"],
     queryFn: async () => {
-      const res = await getTestimonialsAction();
+      const res = await getInstructorsAction();
       return (res.data ?? []) as Instructor[];
     },
   });
 
   const createMutation = useMutation({
-    mutationFn: (payload: object) => createTestimonialAction(payload),
+    mutationFn: (payload: object) => createInstructorAction(payload),
     onSuccess: async (res) => {
       if (res.success) {
-        queryClient.invalidateQueries({ queryKey: ["testimonials"] });
-        await showSuccess("Testimonial added! ✅");
+        queryClient.invalidateQueries({ queryKey: ["instructors"] });
+        await showSuccess("Instructor added! ✅");
         resetForm();
       } else {
         await showError(res.message || "Failed to create!");
@@ -51,7 +47,7 @@ export default function TestimonialSection() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: object }) =>
-      updateTestimonialAction(id, payload),
+      updateInstructorAction(id, payload),
     onSuccess: async (res) => {
       if (res.success) {
         queryClient.invalidateQueries({ queryKey: ["testimonials"] });
@@ -65,7 +61,7 @@ export default function TestimonialSection() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteTestimonialAction(id),
+    mutationFn: (id: string) => deleteInstructorAction(id),
     onSuccess: async (res) => {
       if (res.success) {
         queryClient.invalidateQueries({ queryKey: ["testimonials"] });
@@ -144,17 +140,17 @@ export default function TestimonialSection() {
     <div className="space-y-6">
       {/* ── Header ── */}
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">🗣️ Testimonials</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">🗣️ Instructors</h2>
         <button
           onClick={() => { resetForm(); setIsModalOpen(true); }}
           className="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2.5 rounded-full font-semibold transition shadow-md flex items-center gap-2 text-sm"
         >
-          ➕ Add Testimonial
+          ➕ Add Instructors
         </button>
       </div>
 
       {/* ── Modal ── */}
-      <TestimonialModal
+      <InstructorModal
         isOpen={isModalOpen}
         onClose={resetForm}
         formData={formData}
@@ -171,7 +167,7 @@ export default function TestimonialSection() {
       {isLoading ? (
         <p className="text-center text-cyan-400 animate-pulse py-12">Loading...</p>
       ) : isError ? (
-        <p className="text-center text-red-400 py-12">Failed to load testimonials.</p>
+        <p className="text-center text-red-400 py-12">Failed to load Instructor.</p>
       ) : (
         <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
           <table className="w-full text-left">
@@ -185,15 +181,15 @@ export default function TestimonialSection() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-              {testimonials.length === 0 ? (
+              {instructors.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="text-center p-12 text-gray-400 italic">
-                    No testimonials found. Click "Add Testimonial" to start. ✨
+                    No instructors found. Click "Add Instructor" to start. ✨
                   </td>
                 </tr>
               ) : (
-                testimonials.map((inst, index) => (
-                  <tr key={inst.id || `testimonial-${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition">
+                instructors.map((inst, index) => (
+                  <tr key={inst.id || `instructor-${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition">
                     <td className="p-4">
                       {inst.image ? (
                         <img src={inst.image} alt={inst.name} className="w-10 h-10 rounded-full object-cover" />
@@ -231,6 +227,7 @@ export default function TestimonialSection() {
                       >
                         🗑️ Delete
                       </button>
+
                     </td>
                   </tr>
                 ))
