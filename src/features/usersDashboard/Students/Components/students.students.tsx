@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 "use client";
@@ -5,16 +6,15 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2, CloudUpload, CheckCircle2 } from "lucide-react";
+import { Loader2, CloudUpload, CheckCircle2, UserPlus } from "lucide-react";
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
 import { IStudentFormInput } from "../students.type";
 import { createStudentSchema } from "../students.schema";
 import { addStudentSelfAction } from "../-actions";
 import { STUDENT_FORM_FIELDS } from "../student-form";
-
+import { showSuccess, showError } from "@/core/utils/swal.utils";
 
 export default function StudentAddForm() {
   const [preview, setPreview] = useState<string | null>(null);
@@ -41,28 +41,21 @@ export default function StudentAddForm() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Only image files are allowed!");
-      return;
-    }
-
     setPreview(URL.createObjectURL(file));
     setUploadedImageUrl(null);
     setIsUploading(true);
-    const toastId = toast.loading("Uploading image...");
 
     try {
       const imageUrl = await uploadToCloudinary(file);
       if (imageUrl) {
         setUploadedImageUrl(imageUrl);
         setValue("picture", imageUrl);
-        toast.success("Image uploaded!", { id: toastId });
       } else {
-        toast.error("Image upload failed!", { id: toastId });
+        showError("Image upload failed! Please try again.");
         setPreview(null);
       }
     } catch {
-      toast.error("Image upload error!", { id: toastId });
+      showError("An error occurred during image upload.");
       setPreview(null);
     } finally {
       setIsUploading(false);
@@ -71,103 +64,137 @@ export default function StudentAddForm() {
 
   const onSubmit = async (data: IStudentFormInput) => {
     try {
-      if (!uploadedImageUrl) return toast.error("Please upload a photo!");
+      if (!uploadedImageUrl) return showError("Please upload a student photo first!");
 
-      const loadingId = toast.loading("Processing...");
       const result = await addStudentSelfAction({ ...data, picture: uploadedImageUrl });
 
-      toast.dismiss(loadingId);
       if (result.success) {
-        toast.success(result.message);
+        await showSuccess(result.message || "Student profile created successfully! 🎓");
         reset();
         setPreview(null);
         setUploadedImageUrl(null);
       } else {
-        toast.error(result.message);
+        showError(result.message || "Failed to add student.");
       }
     } catch (err) {
-      console.error("Submit Error:", err);
-      toast.error("An error occurred during submission.");
+      showError("Something went wrong on the server.");
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-10 bg-card/30 backdrop-blur-3xl border border-white/10 routed shadow-sm mt-10">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+    <div className="max-w-7xl mx-auto p-4 md:p-10 transition-all duration-300">
+      <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-white/10 rounded-[2.5rem] shadow-sm p-6 md:p-12 overflow-hidden relative group">
+        
+        <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500" />
 
-        {/* Profile Picture */}
-        <div className="flex justify-center">
-          <div className="relative h-44 w-44 rounded-full border-4 border-dashed border-primary/40 flex items-center justify-center bg-zinc-100 overflow-hidden group hover:border-primary transition-all shadow-inner">
-            {preview ? (
-              <img src={preview} alt="Preview" className="h-full w-full object-cover shadow-2xl" />
-            ) : (
-              <CloudUpload size={50} className="text-zinc-400 group-hover:scale-110 transition-transform" />
-            )}
-
-            {isUploading && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full">
-                <Loader2 className="animate-spin text-white" size={36} />
-              </div>
-            )}
-
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={isUploading}
-              className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
-            />
+        <div className="flex flex-col md:flex-row items-center gap-4 mb-12">
+          <div className="p-4 bg-blue-500/10 rounded-2xl">
+             <UserPlus className="text-blue-500" size={32} />
+          </div>
+          <div className="text-center md:text-left">
+            <h1 className="text-3xl font-black text-gray-800 dark:text-white uppercase tracking-tighter">
+              New Student Registration
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Please fill out all the required information below.</p>
           </div>
         </div>
 
-        {/* Form Inputs */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STUDENT_FORM_FIELDS.map((field) => (
-            <div key={field.name} className="space-y-2">
-              <label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-2">
-                {field.label}
-              </label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
 
-              {field.type === "select" ? (
-                <select
-                  {...register(field.name as keyof IStudentFormInput)}
-                  className="w-full rounded-[1.2rem] h-14 bg-white/5 border border-white/10 shadow-inner focus:border-primary transition-all px-4"
-                >
-                  <option value="">Select {field.label}</option>
-                  {field.options?.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <div className="relative h-48 w-48 rounded-[3rem] border-4 border-dashed border-gray-200 dark:border-white/10 flex items-center justify-center bg-gray-50 dark:bg-white/5 overflow-hidden group hover:border-blue-500 transition-all shadow-xl">
+              {preview ? (
+                <img src={preview} alt="Preview" className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" />
               ) : (
-                <Input
-                  type={field.type}
-                  {...register(field.name as keyof IStudentFormInput)}
-                  placeholder={field.placeholder ?? ""}
-                  className="rounded-[1.2rem] h-14 bg-white/5 border-white/10 shadow-inner focus:border-primary transition-all"
-                />
+                <div className="flex flex-col items-center text-gray-400 group-hover:text-blue-500">
+                  <CloudUpload size={48} className="animate-bounce" />
+                  <span className="text-[10px] font-bold uppercase mt-2">Upload Photo</span>
+                </div>
               )}
 
-              {errors[field.name as keyof IStudentFormInput] && (
-                <p className="text-red-500 text-[10px] ml-2 font-bold uppercase italic">
-                  {errors[field.name as keyof IStudentFormInput]?.message}
-                </p>
+              {isUploading && (
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center">
+                  <Loader2 className="animate-spin text-white mb-2" size={32} />
+                  <span className="text-[10px] text-white font-bold animate-pulse">UPLOADING...</span>
+                </div>
               )}
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={isUploading}
+                className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
+              />
             </div>
-          ))}
-        </div>
+            {uploadedImageUrl && (
+               <div className="flex items-center gap-2 text-green-500 bg-green-500/10 px-4 py-1 rounded-full border border-green-500/20">
+                 <CheckCircle2 size={14} />
+                 <span className="text-[10px] font-bold uppercase tracking-widest">Image Verified</span>
+               </div>
+            )}
+          </div>
 
-        <Button
-          disabled={isSubmitting || isUploading || !uploadedImageUrl}
-          className="w-full py-10 rounded-[2.5rem] text-2xl font-black bg-primary shadow-2xl shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99]"
-        >
-          {isSubmitting
-            ? <Loader2 className="animate-spin mr-3" size={28} />
-            : <CheckCircle2 className="mr-3" size={28} />
-          }
-          {isSubmitting ? "UPDATING SYSTEM..." : "SUBMIT STUDENT PROFILE"}
-        </Button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
+            {STUDENT_FORM_FIELDS.filter(f => f.name !== "picture").map((field) => (
+              <div key={field.name} className="space-y-2 group">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-2 group-focus-within:text-blue-500 transition-colors">
+                  {field.label}
+                </label>
 
-      </form>
+                {field.type === "select" ? (
+                  <select
+                    {...register(field.name as keyof IStudentFormInput)}
+                    className="w-full rounded-2xl h-14 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-4 text-sm font-semibold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none dark:text-white"
+                  >
+                    <option value="" className="dark:bg-gray-900 font-bold">Select {field.label}</option>
+                    {field.options?.map((opt) => (
+                      <option key={opt} value={opt} className="dark:bg-gray-900">{opt}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    type={field.type}
+                    {...register(field.name as keyof IStudentFormInput)}
+                    placeholder={field.placeholder ?? ""}
+                    className="rounded-2xl h-14 bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 px-5 font-semibold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all dark:placeholder:text-gray-600"
+                  />
+                )}
+
+                {errors[field.name as keyof IStudentFormInput] && (
+                  <p className="text-red-500 text-[10px] ml-2 font-black flex items-center gap-1 uppercase italic animate-pulse">
+                    <span className="h-1 w-1 bg-red-500 rounded-full" />
+                    {errors[field.name as keyof IStudentFormInput]?.message}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-6">
+            <Button
+              disabled={isSubmitting || isUploading || !uploadedImageUrl}
+              className="w-full py-10 rounded-[2rem] text-xl font-black bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-2xl shadow-blue-500/30 transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:grayscale"
+            >
+              {isSubmitting ? (
+                <div className="flex items-center gap-3">
+                  <Loader2 className="animate-spin" size={24} />
+                  <span>INITIALIZING DATABASE...</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 size={24} />
+                  <span>SUBMIT STUDENT PROFILE</span>
+                </div>
+              )}
+            </Button>
+            <p className="text-center text-[10px] text-gray-400 mt-4 font-bold uppercase tracking-widest opacity-50 italic">
+              All data will be processed and saved securely
+            </p>
+          </div>
+
+        </form>
+      </div>
     </div>
   );
 }

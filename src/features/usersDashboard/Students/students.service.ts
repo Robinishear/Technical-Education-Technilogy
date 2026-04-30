@@ -9,8 +9,8 @@ export const StudentService = {
             issueDate: data.issueDate ? new Date(data.issueDate).toISOString() : null,
             expireDate: data.expireDate ? new Date(data.expireDate).toISOString() : null,
         };
-        const res = await httpClient.post("/students", payload);
-        return res.data;
+         return await httpClient.post("/students", payload);
+        // return res.data;
     },
 
     getAllStudents: async () => {

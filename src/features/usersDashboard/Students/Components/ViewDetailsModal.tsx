@@ -12,6 +12,7 @@ export default function ViewDetailsModal({ student, onClose }: { student: Studen
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
         <div className="space-y-2">
+          <p><strong>Duration :</strong> {student.duration}</p>
           <p><strong>Father&apos;s Name:</strong> {student.fatherName}</p>
           <p><strong>Mother&apos;s Name:</strong> {student.motherName}</p>
           <p><strong>Address:</strong> {student.studentAddress}</p>

@@ -23,9 +23,8 @@ export const USER_NAV_LINKS = [
   { label: "My Profile", href: "/dashboard/profile", icon: Users },
   { label: "Students-form", href: "/dashboard/student-form", icon: GraduationCap },
   { label: "Students-list", href: "/dashboard/StudentsList", icon: History },
-  { label: "Certificates", href: "/dashboard/certificates", icon: FileText },
-  { label: "Messages", href: "/dashboard/messages", icon: MessageSquare },
-  { label: "Help & Support", href: "/dashboard/support", icon: MessageSquare },
+  { label: "Universal Alert Board", href: "/dashboard/UniversalAlertBoard", icon: FileText },
+  
   
 ];
 
