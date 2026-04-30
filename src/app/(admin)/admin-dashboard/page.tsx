@@ -1,8 +1,10 @@
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Users, BookOpen, DollarSign, Activity } from "lucide-react";
+import Link from "next/link";
 import { ChartAreaInteractive } from "./ChatWithAdminEndpointsApi/charts/ChartAreaInteractive";
 import { ChartPieDonutText } from "./ChatWithAdminEndpointsApi/charts/ChartPieDonutText";
 import { ChartRadialShape } from "./ChatWithAdminEndpointsApi/charts/ChartRadialShape";
+import { ChartSpline } from "lucide-react";
 
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import {
@@ -25,10 +27,22 @@ import { ChartRadialShape } from "./ChatWithAdminEndpointsApi/charts/ChartRadial
 export default function AdminDashboard() {
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Admin Overview 🛠️</h1>
-        <p className="text-muted-foreground font-medium">Current status of the system and management reports.</p>
-      </div>
+    <div className="flex items-center justify-between">
+  <div>
+    <h1 className="text-3xl font-bold tracking-tight">
+      Admin Overview 🛠️
+    </h1>
+    <p className="text-muted-foreground font-medium">
+      Current status of the system and management reports.
+    </p>
+  </div>
+<Link
+  href="/admin-dashboard/UniversalAlertBoard"
+  className=" dark:bg-gray-900 dark:text-white text-black px-4 py-2 rounded-lg font-medium  transition"
+>
+  <ChartSpline/>
+</Link>
+</div>
 {/* 
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {adminStats.map((stat) => (
