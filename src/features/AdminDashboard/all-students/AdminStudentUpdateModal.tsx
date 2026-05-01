@@ -12,13 +12,10 @@ import { Button } from "@/components/ui/button";
 import { adminUpdateStudentAction } from "./-actions";
 import { updateStudentSchema } from "@/features/usersDashboard/Students/students.schema";
 import { STUDENT_FORM_FIELDS } from "@/features/usersDashboard/Students/student-form";
+import { Props } from "./type-utils";
 
 
-interface Props {
-  student: any;
-  onClose: () => void;
-  onUpdated: (updated: any) => void;
-}
+
 
 export default function AdminStudentUpdateModal({ student, onClose, onUpdated }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);

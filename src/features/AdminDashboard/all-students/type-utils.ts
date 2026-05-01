@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
  export interface Student {
   id: string; name: string; email: string; picture: string; fatherName: string;
   motherName: string; dob: string; gender: string; passport: string;
@@ -15,3 +16,8 @@ export interface Meta {
   limit: number;
 }
 
+export interface Props {
+  student: any;
+  onClose: () => void;
+  onUpdated: (updated: any) => void;
+}

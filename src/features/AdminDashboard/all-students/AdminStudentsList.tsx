@@ -20,6 +20,7 @@ import MarkStudent from "./markStudent/MarkStudent";
 import ViewMarks from "./markStudent/ViewMarks";
 import { AdmitCardModal } from "./student-Print-PDF/AdmitCardModal";
 import { RegCardModal } from "./student-Print-PDF/RegCardModal";
+import { CertificateModal } from "./student-Print-PDF/CertificateModal";
 
 
 
@@ -61,7 +62,7 @@ const StudentMobileCard = ({ student, onView, onEdit, onDelete, isDeleting }: {
 const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => void }) => {
   const [showAdmit, setShowAdmit] = useState(false);
   const [showReg, setShowReg] = useState(false);
-  // const [showCertificate, setShowCertificate] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
     return (
 
 <>
@@ -139,12 +140,12 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
                 <Download size={15} /> Reg Card
               </button>
 
-              {/* <button
+              <button
                 onClick={() => setShowCertificate(true)}
                 className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
               >
                 <Download size={15} /> Certificate
-              </button> */}
+              </button>
 
               <button
                 className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
@@ -164,9 +165,9 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
         <RegCardModal student={student} onClose={() => setShowReg(false)} />
       )}
 
-      {/* {showCertificate && (
+      {showCertificate && (
         <CertificateModal student={student} onClose={() => setShowCertificate(false)} />
-      )}  */}
+      )} 
     </>
   );
 };
