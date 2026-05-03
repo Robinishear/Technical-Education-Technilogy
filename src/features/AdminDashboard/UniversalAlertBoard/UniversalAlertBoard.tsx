@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { CheckCircle2, MessageSquare, Mail, BarChart3 } from "lucide-react";
-import DataModal from "./TeamMeeting/DataModal";
-import FormModal from "./TeamMeeting/FormModal";
+
 import CompleteNewDataModal from "./CompleteNewPDF/CompleteNewDataModal";
 import CompleteNewFormModal from "./CompleteNewPDF/CompleteNewFormModal";
+import DataModal from "./Team-meeting-task-data/components/DataModal";
+import FormModal from "./Team-meeting-task-data/components/FormModal";
 
 
 function StatCard({ label, value, delta, up, neutral }: { label: string; value: string; delta: string; up?: boolean; neutral?: boolean }) {
