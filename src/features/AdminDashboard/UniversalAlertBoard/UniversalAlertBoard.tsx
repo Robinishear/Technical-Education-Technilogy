@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { CheckCircle2, MessageSquare, Mail, BarChart3 } from "lucide-react";
 
-import CompleteNewDataModal from "./CompleteNewPDF/CompleteNewDataModal";
-import CompleteNewFormModal from "./CompleteNewPDF/CompleteNewFormModal";
 import DataModal from "./Team-meeting-task-data/components/DataModal";
 import FormModal from "./Team-meeting-task-data/components/FormModal";
+import CompleteNewDataModal from "./CompleteNewPDF/components/CompleteNewDataModal";
+import CompleteNewFormModal from "./CompleteNewPDF/components/CompleteNewFormModal";
 
 
 function StatCard({ label, value, delta, up, neutral }: { label: string; value: string; delta: string; up?: boolean; neutral?: boolean }) {
@@ -99,7 +99,7 @@ export default function Dashboard() {
         <TaskCard
           accent="border-t-blue-500" iconBg="bg-blue-50 dark:bg-blue-900/30"
           Icon={CheckCircle2} iconColor="text-blue-600"
-          title="Complete new PDF" meta="Due today · Alpha project"
+          title="Complete new PDF, Branch " meta="Due today · Alpha project"
           badge="High" badgeClass="bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"
           desc="Add final details and submit the 'Alpha' project for client review."
           progress={75} fillClass="bg-blue-500"
@@ -109,7 +109,7 @@ export default function Dashboard() {
         <TaskCard
           accent="border-t-green-500" iconBg="bg-green-50 dark:bg-green-900/30"
           Icon={MessageSquare} iconColor="text-green-600"
-          title="Team meeting (11 AM)" meta="In 2 hours · Daily stand-up"
+          title="Team meeting Branch " meta="In 2 hours · Daily stand-up"
           badge="Soon" badgeClass="bg-green-50 text-green-800 dark:bg-green-900/30 dark:text-green-300"
           desc="Prepare updates and join the daily stand-up call with the team."
           progress={40} fillClass="bg-green-500"
@@ -119,7 +119,7 @@ export default function Dashboard() {
         <TaskCard
           accent="border-t-purple-500" iconBg="bg-purple-50 dark:bg-purple-900/30"
           Icon={Mail} iconColor="text-purple-600"
-          title="Send client invoices" meta="Due tomorrow · Finance"
+          title="Send Public Student add PDF" meta="Due tomorrow · Finance"
           badge="Medium" badgeClass="bg-purple-50 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300"
           desc="Review and dispatch invoices for all completed work this month."
           progress={50} fillClass="bg-purple-500"
@@ -129,7 +129,7 @@ export default function Dashboard() {
         <TaskCard
           accent="border-t-amber-500" iconBg="bg-amber-50 dark:bg-amber-900/30"
           Icon={BarChart3} iconColor="text-amber-600"
-          title="Update progress report" meta="End of week · Weekly review"
+          title="Update progress report Demu optional" meta="End of week · Weekly review"
           badge="Low" badgeClass="bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
           desc="Add metrics and notes for the weekly review meeting on Friday."
           progress={20} fillClass="bg-amber-500"
