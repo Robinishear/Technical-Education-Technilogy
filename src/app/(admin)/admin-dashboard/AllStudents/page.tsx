@@ -1,4 +1,4 @@
-import AdminStudentsList from '@/features/AdminDashboard/all-students/AdminStudentsList';
+import AdminStudentsList from '@/features/AdminDashboard/all-students/admin-students/components/AdminStudentsList';
 import React from 'react';
 
 const AllStudentsPage = () => {

@@ -1,37 +1,24 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable jsx-a11y/alt-text */
 "use client";
 
-import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
 import { useEffect, useState } from "react";
-interface Slider {
-  id: string;
-  image: string;
-  caption?: string;
-  order: number;
-}
+import { Slider } from "./slider.types";
+import SliderModal from "./SliderModal";
+import { getSlidersAction, deleteSliderAction } from "./slider.actions";
+import { confirmDelete, showError, showSuccess } from "@/core/utils/swal.utils";
 
 export default function AdminSliderPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [caption, setCaption] = useState("");
-  const [order, setOrder] = useState(0);
   const [sliders, setSliders] = useState<Slider[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const API = "http://localhost:5000/api/v1/slider";
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchSliders = async () => {
     try {
-      const res = await fetch(`${API}/get-slider`);
-      const data = await res.json();
-
-      console.log("API Response:", data);
-
-      // 🔥 MAIN FIX
-      setSliders(Array.isArray(data?.data) ? data.data : []);
+      const response = await getSlidersAction();
+      setSliders(Array.isArray(response?.data) ? response.data : []);
     } catch (error) {
-      console.error("Fetch Error:", error);
       setSliders([]);
     }
   };
@@ -39,149 +26,99 @@ export default function AdminSliderPage() {
   useEffect(() => {
     fetchSliders();
   }, []);
+  
+const handleDelete = async (id: string) => {
+  const confirmed = await confirmDelete();
+  if (!confirmed) return;
 
-  // ➕ Create Slider
-  const handleSubmit = async () => {
-    if (!file) return alert("Select image");
-
-    setLoading(true);
-
-    try {
-      const imageUrl = await uploadToCloudinary
-      (file);
-
-      if (!imageUrl) {
-        alert("Image upload failed");
-        setLoading(false);
-        return;
-      }
-
-      const res = await fetch(`${API}/add-slider`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          image: imageUrl,
-          caption,
-          order: Number(order),
-        }),
-      });
-
-      const data = await res.json();
-      console.log("Create Response:", data);
-
-      // reset form
-      setFile(null);
-      setCaption("");
-      setOrder(0);
-
-      fetchSliders();
-    } catch (error) {
-      console.error("Create Error:", error);
-    }
-
-    setLoading(false);
-  };
-
-  //  Delete
-  const handleDelete = async (id: string) => {
-    try {
-      await fetch(`${API}/${id}`, {
-        method: "DELETE",
-      });
-
-      fetchSliders();
-    } catch (error) {
-      console.error("Delete Error:", error);
-    }
-  };
-
+  const res = await deleteSliderAction(id);
+  if (res.success) {
+    await showSuccess("Slider deleted successfully!");
+    fetchSliders();
+  } else {
+    await showError(res.message || "Delete failed");
+  }
+};
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Admin Slider</h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] transition-colors duration-300">
+      <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-6">
+        
+        {/* ── HEADER (Responsive Flex) ── */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center bg-white dark:bg-gray-900 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
+              Slider <span className="text-indigo-600 dark:text-indigo-400">Admin</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Manage your homepage hero sliders</p>
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95"
+          >
+            <span>➕</span> Add New
+          </button>
+        </div>
 
-      {/* ================= FORM ================= */}
-      <div className="space-y-3 border p-4 rounded">
-        <input
-          type="file"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="border p-2 w-full"
+        {/* ── MODAL ── */}
+        <SliderModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={fetchSliders}
         />
 
-        <input
-          type="text"
-          placeholder="Caption"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          className="border p-2 w-full"
-        />
-
-        <input
-          type="number"
-          placeholder="Order"
-          value={order}
-          onChange={(e) => setOrder(Number(e.target.value))}
-          className="border p-2 w-full"
-        />
-
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          {loading ? "Uploading..." : "Add Slider"}
-        </button>
-      </div>
-
-      {/* ================= TABLE ================= */}
-      <div>
-        <h2 className="font-semibold mb-2">Slider List</h2>
-
-        <table className="w-full border">
-          <thead>
-            <tr className="border">
-              <th className="p-2">Image</th>
-              <th className="p-2">Caption</th>
-              <th className="p-2">Order</th>
-              <th className="p-2">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {sliders?.length > 0 ? (
-              sliders.map((item) => (
-                <tr key={item.id} className="border text-center">
-                  <td className="p-2">
-                    <img
-                      src={item.image}
-                      className="w-20 h-12 object-cover mx-auto"
-                    />
-                  </td>
-
-                  <td className="p-2">{item.caption || "—"}</td>
-
-                  <td className="p-2">{item.order}</td>
-
-                  <td className="p-2">
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
+        {/* ── TABLE CONTAINER (Responsive Scroll) ── */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto"> 
+            <table className="w-full text-left min-w-150"> 
+              <thead className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+                <tr>
+                  <th className="p-4 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Preview</th>
+                  <th className="p-4 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Caption</th>
+                  <th className="p-4 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Order</th>
+                  <th className="p-4 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest text-center">Action</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={4} className="text-center p-4">
-                  No Slider Found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {sliders.length > 0 ? (
+                  sliders.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-50/80 dark:hover:bg-gray-800/30 transition-colors">
+                      <td className="p-4">
+                        <img
+                          src={item.image}
+                          className="w-20 h-12 sm:w-24 sm:h-14 object-cover rounded-lg border dark:border-gray-700 shadow-sm"
+                        />
+                      </td>
+                      <td className="p-4 text-sm sm:text-base text-gray-800 dark:text-gray-200 font-medium truncate max-w-37.5 sm:max-w-xs">
+                        {item.caption || <span className="text-gray-400">—</span>}
+                      </td>
+                      <td className="p-4">
+                        <span className="px-2.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-md text-[11px] font-black border border-indigo-100 dark:border-indigo-800">
+                          #{item.order}
+                        </span>
+                      </td>
+                      <td className="p-4 text-center">
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title="Delete Slider"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="text-center p-16 text-gray-400 dark:text-gray-600 italic">
+                      <p className="text-2xl mb-2">🏜️</p>
+                      <p className="text-sm">No sliders found.</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

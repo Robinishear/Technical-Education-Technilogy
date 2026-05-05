@@ -1,4 +1,4 @@
-import StudentsList from '@/features/usersDashboard/Students/StudentsList';
+import StudentsList from '@/features/usersDashboard/Students/Components/StudentsList';
 import React from 'react';
 
 const page = () => {

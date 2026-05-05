@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { socket } from "@/core/lib/socket.config"; // নিশ্চিত করো এই পাথ ঠিক আছে
+import { socket } from "@/core/lib/socket.config"; 
 
 const SocketContext = createContext({
   socket: socket,

@@ -9,8 +9,8 @@ export const StudentService = {
             issueDate: data.issueDate ? new Date(data.issueDate).toISOString() : null,
             expireDate: data.expireDate ? new Date(data.expireDate).toISOString() : null,
         };
-        const res = await httpClient.post("/students", payload);
-        return res.data;
+         return await httpClient.post("/students", payload);
+        // return res.data;
     },
 
     getAllStudents: async () => {
@@ -30,8 +30,12 @@ export const StudentService = {
             issueDate: data.issueDate ? new Date(data.issueDate).toISOString() : null,
             expireDate: data.expireDate ? new Date(data.expireDate).toISOString() : null,
         };
-        const res = await httpClient.patch(`/students/${id}`, payload);
-        return res.data;
+            // console.log("service payload:", JSON.stringify(payload, null, 2)); 
+
+        // const res = await httpClient.patch(`/students/${id}`, payload);
+        return await httpClient.patch(`/students/${id}`, payload);
+            // console.log(" httpClient res:", JSON.stringify(res, null, 2)); 
+        // return res.data;
     },
 
     deleteStudent: async (id: string) => {

@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/immutability */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -5,34 +7,20 @@ import { useEffect, useState } from "react";
 import {
   getCoursesAction,
   getCategoriesAction,
-  createCourseAction,
-  updateCourseAction,
   deleteCourseAction,
-  createCategoryAction,
 } from "./actions";
-import { Category, Course, CreateCoursePayload } from "./types";
-import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
-
-const defaultForm: CreateCoursePayload = {
-  title: "",
-  thumbnail: "",
-  instructor: "",
-  totalReviews: 0,
-  rating:0,
-  price: 0,
-  oldPrice: null,
-  categoryId: "",
-};
+import { Category, Course } from "./types";
+import CourseModal from "./CourseModal";
+import CategoryModal from "./CategoryModal";
+import { confirmDelete, showSuccess, showError } from "@/core/utils/swal.utils";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [form, setForm] = useState<CreateCoursePayload>(defaultForm);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
-  const [categoryLoading, setCategoryLoading] = useState(false);
+
+  const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 
   useEffect(() => {
     fetchCourses();
@@ -49,284 +37,167 @@ export default function CoursesPage() {
     if (data) setCategories(data);
   };
 
-  const handleAddCategory = async () => {
-    if (!newCategory.trim()) return;
-    setCategoryLoading(true);
-    try {
-      await createCategoryAction({ name: newCategory.trim() });
-      setNewCategory("");
-      await fetchCategories();
-    } finally {
-      setCategoryLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      let thumbnailUrl = form.thumbnail;
-
-      if (imageFile) {
-        const url = await uploadToCloudinary(imageFile);
-        if (!url) return;
-        thumbnailUrl = url;
-      }
-
-      const payload: CreateCoursePayload = { ...form, thumbnail: thumbnailUrl };
-
-      if (editingId) {
-        await updateCourseAction(editingId, payload);
-        setEditingId(null);
-      } else {
-        await createCourseAction(payload);
-      }
-
-      setForm(defaultForm);
-      setImageFile(null);
-      await fetchCourses();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleEdit = (course: Course) => {
-    setEditingId(course.id);
-    setForm({
-      title: course.title,
-      thumbnail: course.thumbnail,
-      instructor: course.instructor,
-      totalReviews: Number(course.totalReviews) ,
-            rating: Number(course.rating) ,
-
-      price: Number(course.price),
-      oldPrice: course.oldPrice ? Number(course.oldPrice) : null,
-      categoryId: course.categoryId,
-    });
+    setEditingCourse(course);
+    setIsCourseModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete করবেন?")) return;
-    await deleteCourseAction(id);
-    await fetchCourses();
+    const confirmed = await confirmDelete();
+    if (!confirmed) return;
+    try {
+      await deleteCourseAction(id);
+      await showSuccess("Course deleted successfully! ✅");
+      await fetchCourses();
+    } catch {
+      await showError("Failed to delete the course!");
+    }
+  };
+
+  const handleCourseModalClose = () => {
+    setIsCourseModalOpen(false);
+    setEditingCourse(null);
   };
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] transition-colors duration-300">
+      <div className="p-4 sm:p-8 max-w-350 mx-auto space-y-6">
 
-      {/* Category Add Section */}
-      <div className=" p-5 rounded-xl shadow space-y-3">
-        <h2 className="text-lg font-semibold">Category যোগ করুন</h2>
-        <div className="flex gap-3">
-          <input
-            type="text"
-            placeholder="Category নাম লিখুন"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            className="flex-1 border p-2 rounded"
-          />
-          <button
-            onClick={handleAddCategory}
-            disabled={categoryLoading}
-            className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 disabled:opacity-50"
-          >
-            {categoryLoading ? "Adding..." : "Add"}
-          </button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <span
-              key={cat.id}
-              className="shadow-sm  text-sm px-3 py-1 rounded-full"
-            >
-              {cat.name}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Course Form */}
-      <form onSubmit={handleSubmit} className="space-y-4  p-6 rounded-xl shadow-sm">
-        <h2 className="text-xl font-semibold">
-          {editingId ? "Course Update করুন" : "নতুন Course যোগ করুন"}
-        </h2>
-
-        <input
-          type="text"
-          placeholder="Title"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          type="text"
-          placeholder="Instructor"
-          value={form.instructor}
-          onChange={(e) => setForm({ ...form, instructor: e.target.value })}
-          className="w-full border p-2 rounded"
-          required
-        />
-         <input
-          type="number"
-          placeholder="totalReviews"
-          value={form.totalReviews}
-          onChange={(e) => setForm({ ...form, totalReviews:  Number(e.target.value)  })}
-          className="w-full border p-2 rounded"
-          required
-        />
-          {/* <input
-          type="number"
-          placeholder="rating"
-          value={form.rating}
-          onChange={(e) => setForm({ ...form, rating:  Number(e.target.value)  })}
-          className="w-full border p-2 rounded"
-          required
-        /> */}
-        <div className="flex flex-col">
-  <label htmlFor="rating" className="font-medium text-gray-700 dark:text-gray-300 mb-1">
-    Course Rating highest(5.0
-  </label>
-  <input
-    id="rating"
-    name="rating"
-    type="number"
-    min={0}
-    max={5}
-    step={0.1}
-    placeholder="Rating লিখুন"
-    value={form.rating}
-    onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
-    className="w-full border p-2 rounded"
-    required
-  />
-</div>
-
-        <input
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          type="number"
-          placeholder="Old Price (optional)"
-          value={form.oldPrice ?? ""}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              oldPrice: e.target.value ? Number(e.target.value) : null,
-            })
-          }
-          className="w-full border p-2 rounded"
-        />
-
-        <select
-          value={form.categoryId}
-          onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-          className="w-full border p-2 bg-white dark:bg-gray-800 shadow-2xs rounded"
-          required
-        >
-          <option value="">Category বেছে নিন</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-          className="w-full border p-2 rounded"
-        />
-
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-600 dark:bg-gray-800 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? "Loading..." : editingId ? "Update করুন" : "Add করুন"}
-          </button>
-
-          {editingId && (
+        {/* ── Top Header (Responsive Flex) ── */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
+              📚 Course <span className="text-blue-600 dark:text-blue-400">Management</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">Create, update and manage your courses easily.</p>
+          </div>
+          
+          <div className="flex w-full sm:w-auto gap-3">
             <button
-              type="button"
-              onClick={() => {
-                setEditingId(null);
-                setForm(defaultForm);
-              }}
-              className="text-gray-500 underline"
+              onClick={() => setIsCategoryModalOpen(true)}
+              className="flex-1 sm:flex-none bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 px-5 py-2.5 rounded-xl font-bold transition-all hover:bg-green-600 hover:text-white dark:hover:bg-green-600 flex items-center justify-center gap-2 text-sm"
             >
-              Cancel
+              🗂️ Categories
             </button>
-          )}
+            <button
+              onClick={() => {
+                setEditingCourse(null);
+                setIsCourseModalOpen(true);
+              }}
+              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-200 dark:shadow-none flex items-center justify-center gap-2 text-sm active:scale-95"
+            >
+              ➕ Add Course
+            </button>
+          </div>
         </div>
-      </form>
 
-      {/* Course Table */}
-      <div className=" rounded-xl shadow-sm overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className=" text-left">
-            <tr>
-              <th className="p-3">Thumbnail</th>
-              <th className="p-3">Title</th>
-              <th className="p-3">Instructor</th>
-              <th className="p-3">totalReviews</th>
-              <th className="p-3">rating</th>
-              <th className="p-3">Price</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map((course) => (
-              <tr key={course.id} className="border-t hover:bg-white/30">
-                <td className="p-3">
-                  <img
-                    src={course.thumbnail}
-                    alt={course.title}
-                    className="w-16 h-10 object-cover rounded"
-                  />
-                </td>
-                <td className="p-3">{course.title}</td>
-                <td className="p-3">{course.instructor}</td>
-                <td className="p-3">{course.totalReviews}</td>
-                <td className="p-3">{course.rating}</td>
-                <td className="p-3">৳{Number(course.price)}</td>
-                <td className="p-3">{course.category?.name ?? course.categoryId}</td>
-                <td className="p-3 space-x-2">
-                  <button
-                    onClick={() => handleEdit(course)}
-                    className="text-blue-600 hover:underline"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(course.id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {courses.length === 0 && (
-              <tr>
-                <td colSpan={7} className="p-4 text-center text-gray-400">
-                  কোনো course নেই
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        {/* ── Modals ── */}
+        <CourseModal
+          isOpen={isCourseModalOpen}
+          onClose={handleCourseModalClose}
+          onSuccess={fetchCourses}
+          categories={categories}
+          editingCourse={editingCourse}
+        />
+
+        <CategoryModal
+          isOpen={isCategoryModalOpen}
+          onClose={() => setIsCategoryModalOpen(false)}
+          onSuccess={fetchCategories}
+          categories={categories}
+        />
+
+        {/* ── Course Table (Responsive Scroll) ── */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden transition-all">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left min-w-225">
+              <thead className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                <tr>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Thumbnail</th>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Course Title</th>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Instructor</th>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Stats</th>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Price</th>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Category</th>
+                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50 dark:divide-gray-800 transition-colors">
+                {courses.length > 0 ? (
+                  courses.map((course) => (
+                    <tr key={course.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/20 transition-all group">
+                      <td className="p-5">
+                        <img
+                          src={course.thumbnail}
+                          alt=""
+                          className="w-20 h-12 object-cover rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 group-hover:scale-105 transition-transform"
+                        />
+                      </td>
+                      <td className="p-5">
+                        <p className="font-bold text-gray-800 dark:text-gray-100 max-w-50 truncate leading-tight">
+                          {course.title}
+                        </p>
+                      </td>
+                      <td className="p-5 text-gray-600 dark:text-gray-400 font-medium">
+                        {course.instructor}
+                      </td>
+                      <td className="p-5">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs text-gray-500 dark:text-gray-500 font-medium">{course.totalReviews} Reviews</span>
+                          <span className="w-fit bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500 border border-yellow-200 dark:border-yellow-900/50 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase">
+                            ⭐ {Number(course.rating).toFixed(1)}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="p-5">
+                        <div className="flex flex-col">
+                          <span className="text-gray-900 dark:text-gray-100 font-black">৳{Number(course.price)}</span>
+                          {course.oldPrice && (
+                            <span className="text-gray-400 dark:text-gray-600 line-through text-[10px]">
+                              ৳{Number(course.oldPrice)}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="p-5">
+                        <span className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 px-3 py-1 rounded-full text-[11px] font-bold">
+                          {course.category?.name ?? "General"}
+                        </span>
+                      </td>
+                      <td className="p-5 text-center">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            onClick={() => handleEdit(course)}
+                            className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 dark:hover:bg-blue-600 text-blue-600 dark:text-blue-400 hover:text-white border border-blue-100 dark:border-blue-900/50 p-2 rounded-xl transition-all"
+                            title="Edit Course"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            onClick={() => handleDelete(course.id)}
+                            className="bg-red-50 dark:bg-red-900/20 hover:bg-red-600 dark:hover:bg-red-600 text-red-600 dark:text-red-400 hover:text-white border border-red-100 dark:border-red-900/50 p-2 rounded-xl transition-all"
+                            title="Delete Course"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={8} className="text-center p-20 text-gray-400 dark:text-gray-600 italic">
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-4xl">📭</span>
+                        <p className="text-sm">No courses found. Click "Add Course" to start.</p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { getMyProfileAction } from "@/features/usersDashboard/profile/-actions";
-import { ProfileContent } from "@/features/usersDashboard/profile/profile.profile";
+import { ProfileContent } from "@/features/usersDashboard/profile/Components/profile.profile";
 
 
 export default async function Page() {

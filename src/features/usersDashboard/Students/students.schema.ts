@@ -37,7 +37,6 @@ export const createStudentSchema = z.object({
   expireDate: requiredString("Expire date"),
 });
 
-// UPDATE (flexible)
 export const updateStudentSchema = z.object({
   name: optionalString,
   email: z.string().email().optional(),
