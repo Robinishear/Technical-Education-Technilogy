@@ -21,6 +21,7 @@ import { StudentIdModal } from "../../student-Print-PDF/StudentIdModal";
 import { adminDeleteStudentAction, getAdminStudentsAction } from "../actions/admin-students.actions";
 import MarkStudent from "../../markStudent/components/MarkStudent";
 import ViewMarks from "../../markStudent/components/ViewMarks";
+import TranscriptResultModal from "../../student-Print-PDF/TranscriptResultModal";
 
 
 
@@ -65,7 +66,9 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
   const [showAdmit, setShowAdmit] = useState(false);
   const [showReg, setShowReg] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-    const [showStudentId, setShowStudentId] = useState(false);
+  const [showStudentId, setShowStudentId] = useState(false);
+  const [showTranscriptResult, setShowTranscriptResult] = useState(false);
+
 
     return (
 
@@ -150,12 +153,20 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
               >
                 <Download size={15} /> Certificate
               </button>
- <button
+            <button
                 onClick={() => setShowStudentId(true)}
                 className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
               >
                 <Download size={15} /> Student ID
               </button>
+
+                 <button
+                onClick={() => setShowTranscriptResult(true)}
+                className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
+              >
+                <Download size={15} /> Transcript 
+              </button>
+
               <button
                 className="flex-1 h-11 rounded-xl font-bold text-sm bg-stone-800 text-white hover:bg-stone-900 transition-colors uppercase tracking-wider"
                 onClick={onClose}
@@ -180,6 +191,23 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
        {showStudentId && (
         <StudentIdModal student={student} onClose={() => setShowStudentId(false)} />
       )} 
+        {/* {showTranscriptResult && (
+        <TranscriptResultModal result={student}
+         onClose={() => setShowTranscriptResult(false)} />
+      )} 
+     */}
+  {showTranscriptResult && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 overflow-y-auto">
+    <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-4 my-8">
+      <TranscriptResultModal
+        studentId={student.id}  
+        student={student}       
+        onClose={() => setShowTranscriptResult(false)}
+      />
+    </div>
+  </div>
+)}
+
     </>
   );
 };

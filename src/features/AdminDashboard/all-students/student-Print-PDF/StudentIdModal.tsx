@@ -2,8 +2,8 @@
 "use client";
 import { X, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
-import { Student } from "../type-utils";
 import { Button } from "@/components/ui/button";
+import { Student } from "../admin-students/types/admin-students.types";
 
 export const StudentIdModal = ({ student, onClose }: { student: Student; onClose: () => void }) => {
   const [scale, setScale] = useState(1);
