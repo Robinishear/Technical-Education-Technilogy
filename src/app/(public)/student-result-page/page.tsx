@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Search } from "lucide-react";
 import ResultView from "@/features/public_assets/student-result/ResultView";
 import { getResultByRollAction } from "@/features/public_assets/student-result/actions.ts";
 
-export default function StudentResultPage() {
+function StudentResultContent() {
   const searchParams = useSearchParams();
   const [roll, setRoll] = useState("");
   const [result, setResult] = useState<any>(null);
@@ -94,5 +94,17 @@ export default function StudentResultPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function StudentResultPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="animate-spin text-blue-500" size={40} />
+      </div>
+    }>
+      <StudentResultContent />
+    </Suspense>
   );
 }
