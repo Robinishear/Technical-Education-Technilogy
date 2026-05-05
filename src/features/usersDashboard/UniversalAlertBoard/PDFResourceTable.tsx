@@ -1,7 +1,7 @@
 "use client";
 
+import { CompleteNewData } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/Types/complete-new.types";
 import { FileText, Calendar, Download } from "lucide-react";
-import { CompleteNewData } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/complete-new.service";
 
 interface Props {
   data: CompleteNewData[];

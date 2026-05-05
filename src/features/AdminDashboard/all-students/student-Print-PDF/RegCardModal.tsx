@@ -2,9 +2,9 @@
 "use client";
 import { X, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
-import { Student } from "../type-utils";
 import { RegQR, RegQRHidden } from "../QR/RegQR";
 import { Button } from "@/components/ui/button";
+import { Student } from "../admin-students/types/admin-students.types";
 
 export const RegCardModal = ({ student, onClose }: { student: Student; onClose: () => void }) => {
   const [scale, setScale] = useState(1);

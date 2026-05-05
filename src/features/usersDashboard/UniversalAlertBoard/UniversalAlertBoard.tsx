@@ -5,11 +5,12 @@ import { Loader2, LayoutGrid, BellRing } from "lucide-react";
 
 import LinkResourceTable from "./LinkResourceTable"; 
 import PDFResourceTable from "./PDFResourceTable";   
+import { getAllTaskDataAction } from "@/features/AdminDashboard/UniversalAlertBoard/Team-meeting-task-data/actions/task-data.actions";
+import { getAllCompleteNewAction } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/actions/complete-new.actions";
+import { CompleteNewData } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/Types/complete-new.types";
+import { TaskData } from "@/features/AdminDashboard/UniversalAlertBoard/Team-meeting-task-data/types/task-data.types";
 
-import { getAllTaskDataAction } from "@/features/AdminDashboard/UniversalAlertBoard/Team-meeting-task-data/task-data.actions";
-import { getAllCompleteNewAction } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/complete-new.actions";
-import { TaskData } from "@/features/AdminDashboard/UniversalAlertBoard/Team-meeting-task-data/type";
-import { CompleteNewData } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/complete-new.service";
+
 
 export default function UniversalAlertBoard() {
   const [linksData, setLinksData] = useState<TaskData[]>([]);

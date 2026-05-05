@@ -1,5 +1,5 @@
-import { Student } from "../type-utils";
 import QRCode from 'react-qr-code';
+import { Student } from '../admin-students/types/admin-students.types';
 
 export const buildRegQRData = (student: Student): string => {
   return JSON.stringify({

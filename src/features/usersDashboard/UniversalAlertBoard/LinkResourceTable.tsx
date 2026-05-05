@@ -1,7 +1,7 @@
 "use client";
 
+import { TaskData } from "@/features/AdminDashboard/UniversalAlertBoard/Team-meeting-task-data/types/task-data.types";
 import { Link2, Clock, ExternalLink } from "lucide-react";
-import { TaskData } from "@/features/AdminDashboard/UniversalAlertBoard/Team-meeting-task-data/type";
 
 interface Props {
   data: TaskData[];

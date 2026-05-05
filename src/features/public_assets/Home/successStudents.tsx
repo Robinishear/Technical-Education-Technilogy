@@ -8,7 +8,6 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-// 📘 Interface naming (Singular is better practice)
 interface Student {
   id: string;
   name: string;

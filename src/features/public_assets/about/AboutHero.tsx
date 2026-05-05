@@ -6,16 +6,13 @@ export default function AboutHero() {
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
 
-      {/* 🌈 Gradient Background Glow */}
       <div className="absolute top-[-10%] left-[-10%] w-125 h-125 bg-cyan-400/20 dark:bg-cyan-500/20 rounded-full blur-[150px]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-125 h-125 bg-blue-400/20 dark:bg-blue-600/20 rounded-full blur-[150px]" />
 
-      {/* ✨ Grid Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[40px_40px]" />
 
       <div className="container mx-auto px-6 z-10 text-center">
 
-        {/* 🔥 Title */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -28,7 +25,6 @@ export default function AboutHero() {
           </span>
         </motion.h1>
 
-        {/* 📄 Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -39,7 +35,6 @@ export default function AboutHero() {
           connecting students, teachers, and parents in one powerful digital ecosystem.
         </motion.p>
 
-        {/* 🚀 Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
