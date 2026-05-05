@@ -1,6 +1,6 @@
 import { httpClient } from "@/core/axios/httpClient";
-import { TaskData } from "./type";
 import { ApiResponse } from "@/core/axios/api.types";
+import { TaskData } from "../types/task-data.types";
 
 const ENDPOINT = "/task-data";
 

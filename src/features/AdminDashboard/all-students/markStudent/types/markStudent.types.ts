@@ -89,3 +89,10 @@ export interface SemesterFormProps {
   onSubjectChange: (semId: number, subIdx: number, field: string, value: string) => void;
   onRemove: (id: number) => void;
 }
+
+
+export interface Props {
+  studentId: string;
+  student: any;
+  onClose: () => void;
+}

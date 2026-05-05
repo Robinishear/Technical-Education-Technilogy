@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getSemesterGrade, Mark } from "@/features/AdminDashboard/all-students/markStudent/types";
+
+import { getSemesterGrade, Mark } from "@/features/AdminDashboard/all-students/markStudent/types/markStudent.types";
+import { QRCode } from "react-qr-code";
 
 export default function ResultView({ result }: { result: any }) {
   const marks: Mark[] = result.marks ?? [];
@@ -143,13 +145,42 @@ export default function ResultView({ result }: { result: any }) {
         </div>
 
         {/* Footer Summary */}
-        {marks.length > 0 && (
+        {/* {marks.length > 0 && (
           <div style={{ padding: "12px 24px", borderTop: "1px solid #cbd5e1", backgroundColor: "#f8fafc", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#334155" }}>
             <span>Total Credit: {marks.reduce((acc, m) => acc + m.totalCredit, 0)}</span>
             <span>Credit Earned: {marks.reduce((acc, m) => acc + m.totalCredit, 0)}</span>
             <span>CGPA: {(marks.reduce((acc, m) => acc + m.cgpa, 0) / marks.length).toFixed(2)}</span>
           </div>
-        )}
+        )} */}
+        {/* Footer Summary */}
+{marks.length > 0 && (
+  <div style={{ padding: "12px 24px", borderTop: "1px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+      
+      {/* Summary text */}
+      <div style={{ display: "flex", gap: 24, fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#334155" }}>
+        <span>Total Credit: {marks.reduce((acc, m) => acc + m.totalCredit, 0)}</span>
+        <span>Credit Earned: {marks.reduce((acc, m) => acc + m.totalCredit, 0)}</span>
+        <span>CGPA: {(marks.reduce((acc, m) => acc + m.cgpa, 0) / marks.length).toFixed(2)}</span>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+        {/* <QRCode
+          value={`${typeof window !== "undefined" ? window.location.origin : ""}/student-result?roll=${result.roll}`}
+          size={64}
+        /> */}
+        <QRCode
+  value={`${process.env.NEXT_PUBLIC_APP_URL}/student-result?roll=${result.roll}`}
+  size={64}
+/>
+        <p style={{ fontSize: 8, color: "#94a3b8", margin: 0, fontWeight: 700, textTransform: "uppercase" }}>
+          Scan to verify
+        </p>
+      </div>
+
+    </div>
+  </div>
+)}
 
         {/* Note */}
         <div style={{ padding: "10px 24px", borderTop: "1px solid #e2e8f0", textAlign: "center" }}>

@@ -5,9 +5,9 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
 import { GraduationCap, Loader2, PlusCircle, Save, X } from "lucide-react";
-import { saveMarksAction } from "./actions";
 import SemesterForm from "./SemesterForm";
-import { calculateGrade, getSemesterGrade } from "./types";
+import { calculateGrade, getSemesterGrade } from "../types/markStudent.types";
+import { saveMarksAction } from "../actions/markStudent.actions";
 
 const MAX_PAGES = 8;
 
@@ -68,7 +68,6 @@ export default function MarkStudent({
   };
 
   const getSemesterSummary = (subjects: any[]) => {
-   // ঠিক — একবারেই সব declare করো
 let totalWritten = 0, totalPractical = 0, totalViva = 0, 
     totalCredit = 0, totalPoints = 0, totalFullMark = 0; 
 
@@ -79,7 +78,7 @@ let totalWritten = 0, totalPractical = 0, totalViva = 0,
       totalViva += parseFloat(sub.v) || 0;
       totalCredit += parseFloat(sub.credit) || 0;
       totalPoints += parseFloat(sub.cgp) || 0;
-          totalFullMark += parseFloat(String(sub.fullMark)) || 0; // ✅ যোগ করো
+          totalFullMark += parseFloat(String(sub.fullMark)) || 0; 
 
       if (sub.grade === "F") hasFailed = true;
     });

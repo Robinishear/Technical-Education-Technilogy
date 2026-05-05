@@ -4,8 +4,8 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Pencil, Trash2 } from "lucide-react";
 import { confirmDelete, showSuccess, showError } from "@/core/utils/swal.utils";
-import { getAllTaskDataAction, updateTaskDataAction, deleteTaskDataAction } from "../task-data.actions";
-import { TaskData, TaskDataProps } from "../type";
+import { getAllTaskDataAction, updateTaskDataAction, deleteTaskDataAction } from "../actions/task-data.actions";
+import { TaskData, TaskDataProps } from "../types/task-data.types";
 
 export default function DataModal({ isOpen, onClose, title }: TaskDataProps) {
   const [items, setItems] = useState<TaskData[]>([]);

@@ -2,8 +2,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { CompleteNewService } from "./complete-new.service";
 import { ApiErrorResponse } from "@/core/axios/api.types";
+import { CompleteNewService } from "../service/complete-new.service";
 
 export const getAllCompleteNewAction = async () => {
   try {

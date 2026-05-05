@@ -4,15 +4,11 @@
 
 import { useEffect, useState } from "react";
 import { X, GraduationCap, Loader2, Save } from "lucide-react";
-import { getMarksAction, deleteMarkAction, updateMarkAction } from "./actions";
-import { Mark, getSemesterGrade, calculateGrade } from "./types";
 import { toast } from "sonner";
+import { calculateGrade, getSemesterGrade, Mark } from "../types/markStudent.types";
+import { deleteMarkAction, getMarksAction, updateMarkAction } from "../actions/markStudent.actions";
+import { Props } from "../types/markStudent.types";
 
-export interface Props {
-  studentId: string;
-  student: any;
-  onClose: () => void;
-}
 
 export default function ViewMarks({ studentId, student, onClose }: Props) {
   const [marks, setMarks] = useState<Mark[]>([]);

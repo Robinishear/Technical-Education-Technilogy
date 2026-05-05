@@ -4,9 +4,9 @@ import { useState } from "react";
 import { X, Upload, FileText, Loader2 } from "lucide-react";
 
 import { showSuccess, showError } from "@/core/utils/swal.utils";
-import { createCompleteNewAction } from "../complete-new.actions";
-import { uploadPDFToCloudinary } from "../upload.service";
-import { FormModalProps } from "../complete-new.type";
+import { createCompleteNewAction } from "../actions/complete-new.actions";
+import { uploadPDFToCloudinary } from "../service/upload.service";
+import { FormModalProps } from "../Types/complete-new.types";
 
 export default function CompleteNewFormModal({ isOpen, onClose, title }: FormModalProps) {
   const [text, setText] = useState("");

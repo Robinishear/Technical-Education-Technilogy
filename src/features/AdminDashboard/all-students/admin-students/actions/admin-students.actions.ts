@@ -2,8 +2,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { AdminStudentService } from "./admin-students.service";
 import { ApiErrorResponse } from "@/core/axios/api.types";
+import { AdminStudentService } from "../service/admin-students.service";
 
 export const getAdminStudentsAction = async (page = 1, limit = 10) => {
     try {

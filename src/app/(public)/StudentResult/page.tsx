@@ -3,8 +3,8 @@
 
 import { useState } from "react";
 import { Loader2, Search } from "lucide-react";
-import { getResultByRollAction } from "@/features/public_assets/student-result/actions.ts";
 import ResultView from "@/features/public_assets/student-result/ResultView";
+import { getResultByRollAction } from "@/features/public_assets/student-result/actions.ts";
 
 export default function StudentResultPage() {
   const [roll, setRoll] = useState("");
@@ -33,7 +33,6 @@ export default function StudentResultPage() {
     <div className="w-full px-2 sm:px-6 lg:px-10 py-6 md:py-10 min-h-screen transition-colors duration-300">
       <div className="w-full space-y-4 pb-10">
 
-        {/* 🎨 Header Section */}
         <div className="text-center py-6 md:py-10 print:hidden">
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 dark:text-white">
             Student Result
@@ -68,7 +67,6 @@ export default function StudentResultPage() {
           </div>
         </div>
 
-        {/* ❌ Not Found Alert */}
         {notFound && (
           <div className="print:hidden text-center py-10 animate-in fade-in zoom-in">
             <p className="text-red-500 dark:text-red-400 font-black uppercase tracking-widest text-sm sm:text-base">
@@ -77,7 +75,6 @@ export default function StudentResultPage() {
           </div>
         )}
 
-        {/* 📄 Result Component */}
         <div className="w-full mt-6">
           {result && <ResultView result={result} />}
         </div>

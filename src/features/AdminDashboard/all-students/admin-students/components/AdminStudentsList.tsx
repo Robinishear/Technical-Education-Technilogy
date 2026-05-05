@@ -12,16 +12,17 @@ import {
   SquarePen,
   Fullscreen,
 } from "lucide-react";
-import { getAdminStudentsAction, adminDeleteStudentAction } from "./-actions";
 import AdminStudentUpdateModal from "./AdminStudentUpdateModal";
+import { Meta, Student } from "../types/admin-students.types";
+import { AdmitCardModal } from "../../student-Print-PDF/AdmitCardModal";
+import { RegCardModal } from "../../student-Print-PDF/RegCardModal";
+import { CertificateModal } from "../../student-Print-PDF/CertificateModal";
+import { StudentIdModal } from "../../student-Print-PDF/StudentIdModal";
+import { adminDeleteStudentAction, getAdminStudentsAction } from "../actions/admin-students.actions";
+import MarkStudent from "../../markStudent/components/MarkStudent";
+import ViewMarks from "../../markStudent/components/ViewMarks";
 
-import { Meta, Student } from "./type-utils";
-import MarkStudent from "./markStudent/MarkStudent";
-import ViewMarks from "./markStudent/ViewMarks";
-import { AdmitCardModal } from "./student-Print-PDF/AdmitCardModal";
-import { RegCardModal } from "./student-Print-PDF/RegCardModal";
-import { CertificateModal } from "./student-Print-PDF/CertificateModal";
-import { StudentIdModal } from "./student-Print-PDF/StudentIdModal";
+
 
 
 

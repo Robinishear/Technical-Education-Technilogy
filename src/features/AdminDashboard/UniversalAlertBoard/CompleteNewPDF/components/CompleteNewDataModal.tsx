@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { X, Loader2, Pencil, Trash2, Download, FileText } from "lucide-react";
 
 import { confirmDelete, showSuccess, showError } from "@/core/utils/swal.utils";
-import { deleteCompleteNewAction, getAllCompleteNewAction, updateCompleteNewAction } from "../complete-new.actions";
-import { CompleteNewData } from "../complete-new.service";
-import { DataModalProps } from "../complete-new.type";
-import { uploadPDFToCloudinary } from "../upload.service";
+import { CompleteNewData } from "../service/complete-new.service";
+import { DataModalProps } from "../Types/complete-new.types";
+import { deleteCompleteNewAction, getAllCompleteNewAction, updateCompleteNewAction } from "../actions/complete-new.actions";
+import { uploadPDFToCloudinary } from "../service/upload.service";
+
 
 export default function CompleteNewDataModal({ isOpen, onClose, title }: DataModalProps) {
   const [items, setItems] = useState<CompleteNewData[]>([]);

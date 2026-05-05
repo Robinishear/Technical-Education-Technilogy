@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Trash2 } from "lucide-react";
-import { SemesterFormProps } from "./types";
+import { SemesterFormProps } from "../types/markStudent.types";
 
 export default function SemesterForm({
   sem,

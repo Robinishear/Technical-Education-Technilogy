@@ -2,8 +2,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { TaskDataService } from "./task-data.service";
 import { ApiErrorResponse } from "@/core/axios/api.types";
+import { TaskDataService } from "../service/task-data.service";
 
 export const getAllTaskDataAction = async () => {
   try {

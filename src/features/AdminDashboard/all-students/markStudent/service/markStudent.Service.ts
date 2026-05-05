@@ -1,5 +1,5 @@
 import { httpClient } from "@/core/axios/httpClient";
-import { Mark, MarksPayload } from "./types";
+import { Mark, MarksPayload } from "../types/markStudent.types";
 
 export const markStudentService = {
   saveResult: async (studentId: string, payload: MarksPayload): Promise<void> => {

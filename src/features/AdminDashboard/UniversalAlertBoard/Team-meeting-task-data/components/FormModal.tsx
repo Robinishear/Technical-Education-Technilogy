@@ -4,8 +4,8 @@ import { useState } from "react";
 import { X, Loader2 } from "lucide-react";
 
 import { showSuccess, showError } from "@/core/utils/swal.utils";
-import { createTaskDataAction } from "../task-data.actions";
-import { TaskDataProps } from "../type";
+import { createTaskDataAction } from "../actions/task-data.actions";
+import { TaskDataProps } from "../types/task-data.types";
 
 export default function FormModal({ isOpen, onClose, title }: TaskDataProps) {
   const [link, setLink] = useState("");

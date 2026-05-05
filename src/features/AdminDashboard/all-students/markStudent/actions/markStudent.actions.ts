@@ -1,8 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { MarksPayload } from "./types";
-import { markStudentService } from "./markStudent.Service";
+import { markStudentService } from "../service/markStudent.Service";
+import { MarksPayload } from "../types/markStudent.types";
+
 
 export const saveMarksAction = async (
   studentId: string,
