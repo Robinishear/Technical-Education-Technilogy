@@ -33,7 +33,7 @@ export const PUBLIC_NAV_LINKS = [
   { label: "Our Courses", href: "/courses", icon: BookOpen },
   { label: "About Us", href: "/about", icon: FileText },
   { label: "All Branches", href: "/AllBranches", icon: Webhook },
-  { label: "Student Results", href: "/StudentResult", icon: GraduationCap },
+  { label: "Student Results", href: "/student-result-page", icon: GraduationCap },
   { label: "Contact", href: "/contact", icon: MessageSquare },
 
 ];

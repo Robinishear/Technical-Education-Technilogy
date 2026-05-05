@@ -1,24 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Loader2, Search } from "lucide-react";
 import ResultView from "@/features/public_assets/student-result/ResultView";
 import { getResultByRollAction } from "@/features/public_assets/student-result/actions.ts";
 
 export default function StudentResultPage() {
+  const searchParams = useSearchParams();
   const [roll, setRoll] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
-  const handleSearch = async () => {
-    if (!roll.trim()) return;
+  useEffect(() => {
+    const rollFromUrl = searchParams.get("roll");
+    if (rollFromUrl) {
+      setRoll(rollFromUrl);
+      handleSearchByRoll(rollFromUrl);
+    }
+  }, [searchParams]);
+
+  const handleSearchByRoll = async (rollNumber: string) => {
     try {
       setLoading(true);
       setNotFound(false);
       setResult(null);
-      const data = await getResultByRollAction(roll.trim());
+      const data = await getResultByRollAction(rollNumber);
       if (!data) {
         setNotFound(true);
       } else {
@@ -27,6 +36,11 @@ export default function StudentResultPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = async () => {
+    if (!roll.trim()) return;
+    handleSearchByRoll(roll.trim());
   };
 
   return (
@@ -42,7 +56,6 @@ export default function StudentResultPage() {
           </p>
         </div>
 
-        {/* 🔍 Search Box (Light/Dark Mode Support) */}
         <div className="print:hidden bg-white dark:bg-slate-900 p-4 sm:p-6 md:p-8 rounded-xl w-full shadow-sm dark:shadow-blue-900/10 border border-slate-200 dark:border-slate-800 transition-all">
           <div className="flex flex-col sm:flex-row gap-3">
             <input
