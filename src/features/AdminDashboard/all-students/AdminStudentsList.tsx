@@ -64,71 +64,71 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
   const [showAdmit, setShowAdmit] = useState(false);
   const [showReg, setShowReg] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-    const [showStudentId, setShowStudentId] = useState(false);
+  const [showStudentId, setShowStudentId] = useState(false);
 
-    return (
+  return (
 
-<>
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/30 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-    <div className="bg-white border border-stone-200 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl no-scrollbar relative">
-      <button onClick={onClose} className="absolute top-5 right-5 p-2 bg-stone-100 hover:bg-stone-200 rounded-full transition-colors z-10 text-stone-500">
-        <X size={18} />
-      </button>
-      <div className="p-8 md:p-10">
-        <div className="flex flex-col md:flex-row gap-7 items-center md:items-start border-b border-stone-100 pb-8 mb-8">
-          <div className="relative">
-            <img src={student.picture} className="h-28 w-28 rounded-2xl object-cover ring-4 ring-amber-100 shadow-lg" alt="" />
-            <div className="absolute -bottom-2 -right-2 bg-amber-500 p-1.5 rounded-lg shadow">
-              <ShieldCheck className="text-white h-4 w-4" />
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/30 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div className="bg-white border border-stone-200 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl no-scrollbar relative">
+          <button onClick={onClose} className="absolute top-5 right-5 p-2 bg-stone-100 hover:bg-stone-200 rounded-full transition-colors z-10 text-stone-500">
+            <X size={18} />
+          </button>
+          <div className="p-8 md:p-10">
+            <div className="flex flex-col md:flex-row gap-7 items-center md:items-start border-b border-stone-100 pb-8 mb-8">
+              <div className="relative">
+                <img src={student.picture} className="h-28 w-28 rounded-2xl object-cover ring-4 ring-amber-100 shadow-lg" alt="" />
+                <div className="absolute -bottom-2 -right-2 bg-amber-500 p-1.5 rounded-lg shadow">
+                  <ShieldCheck className="text-white h-4 w-4" />
+                </div>
+              </div>
+              <div className="text-center md:text-left space-y-2">
+                <h2 className="text-2xl font-black text-stone-800 tracking-tight uppercase leading-none">{student.name}</h2>
+                <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                  <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold font-mono">ID: {student.studentId}</span>
+                  <span className="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1 rounded-full text-xs font-bold font-mono">Roll: {student.roll}</span>
+                  <span className="bg-emerald-50 text-emerald-600 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold font-mono">Reg: {student.regNumber}</span>
+                </div>
+                <p className="text-stone-400 text-sm pt-1">{student.email}</p>
+              </div>
             </div>
-          </div>
-          <div className="text-center md:text-left space-y-2">
-            <h2 className="text-2xl font-black text-stone-800 tracking-tight uppercase leading-none">{student.name}</h2>
-            <div className="flex flex-wrap justify-center md:justify-start gap-2">
-              <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold font-mono">ID: {student.studentId}</span>
-              <span className="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1 rounded-full text-xs font-bold font-mono">Roll: {student.roll}</span>
-              <span className="bg-emerald-50 text-emerald-600 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold font-mono">Reg: {student.regNumber}</span>
-            </div>
-            <p className="text-stone-400 text-sm pt-1">{student.email}</p>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-amber-600 font-black uppercase text-[10px] tracking-widest border-b border-amber-100 pb-2"><BookOpen size={13} /> Academic Profile</h4>
-            <DataRow label="Institute" value={student.institute} />
-            <DataRow label="Qualification" value={student.educationQualification} />
-            <DataRow label="Director" value={student.directorName} />
-            <DataRow label="Duration" value={student.duration} />
-            <DataRow label="Session" value={`${student.month1}/${student.year1} - ${student.month2}/${student.year2}`} />
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-blue-500 font-black uppercase text-[10px] tracking-widest border-b border-blue-100 pb-2"><User size={13} /> Personal & Family</h4>
-            <DataRow label="Father's Name" value={student.fatherName} />
-            <DataRow label="Mother's Name" value={student.motherName} />
-            <DataRow label="Date of Birth" value={student.dob} />
-            <DataRow label="Gender" value={student.gender} />
-            <DataRow label="Passport/NID" value={student.passport} />
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-rose-500 font-black uppercase text-[10px] tracking-widest border-b border-rose-100 pb-2"><MapPin size={13} /> Location & Contact</h4>
-            <DataRow label="Phone" value={student.guardianPhone} highlight />
-            <DataRow label="District" value={student.district} />
-            <DataRow label="Thana" value={student.thana} />
-            <DataRow label="Address" value={student.studentAddress} />
-          </div>
-          <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-emerald-600 font-black uppercase text-[10px] tracking-widest border-b border-emerald-100 pb-2"><Calendar size={13} /> Validity Dates</h4>
-            <DataRow label="Issue Date" value={student.issueDate} />
-            <DataRow label="Expire Date" value={student.expireDate} />
-            <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
-              <p className="text-[10px] text-emerald-600 uppercase font-bold tracking-wider">Status Note</p>
-              <p className="text-xs text-stone-500 leading-relaxed mt-1">The student identity is verified for the current session.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-amber-600 font-black uppercase text-[10px] tracking-widest border-b border-amber-100 pb-2"><BookOpen size={13} /> Academic Profile</h4>
+                <DataRow label="Institute" value={student.institute} />
+                <DataRow label="Qualification" value={student.educationQualification} />
+                <DataRow label="Director" value={student.directorName} />
+                <DataRow label="Duration" value={student.duration} />
+                <DataRow label="Session" value={`${student.month1}/${student.year1} - ${student.month2}/${student.year2}`} />
+              </div>
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-blue-500 font-black uppercase text-[10px] tracking-widest border-b border-blue-100 pb-2"><User size={13} /> Personal & Family</h4>
+                <DataRow label="Father's Name" value={student.fatherName} />
+                <DataRow label="Mother's Name" value={student.motherName} />
+                <DataRow label="Date of Birth" value={student.dob} />
+                <DataRow label="Gender" value={student.gender} />
+                <DataRow label="Passport/NID" value={student.passport} />
+              </div>
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-rose-500 font-black uppercase text-[10px] tracking-widest border-b border-rose-100 pb-2"><MapPin size={13} /> Location & Contact</h4>
+                <DataRow label="Phone" value={student.guardianPhone} highlight />
+                <DataRow label="District" value={student.district} />
+                <DataRow label="Thana" value={student.thana} />
+                <DataRow label="Address" value={student.studentAddress} />
+              </div>
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-emerald-600 font-black uppercase text-[10px] tracking-widest border-b border-emerald-100 pb-2"><Calendar size={13} /> Validity Dates</h4>
+                <DataRow label="Issue Date" value={student.issueDate} />
+                <DataRow label="Expire Date" value={student.expireDate} />
+                <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+                  <p className="text-[10px] text-emerald-600 uppercase font-bold tracking-wider">Status Note</p>
+                  <p className="text-xs text-stone-500 leading-relaxed mt-1">The student identity is verified for the current session.</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
               <button
                 onClick={() => setShowAdmit(true)}
                 className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
@@ -149,7 +149,7 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
               >
                 <Download size={15} /> Certificate
               </button>
- <button
+              <button
                 onClick={() => setShowStudentId(true)}
                 className="flex-1 h-11 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center gap-2"
               >
@@ -165,7 +165,7 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
           </div>
         </div>
       </div>
- {showAdmit && (
+      {showAdmit && (
         <AdmitCardModal student={student} onClose={() => setShowAdmit(false)} />
       )}
 
@@ -175,10 +175,10 @@ const DetailsModal = ({ student, onClose }: { student: Student; onClose: () => v
 
       {showCertificate && (
         <CertificateModal student={student} onClose={() => setShowCertificate(false)} />
-      )} 
-       {showStudentId && (
+      )}
+      {showStudentId && (
         <StudentIdModal student={student} onClose={() => setShowStudentId(false)} />
-      )} 
+      )}
     </>
   );
 };
@@ -378,7 +378,7 @@ export default function AdminStudentsList() {
                       </button>
                       <button className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-blue-50 border border-stone-200 hover:border-blue-200 flex items-center justify-center transition-colors"
                         onClick={() => setViewingStudent(student)}>
-                        <Fullscreen size={13} className="text-blue-400"/>
+                        <Fullscreen size={13} className="text-blue-400" />
                       </button>
                       <button
                         className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
@@ -417,8 +417,8 @@ export default function AdminStudentsList() {
             <button
               key={page}
               className={`h-8 w-8 rounded-lg text-xs font-bold border transition-colors ${currentPage === page
-                  ? "bg-amber-500 text-white border-amber-500 shadow-sm"
-                  : "bg-white text-stone-500 border-stone-200 hover:bg-stone-50"
+                ? "bg-amber-500 text-white border-amber-500 shadow-sm"
+                : "bg-white text-stone-500 border-stone-200 hover:bg-stone-50"
                 }`}
               onClick={() => setCurrentPage(page)}
             >

@@ -1,10 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { X, ZoomIn, ZoomOut } from "lucide-react";
+import { X, ZoomIn, ZoomOut, Download, FileText } from "lucide-react";
 import { useState } from "react";
 import { Student } from "../type-utils";
 import { RegQR, RegQRHidden } from "../QR/RegQR";
-import { Button } from "@/components/ui/button";
+
+// ── Helper: format ISO date → "08 Nov 1978"
+const formatDOB = (dob: string): string => {
+  if (!dob) return "—";
+  try {
+    const date = new Date(dob);
+    if (isNaN(date.getTime())) return dob;
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return dob;
+  }
+};
 
 export const RegCardModal = ({ student, onClose }: { student: Student; onClose: () => void }) => {
   const [scale, setScale] = useState(1);
@@ -14,191 +29,423 @@ export const RegCardModal = ({ student, onClose }: { student: Student; onClose: 
     if (!printWindow) return;
 
     const today = new Date().toLocaleDateString("en-GB", {
-      day: "2-digit", month: "short", year: "numeric"
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
 
     const qrSvgEl = document.getElementById("reg-qr-code");
     const qrSvgString = qrSvgEl ? qrSvgEl.outerHTML : "";
 
-    printWindow.document.write(`<!DOCTYPE html>
+    printWindow.document.write(`
+<!DOCTYPE html>
 <html>
 <head>
-<title>Registration Card - ${student.name}</title>
+<meta charset="utf-8" />
+<title>Registration Card</title>
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  @page { size: A4 portrait; margin: 0; }
-  body { width: 210mm; height: 297mm; font-family: 'Courier New', monospace; overflow: hidden; }
-  .card { width: 210mm; height: 297mm; position: relative; background: white; }
-  .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; z-index: 0; }
-  .overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; padding: 48mm 12mm 10mm 12mm; overflow: hidden; }
-  .serial { font-size: 8pt; color: #cc0000; margin-bottom: 4mm; }
-  .serial span { font-weight: 900; }
-  .top-right { position: absolute; top: 48mm; right: 12mm; display: flex; flex-direction: column; align-items: flex-end; gap: 2mm; }
-  .photo { width: 28mm; height: 34mm; object-fit: cover; border: 1px solid #aaa; display: block; }
-  .qr-wrap svg { width: 22mm !important; height: 22mm !important; }
-  .info-table { width: 100%; border-collapse: collapse; margin-top: 2mm; }
-  .info-table tr td { padding: 2.2mm 0; vertical-align: top; font-size: 9pt; }
-  .info-table .lbl { font-weight: 900; color: #111; width: 46mm; white-space: nowrap; font-family: 'Courier New', monospace; }
-  .info-table .colon { width: 6mm; color: #111; font-weight: 900; }
-  .info-table .val { color: #111; font-family: 'Courier New', monospace; word-break: break-word; max-width: 90mm; }
-  .sig-row { position: absolute; bottom: 42mm; left: 12mm; right: 12mm; display: flex; justify-content: space-between; }
-  .sig-block { text-align: center; font-size: 7.5pt; color: #333; }
-  .sig-line { border-top: 1px solid #555; width: 40mm; margin: 0 auto 1mm; }
-  .note { position: absolute; bottom: 20mm; left: 12mm; right: 12mm; font-size: 7pt; color: #555; line-height: 1.5; }
-  .print-date { position: absolute; bottom: 10mm; left: 12mm; font-size: 7pt; color: #555; }
+@page {
+  size: A4;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  position: relative;
+}
+
+.bg {
+  position: absolute;
+  width: 210mm;
+  height: 297mm;
+  top: 0;
+  left: 0;
+}
+
+.content {
+  position: absolute;
+  top: 82mm;
+  left: 22mm;
+  right: 22mm;
+}
+
+.serial {
+  position: absolute;
+  top: -10mm;
+  left: 0;
+  font-size: 11pt;
+  color: red;
+  font-weight: bold;
+}
+
+.photo-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 38mm;
+  text-align: center;
+}
+
+.photo {
+  width: 32mm;
+  height: 38mm;
+  object-fit: cover;
+  border: 1px solid #aaa;
+  margin-bottom: 4mm;
+}
+
+.qr svg {
+  width: 30mm;
+  height: 30mm;
+}
+
+/* LEFT INFO */
+.info {
+  width: calc(100% - 20mm);
+  max-height: 120mm;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 3.2mm;
+  font-size: 10pt;
+}
+
+.label {
+  width: 58mm;
+  font-weight: bold;
+}
+
+.colon {
+  width: 5mm;
+}
+
+.value {
+  flex: 1;
+}
+
+/* SIGNATURE */
+.signatures {
+  position: absolute;
+  bottom: 40mm;
+  left: 22mm;
+  right: 22mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9pt;
+}
+
+.sign {
+  text-align: center;
+}
+
+.line {
+  border-top: 1px solid #000;
+  width: 50mm;
+  margin-bottom: 3mm;
+}
+
+.footer-note {
+  position: absolute;
+  bottom: 20mm;
+  left: 22mm;
+  right: 22mm;
+  font-size: 7pt;
+  text-align: justify;
+}
+
+.print-date {
+  position: absolute;
+  bottom: 10mm;
+  left: 22mm;
+  font-size: 7pt;
+}
+
 </style>
 </head>
+
 <body>
-<div class="card">
-  <img class="bg" src="${window.location.origin}/reg.png" crossorigin="anonymous" />
-  <div class="overlay">
-    <p class="serial">Serial: <span>${student.studentId}</span></p>
-    <div class="top-right">
-      <img class="photo" src="${student.picture}" crossorigin="anonymous" alt="${student.name}" />
-      <div class="qr-wrap">${qrSvgString}</div>
+
+<div class="page">
+  <img src="${window.location.origin}/reg.png" class="bg"/>
+
+  <div class="content">
+
+    <div class="serial">Serial: ${student.studentId}</div>
+
+    <div class="photo-box">
+      <img src="${student.picture}" class="photo"/>
+      <div class="qr">${qrSvgString}</div>
     </div>
-    <table class="info-table">
-      <tbody>
-        <tr><td class="lbl">Student Name</td><td class="colon">:</td><td class="val">${student.name || "—"}</td></tr>
-        <tr><td class="lbl">Father's Name</td><td class="colon">:</td><td class="val">${student.fatherName || "—"}</td></tr>
-        <tr><td class="lbl">Mother's Name</td><td class="colon">:</td><td class="val">${student.motherName || "—"}</td></tr>
-        <tr><td class="lbl">Sex</td><td class="colon">:</td><td class="val">${student.gender || "—"}</td></tr>
-        <tr><td class="lbl">Name of the Institute</td><td class="colon">:</td><td class="val">${student.institute || "—"}</td></tr>
-        <tr><td class="lbl">Institute Code</td><td class="colon">:</td><td class="val">${student.studentId?.slice(0, 6) || "—"}</td></tr>
-        <tr><td class="lbl">Post Office</td><td class="colon">:</td><td class="val">${student.thana || "—"}</td></tr>
-        <tr><td class="lbl">Upazilla/Thana</td><td class="colon">:</td><td class="val">${student.thana || "—"}</td></tr>
-        <tr><td class="lbl">District</td><td class="colon">:</td><td class="val">${student.district || "—"}</td></tr>
-        <tr><td class="lbl">Trade Code &amp; Name</td><td class="colon">:</td><td class="val">${student.educationQualification || "—"}</td></tr>
-        <tr><td class="lbl">Registration Number</td><td class="colon">:</td><td class="val">${student.regNumber || "—"}</td></tr>
-        <tr><td class="lbl">Session</td><td class="colon">:</td><td class="val">${student.month1} - ${student.month2} ${student.year1}</td></tr>
-        <tr><td class="lbl">Course Duration</td><td class="colon">:</td><td class="val">${student.duration || "—"}</td></tr>
-      </tbody>
-    </table>
-    <div class="sig-row">
-      <div class="sig-block"><div class="sig-line"></div><p>Signature of the Student</p></div>
-      <div class="sig-block"><div class="sig-line"></div><p>Signature of Head of the Institute</p></div>
-      <div class="sig-block"><div class="sig-line"></div><p>Deputy Secretary<br/>(Registration)</p></div>
-    </div>
-    <div class="note">Note: This registration card is valid for six (6) months. For all communications with the board, the institute code, registration number and study session are to be mentioned. This registration card is generated by BTET ESHEBA (btetbd.com). The registration card must be printed in color.</div>
-    <p class="print-date">Print Date: ${today}</p>
-  </div>
+
+    <div class="info">
+
+  <div class="row"><div class="label">Student Name</div><div class="colon">:</div><div class="value">${student.name || "—"}</div></div>
+
+  <div class="row"><div class="label">Father's Name</div><div class="colon">:</div><div class="value">${student.fatherName || "—"}</div></div>
+
+  <div class="row"><div class="label">Mother's Name</div><div class="colon">:</div><div class="value">${student.motherName || "—"}</div></div>
+
+  <div class="row"><div class="label">Date of Birth</div><div class="colon">:</div><div class="value">${formatDOB(student.dob)}</div></div>
+
+  <div class="row"><div class="label">Sex</div><div class="colon">:</div><div class="value">${student.gender || "—"}</div></div>
+
+  <div class="row"><div class="label">Name of the Institute</div><div class="colon">:</div><div class="value">${student.institute || "—"}</div></div>
+
+  <div class="row"><div class="label">Institute Code</div><div class="colon">:</div><div class="value">${student.studentId?.slice(0, 6) || "—"}</div></div>
+
+  <div class="row"><div class="label">Post Office</div><div class="colon">:</div><div class="value">${student.thana || "—"}</div></div>
+
+  <div class="row"><div class="label">Upazilla/Thana</div><div class="colon">:</div><div class="value">${student.thana || "—"}</div></div>
+
+  <div class="row"><div class="label">District</div><div class="colon">:</div><div class="value">${student.district || "—"}</div></div>
+
+  <div class="row"><div class="label">Trade Code & Name</div><div class="colon">:</div><div class="value">${student.educationQualification || "—"}</div></div>
+
+  <div class="row"><div class="label">Registration Number</div><div class="colon">:</div><div class="value">${student.regNumber || "—"}</div></div>
+
+  <div class="row"><div class="label">Session</div><div class="colon">:</div><div class="value">${student.month1} - ${student.month2} ${student.year1}</div></div>
+
+  <div class="row"><div class="label">Course Duration</div><div class="colon">:</div><div class="value">${student.duration || "—"}</div></div>
+
 </div>
+
+  </div>
+
+  <div class="signatures">
+    <div class="sign">
+      <div class="line"></div>
+      Signature of the Student
+    </div>
+
+    <div class="sign">
+      <div class="line"></div>
+      Signature of Head of the Institute
+    </div>
+
+    <div class="sign">
+      <div class="line"></div>
+      Deputy Secretary<br>(Registration)
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Note: This registration card is valid for six (6) months. For all communications with the board, the institute code, registration number and study session are to be mentioned.
+  </div>
+
+  <div class="print-date">
+    Print Date: ${today}
+  </div>
+
+</div>
+
 <script>
-  window.onload = function() {
-    setTimeout(function() {
-      window.print();
-      window.onafterprint = function() { window.close(); };
-    }, 600);
-  };
+window.onload = function () {
+  setTimeout(() => {
+    window.print();
+    window.close();
+  }, 500);
+};
 </script>
+
 </body>
-</html>`);
+</html>
+`);
+
     printWindow.document.close();
   };
 
-  // ── info rows — label + value ──
   const rows: [string, string | undefined][] = [
-    ["Student Name",          student.name],
-    ["Father's Name",         student.fatherName],
-    ["Mother's Name",         student.motherName],
-    ["Sex",                   student.gender],
+    ["Student Name", student.name],
+    ["Father's Name", student.fatherName],
+    ["Mother's Name", student.motherName],
+    ["Date of Birth", formatDOB(student.dob)],
+    ["Sex", student.gender],
     ["Name of the Institute", student.institute],
-    ["Institute Code",        student.studentId?.slice(0, 6)],
-    ["Post Office",           student.thana],
-    ["Upazilla/Thana",        student.thana],
-    ["District",              student.district],
-    ["Trade Code & Name",     student.educationQualification],
-    ["Registration Number",   student.regNumber],
-    ["Session",               `${student.month1} - ${student.month2} ${student.year1}`],
-    ["Course Duration",       student.duration],
+    ["Institute Code", student.studentId?.slice(0, 6)],
+    ["Post Office", student.thana],
+    ["Upazilla/Thana", student.thana],
+    ["District", student.district],
+    ["Trade Code & Name", student.educationQualification],
+    ["Registration Number", student.regNumber],
+    ["Session", `${student.month1} - ${student.month2} ${student.year1}`],
+    ["Course Duration", student.duration],
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[95vh]">
-
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)" }}
+    >
+      <div
+        className="flex flex-col w-full max-w-2xl"
+        style={{
+          background: "white",
+          borderRadius: "20px",
+          maxHeight: "95vh",
+          overflow: "hidden",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.35)",
+        }}
+      >
         {/* ── Header ── */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
-          <div>
-            <h2 className="text-base font-bold text-gray-800 dark:text-gray-100">Registration Card Preview</h2>
-            <p className="text-xs text-gray-400 mt-0.5">{student.name} · {student.studentId}</p>
+        <div
+          className="flex items-center justify-between px-6 py-4"
+          style={{
+            borderBottom: "1px solid #f0f0f0",
+            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="flex items-center justify-center"
+              style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(255,255,255,0.12)" }}
+            >
+              <FileText size={18} color="white" />
+            </div>
+            <div>
+              <h2 className="font-semibold text-white" style={{ fontSize: 15 }}>
+                Registration Card Preview
+              </h2>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 1 }}>
+                {student.name} &middot; {student.studentId}
+              </p>
+            </div>
           </div>
-          {/* Zoom Controls */}
+
           <div className="flex items-center gap-2">
             <button
               onClick={() => setScale((s) => Math.max(0.4, +(s - 0.1).toFixed(1)))}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              style={{
+                width: 34, height: 34, borderRadius: 8,
+                background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.2)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
             >
-              <ZoomOut size={16} className="text-gray-600 dark:text-gray-300" />
+              <ZoomOut size={15} color="white" />
             </button>
-            <span className="text-xs font-mono text-gray-500 w-10 text-center">
+
+            <span style={{
+              fontSize: 12, fontWeight: 600, color: "white",
+              width: 44, textAlign: "center",
+              background: "rgba(255,255,255,0.1)", borderRadius: 6, padding: "4px 0",
+            }}>
               {Math.round(scale * 100)}%
             </span>
+
             <button
               onClick={() => setScale((s) => Math.min(2, +(s + 0.1).toFixed(1)))}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              style={{
+                width: 34, height: 34, borderRadius: 8,
+                background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.2)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
             >
-              <ZoomIn size={16} className="text-gray-600 dark:text-gray-300" />
+              <ZoomIn size={15} color="white" />
             </button>
+
+            <div style={{ width: 1, height: 24, background: "rgba(255,255,255,0.15)", margin: "0 4px" }} />
+
             <button
               onClick={onClose}
-              className="ml-2 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-900/30 transition"
+              style={{
+                width: 34, height: 34, borderRadius: 8,
+                background: "rgba(239,68,68,0.15)", border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(239,68,68,0.35)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(239,68,68,0.15)")}
             >
-              <X size={18} className="text-gray-600 dark:text-gray-400" />
+              <X size={16} color="#f87171" />
             </button>
           </div>
         </div>
 
-        {/* Hidden QR */}
         <RegQRHidden student={student} />
 
-        {/* ── Preview ── */}
-        <div className="overflow-auto flex-1 p-6 flex items-start justify-center bg-gray-50 dark:bg-gray-950">
+        {/* ── Preview area ── */}
+        <div
+          className="flex-1 overflow-auto flex items-start justify-center"
+          style={{ background: "#0f0f1a", padding: "28px 24px" }}
+        >
           <div
             style={{
-              transform: `scale(${scale})`,
-              transformOrigin: "top center",
-              transition: "transform 0.2s ease",
               width: "100%",
               aspectRatio: "210 / 297",
               position: "relative",
               background: "white",
-              borderRadius: "8px",
+              borderRadius: 10,
               overflow: "hidden",
-              boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)",
+              transform: `scale(${scale})`,
+              transformOrigin: "top center",
+              transition: "transform 0.2s ease",
             }}
           >
             <img src="/reg.png" alt="" className="absolute inset-0 w-full h-full object-fill" />
 
             <div
-              className="absolute inset-0 overflow-hidden"
-              style={{ padding: "16% 5% 4% 5%", fontFamily: "'Courier New', monospace" }}
+              className="absolute mt-32 mx-10 inset-0 overflow-hidden"
+              style={{ padding: "17.5% 5% 4% 5%",  }}
             >
               {/* Serial */}
-              <p style={{ fontSize: "0.7vw", color: "#cc0000", marginBottom: "1%" }}>
+              <p style={{ fontSize: "0.7vw", color: "#cc0000", marginBottom: "1%", fontWeight: 700 }}>
                 Serial: <strong>{student.studentId}</strong>
               </p>
 
-              {/* Photo + QR top right */}
-              <div className="absolute flex flex-col items-end gap-1" style={{ top: "16%", right: "5%" }}>
+              {/* Photo + QR — top right */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "15.5%",
+                  right: "5%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: "0.5vw",
+                }}
+              >
                 <img
                   src={student.picture}
                   alt=""
                   style={{ width: "7vw", height: "8.5vw", objectFit: "cover", border: "1px solid #aaa" }}
                 />
-                <RegQR student={student} size={55} />
+                <RegQR student={student} size={120} />
               </div>
 
-              {/* ✅ Info rows — word wrap করবে */}
-              <div className="mt-2" style={{ paddingRight: "25%" }}>
+              {/* Info rows */}
+              <div style={{ paddingRight: "26%", marginTop: "0.5%" }}>
                 {rows.map(([label, value], i) => (
-                  <div key={i} className="flex" style={{ fontSize: "0.7vw", marginBottom: "0.35vw", gap: "0.3vw" }}>
-                    <span style={{ fontWeight: 900, minWidth: "10vw", flexShrink: 0, color: "#111" }}>
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      fontSize: "0.68vw",
+                      marginBottom: "0.32vw",
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    <span style={{
+                      fontWeight: 900,
+                      width: "9.5vw",
+                      flexShrink: 0,
+                      color: "#111",
+                      whiteSpace: "nowrap",
+                    }}>
                       {label}
                     </span>
-                    <span style={{ color: "#111", fontWeight: 700, flexShrink: 0 }}>:</span>
-                    {/* ✅ word break যোগ করা হয়েছে */}
-                    <span style={{ color: "#111", wordBreak: "break-word", whiteSpace: "normal" }}>
+                    <span style={{ color: "#111", fontWeight: 900, flexShrink: 0, marginRight: "0.3vw" }}>:</span>
+                    <span style={{ color: "#111", wordBreak: "break-word" }}>
                       {value || "—"}
                     </span>
                   </div>
@@ -207,11 +454,23 @@ export const RegCardModal = ({ student, onClose }: { student: Student; onClose: 
 
               {/* Signatures */}
               <div
-                className="absolute flex justify-between"
-                style={{ bottom: "15%", left: "5%", right: "5%", fontSize: "0.6vw", color: "#333" }}
+                style={{
+                  position: "absolute",
+                  bottom: "15%",
+                  left: "5%",
+                  right: "5%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "0.55vw",
+                  color: "#333",
+                }}
               >
-                {["Signature of the Student", "Signature of Head of the Institute", "Deputy Secretary\n(Registration)"].map((sig, i) => (
-                  <div key={i} className="text-center">
+                {[
+                  "Signature of the Student",
+                  "Signature of Head of the Institute",
+                  "Deputy Secretary\n(Registration)",
+                ].map((sig, i) => (
+                  <div key={i} style={{ textAlign: "center" }}>
                     <div style={{ borderTop: "1px solid #555", width: "7vw", margin: "0 auto 0.3vw" }} />
                     <p style={{ whiteSpace: "pre-line" }}>{sig}</p>
                   </div>
@@ -220,14 +479,21 @@ export const RegCardModal = ({ student, onClose }: { student: Student; onClose: 
 
               {/* Note */}
               <div
-                className="absolute"
-                style={{ bottom: "7%", left: "5%", right: "5%", fontSize: "0.5vw", color: "#555", lineHeight: 1.5 }}
+                style={{
+                  position: "absolute",
+                  bottom: "7%",
+                  left: "5%",
+                  right: "5%",
+                  fontSize: "0.48vw",
+                  color: "#555",
+                  lineHeight: 1.5,
+                }}
               >
                 Note: This registration card is valid for six (6) months. For all communications with the board, the institute code, registration number and study session are to be mentioned. This registration card is generated by BTET ESHEBA (btetbd.com). The registration card must be printed in color.
               </div>
 
               {/* Print date */}
-              <div className="absolute" style={{ bottom: "3%", left: "5%", fontSize: "0.55vw", color: "#555" }}>
+              <div style={{ position: "absolute", bottom: "3%", left: "5%", fontSize: "0.5vw", color: "#555" }}>
                 Print Date: {new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
               </div>
             </div>
@@ -235,16 +501,42 @@ export const RegCardModal = ({ student, onClose }: { student: Student; onClose: 
         </div>
 
         {/* ── Footer ── */}
-        <div className="flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800">
-          <Button variant="outline" onClick={onClose} className="flex-1 h-11 rounded-xl">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDownload}
-            className="flex-1 h-11 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-sm tracking-widest uppercase"
+        <div
+          className="flex items-center gap-3 px-6 py-4"
+          style={{ borderTop: "1px solid #f0f0f0", background: "#fafafa" }}
+        >
+          <button
+            onClick={onClose}
+            style={{
+              flex: 1, height: 44, borderRadius: 12,
+              border: "1.5px solid #e5e7eb", background: "white",
+              cursor: "pointer", fontSize: 14, fontWeight: 600, color: "#6b7280",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#f9fafb"; e.currentTarget.style.borderColor = "#d1d5db"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "white"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
           >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleDownload}
+            style={{
+              flex: 1, height: 44, borderRadius: 12,
+              border: "none",
+              background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+              cursor: "pointer", fontSize: 13, fontWeight: 700, color: "white",
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              boxShadow: "0 4px 14px rgba(245,158,11,0.35)",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 6px 20px rgba(245,158,11,0.5)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 4px 14px rgba(245,158,11,0.35)"; e.currentTarget.style.transform = "translateY(0)"; }}
+          >
+            <Download size={16} />
             Download PDF
-          </Button>
+          </button>
         </div>
       </div>
     </div>

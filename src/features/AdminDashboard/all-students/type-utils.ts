@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
  export interface Student {
+   website: string;
+   officeAddress: any;
+   joinedDate(joinedDate: any): unknown;
+   phone: string;
   id: string; name: string; email: string; picture: string; fatherName: string;
   motherName: string; dob: string; gender: string; passport: string;
   guardianPhone: string; studentAddress: string; district: string;

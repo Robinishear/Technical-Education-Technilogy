@@ -12,9 +12,9 @@ export const uploadToCloudinary = async (file: File): Promise<string | null> => 
   }
 
   const compressionOptions = {
-    maxSizeMB: 1,           
-    maxWidthOrHeight: 1920,   
-    useWebWorker: false,     
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: false,
   };
 
   try {
@@ -28,7 +28,7 @@ export const uploadToCloudinary = async (file: File): Promise<string | null> => 
     formData.append("upload_preset", "zahid_preset");
 
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/dr9gketux/image/upload`, 
+      `https://api.cloudinary.com/v1_1/dr9gketux/image/upload`,
       {
         method: "POST",
         body: formData,
@@ -39,7 +39,7 @@ export const uploadToCloudinary = async (file: File): Promise<string | null> => 
 
     if (response.ok && data.secure_url) {
       console.log("Upload Success! URL:", data.secure_url);
-      return data.secure_url; 
+      return data.secure_url;
     } else {
       console.error("Cloudinary Error:", data.error?.message || "Unknown error");
       return null;

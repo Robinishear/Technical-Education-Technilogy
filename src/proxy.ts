@@ -14,10 +14,10 @@ export async function proxy(request: NextRequest) {
 
   if (accessToken) {
     const decoded = jwtUtils.decodedToken(accessToken);
-    const userRole = decoded?.role; 
+    const userRole = decoded?.role;
     const userStatus = decoded?.status;
 
-     // PENDING user dashboard এ 
+    // PENDING user dashboard এ 
     if (userStatus === "PENDING" && pathname.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/pending-approval", request.url));
     }
@@ -28,11 +28,11 @@ export async function proxy(request: NextRequest) {
     }
 
     if (routeOwner && !isValidRedirectForRole(pathname, userRole)) {
-      return NextResponse.redirect(new URL("/login", request.url)); 
+      return NextResponse.redirect(new URL("/login", request.url));
     }
-    
+
     if (pathname === "/login" || pathname === "/register") {
-       return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
@@ -40,10 +40,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", 
+  matcher: ["/dashboard/:path*",
     "/admin-dashboard/:path*",
-      "/login", 
-      "/register",
-      "/pending-approval", 
-      "/blocked"],
+    "/login",
+    "/register",
+    "/pending-approval",
+    "/blocked"],
 };
