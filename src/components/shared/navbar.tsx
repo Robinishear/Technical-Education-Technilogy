@@ -78,7 +78,7 @@ export const Navbar = () => {
                   isActive ? "text-primary font-semibold" : "text-muted-foreground"
                 )}
               >
-                <link.icon className="h-4 w-4" />
+                {/* <link.icon className="h-4 w-4" /> */}
                 {link.label}
               </Link>
             );

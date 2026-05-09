@@ -1,11 +1,7 @@
 import AboutFounderSection from '@/features/public_assets/Home/AboutFounderSection';
-import AboutSection from '@/features/public_assets/Home/AboutSection';
 import { Advantages } from '@/features/public_assets/Home/Advantages';
-import Course from '@/features/public_assets/Home/Course';
-import ImpactSection from '@/features/public_assets/Home/ImpactSection';
+import CircularProgress from '@/features/public_assets/Home/CircularProgress';
 import Instructors from '@/features/public_assets/Home/Instructors';
-import LatestNewsSection from '@/features/public_assets/Home/LatestNewsSection';
-import { NewsSection } from '@/features/public_assets/Home/NewsSection';
 import Slider from '@/features/public_assets/Home/Slider';
 import SuccessStudents from '@/features/public_assets/Home/successStudents';
 import Testimonials from '@/features/public_assets/Home/Testimonials';
@@ -19,13 +15,11 @@ const page = () => {
         <Advantages></Advantages>
         <AboutFounderSection></AboutFounderSection>
         <Instructors></Instructors>
-        <AboutSection></AboutSection>
-        <Course></Course>
         <SuccessStudents></SuccessStudents>
-        <ImpactSection></ImpactSection>
+<CircularProgress></CircularProgress>
+
         <Testimonials></Testimonials>
-        <NewsSection></NewsSection>
-        <LatestNewsSection></LatestNewsSection>
+     
         </div>
     );
 };

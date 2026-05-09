@@ -44,7 +44,7 @@ export default function Instructors() {
   }, []);
 
   return (
-    <section className="py-20 font-sans overflow-hidden">
+    <section className="py-20 font-sans overflow-hidden bg-white dark:bg-gray-900">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">

@@ -1,16 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import { Phone, Mail, Facebook, Twitter, Youtube, Linkedin, MapPin, ArrowRight } from "lucide-react";
+import { Phone, Mail, Facebook, Twitter, Youtube, Linkedin, Instagram } from "lucide-react";
 import Link from "next/link";
 
 export const Footer = () => {
-  return (
-<footer className="dark:bg-gray-900 text-slate-900 dark:text-slate-300 pt-20">      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16">
+  const today = new Date();
+  const currentDay = today.getDate();
+  const monthName = today.toLocaleString('default', { month: 'long' });
+  const yearShort = today.getFullYear().toString().slice(-2);
+  
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
 
-          {/* Logo & About */}
+  return (
+    <footer className="bg-[#0a192f] text-white pt-16 font-sans">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16">
+          
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
+              <div className="w-16 h-16 bg-white p-1 rounded-sm shadow-lg">
                 <img
                   src="https://i.ibb.co/r2dVnpdh/Screenshot-from-2026-03-04-16-25-16-removebg-preview.png"
                   alt="Logo"
@@ -18,120 +26,119 @@ export const Footer = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-red-500 font-bold text-lg md:text-xl leading-tight">
-                  BANGLADESH <span className="text-blue-700">TECHNICAL</span>
-                </h1>
-                <p className="text-green-500 text-[10px] md:text-[11px] font-semibold uppercase">
-                  EDUCATION TECHNOLOGY
+                <h2 className="font-black text-xl leading-tight tracking-tighter uppercase">
+                  Bangladesh Technical
+                </h2>
+                <p className="text-[#0066cc] text-[11px] font-bold uppercase tracking-widest">
+                  Education Technology
                 </p>
               </div>
             </Link>
 
-            <p className="text-sm leading-relaxed text-slate-400 dark:text-gray-400">
-              Empowering the next generation of technical experts through innovative education and digital excellence. Join our journey to build a smarter Bangladesh.
-            </p>
-
-            <div className="flex gap-3">
-              {[Facebook, Twitter, Linkedin, Youtube].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#e11d48] hover:text-white hover:-translate-y-1 transition-all duration-300"
-                >
-                  <Icon size={18} />
+            <div className="flex gap-4">
+              {[Facebook, Twitter, Linkedin, Instagram, Youtube].map((Icon, i) => (
+                <a key={i} href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
+
+            <p className="text-[11px] leading-relaxed text-gray-400 text-justify">
+              Empowering the next generation of technical experts through innovative education and digital excellence. Join our journey to build a smarter Bangladesh.
+            </p>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className=" text-lg font-bold mb-8 flex items-center gap-2">
-              <span className="w-8 h-0.5 bg-[#e11d48]"></span> SERVICES
+          <div className="lg:pl-10 relative">
+            <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-0.5 bg-[#84cc16]"></div>
+            
+            <h3 className="text-lg font-black uppercase mb-8 tracking-widest">
+              USEFUL LINKS
             </h3>
-            <ul className="space-y-4">
-              {['Digital Literacy', 'Skill Development', 'Technical Support', 'Online Certification', 'E-Learning Portal'].map((item) => (
-                <li key={item}>
-                  <a className="text-sm hover:text-[#e11d48] flex items-center gap-2 group transition-colors" href="#">
-                    <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+            <ul className="space-y-3">
+              {['About BTEB', 'Academic Calendar', 'Exam Results', 'Latest Notices', 'Privacy Policy', 'Support'].map((item, i) => (
+                <li key={i}>
+                  <Link href="#" className="text-xs font-bold text-gray-300 hover:text-[#84cc16] transition-colors border-b border-gray-600 pb-1 inline-block min-w-30">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className=" text-lg font-bold mb-8 flex items-center gap-2">
-              <span className="w-8 h-0.5 bg-blue-500"></span> QUICK LINKS
-            </h3>
-            <ul className="space-y-4">
-              {['About BTEB', 'Academic Calendar', 'Exam Results', 'Latest Notices', 'Privacy Policy'].map((item) => (
-                <li key={item}>
-                  <a className="text-sm hover:text-blue-500 flex items-center gap-2 group transition-colors" href="#">
-                    <ArrowRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
-                    {item}
+          <div className="space-y-10">
+            <div>
+              <h3 className="text-lg font-black uppercase mb-8 tracking-widest">CONTACTS</h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 text-xs font-bold text-gray-300">
+                  <Phone size={16} className="text-gray-400" />
+                  <span>+880 1234 567 890</span>
+                </div>
+                <div className="flex items-center gap-3 text-xs font-bold text-gray-300">
+                  <Mail size={16} className="text-gray-400" />
+                  <span>info@bteb.gov.bd</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-black uppercase mb-6 tracking-widest">FOLLOW US</h3>
+              <div className="flex gap-2">
+                {['f', 'tw', 'g+', 'in', 'yt'].map((social, i) => (
+                  <a key={i} href="#" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#84cc16] flex items-center justify-center text-[10px] font-bold uppercase transition-all">
+                    {social}
                   </a>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h3 className=" text-lg font-bold mb-8 flex items-center gap-2">
-              <span className="w-8 h-0.5 bg-green-500"></span> CONTACT US
-            </h3>
-            <div className="space-y-6">
-
-              <div className="flex items-start gap-4 group">
-                <div className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-green-500 transition-colors">
-                  <MapPin size={20} className="text-green-500" />
-                </div>
-                <div className="text-sm">
-                  <p className="text-white font-semibold">Our Location</p>
-                  <p className="text-slate-400 dark:text-gray-400">Agargaon, Sher-e-Bangla Nagar, Dhaka</p>
-                </div>
+          <div className="flex justify-center lg:justify-end">
+            <div className="bg-white rounded-xl p-4 w-full max-w-65 shadow-2xl">
+              <div className="flex justify-between items-center mb-4 px-2">
+                <button className="text-gray-400 hover:text-gray-800 text-xs">❮</button>
+                <span className="text-gray-800 font-bold text-sm uppercase">
+                  {monthName} {yearShort}
+                </span>
+                <button className="text-gray-400 hover:text-gray-800 text-xs">❯</button>
+              </div>
+              
+              <div className="grid grid-cols-7 text-center text-[10px] mb-2 font-bold text-gray-400">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => <div key={day}>{day}</div>)}
               </div>
 
-              <div className="flex items-start gap-4 group">
-                <div className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[#e11d48] transition-colors">
-                  <Phone size={20} className="text-[#e11d48]" />
-                </div>
-                <div className="text-sm">
-                  <p className="text-white font-semibold">Call Support</p>
-                  <p className="text-slate-400 dark:text-gray-400">+880 1234 567 890</p>
-                </div>
+              <div className="grid grid-cols-7 text-center gap-y-1">
+                {[...Array(firstDayOfMonth)].map((_, i) => (
+                  <div key={`empty-${i}`} className="p-1"></div>
+                ))}
+                
+                {[...Array(daysInMonth)].map((_, i) => {
+                  const day = i + 1;
+                  const isToday = day === currentDay;
+                  return (
+                    <div 
+                      key={day} 
+                      className={`text-[10px] font-bold p-1 transition-all ${
+                        isToday 
+                        ? 'bg-[#0066cc] text-white rounded-full scale-110 shadow-lg' 
+                        : 'text-gray-600 hover:bg-gray-100 rounded-full cursor-default'
+                      }`}
+                    >
+                      {day}
+                    </div>
+                  );
+                })}
               </div>
-
-              <div className="flex items-start gap-4 group">
-                <div className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500 transition-colors">
-                  <Mail size={20} className="text-blue-500" />
-                </div>
-                <div className="text-sm">
-                  <p className="text-white font-semibold">Email Us</p>
-                  <p className="text-slate-400 dark:text-gray-400">info@bteb.gov.bd</p>
-                </div>
-              </div>
-
             </div>
           </div>
 
         </div>
       </div>
 
-      {/* Bottom Footer */}
-      <div className="border-t border-white/5 py-8 shadow-sm dark:bg-gray-950">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">
-            © 2026 Bangladesh Technical Education Board. All Rights Reserved.
+      <div className="bg-[#071121] py-6 border-t border-white/5">
+        <div className="container mx-auto px-6 text-center md:text-left">
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+            © Copyright 2026 Bangladesh Technical Education Technology. All Rights Reserved
           </p>
-          <div className="flex items-center gap-6">
-            {['Terms', 'Support', 'FAQ'].map((item) => (
-              <a key={item} href="#" className="text-[10px] font-bold hover:text-white transition-colors uppercase tracking-wider">{item}</a>
-            ))}
-          </div>
         </div>
       </div>
     </footer>
