@@ -73,7 +73,7 @@ export default function UsersTable() {
       {/* ── Stat Cards ── */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center shrink-0">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
           <div>
@@ -83,7 +83,7 @@ export default function UsersTable() {
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-pink-50 dark:bg-pink-900/30 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-pink-50 dark:bg-pink-900/30 flex items-center justify-center shrink-0">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4537E" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </div>
           <div>
@@ -93,7 +93,7 @@ export default function UsersTable() {
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
             <Shield size={20} className="text-blue-600 dark:text-blue-400" />
           </div>
           <div>
@@ -161,7 +161,7 @@ export default function UsersTable() {
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-900 dark:text-gray-100">{user.name ?? "—"}</p>
-                    <p className="text-xs text-gray-400 mt-0.5 truncate max-w-[160px]">{user.email}</p>
+                    <p className="text-xs text-gray-400 mt-0.5 truncate max-w-40">{user.email}</p>
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-amber-600 dark:text-amber-400 font-medium text-xs">

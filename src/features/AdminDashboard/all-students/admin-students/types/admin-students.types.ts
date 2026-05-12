@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
  export interface Student {
+   website: string;
+  //  officeAddress: any;
+  //  officeAddress: any;
+   joinedDate(joinedDate: (joinedDate: any) => import("react").ReactNode): unknown;
+   joinedDate(joinedDate: any): import("react").ReactNode;
   id: string; name: string; email: string; picture: string; fatherName: string;
   motherName: string; dob: string; gender: string; passport: string;
   guardianPhone: string; studentAddress: string; district: string;

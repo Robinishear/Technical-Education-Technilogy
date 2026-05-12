@@ -67,7 +67,7 @@ export default function CoursesPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
-              📚 Course <span className="text-blue-600 dark:text-blue-400">Management</span>
+               Course <span className="text-blue-600 dark:text-blue-400">Management</span>
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">Create, update and manage your courses easily.</p>
           </div>
@@ -117,7 +117,7 @@ export default function CoursesPage() {
                   <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Course Title</th>
                   <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Instructor</th>
                   <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Stats</th>
-                  <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Price</th>
+                  {/* <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Price</th> */}
                   <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest">Category</th>
                   <th className="p-5 font-bold text-gray-600 dark:text-gray-400 uppercase text-[10px] tracking-widest text-center">Actions</th>
                 </tr>
@@ -149,7 +149,7 @@ export default function CoursesPage() {
                           </span>
                         </div>
                       </td>
-                      <td className="p-5">
+                      {/* <td className="p-5">
                         <div className="flex flex-col">
                           <span className="text-gray-900 dark:text-gray-100 font-black">৳{Number(course.price)}</span>
                           {course.oldPrice && (
@@ -158,7 +158,7 @@ export default function CoursesPage() {
                             </span>
                           )}
                         </div>
-                      </td>
+                      </td> */}
                       <td className="p-5">
                         <span className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 px-3 py-1 rounded-full text-[11px] font-bold">
                           {course.category?.name ?? "General"}

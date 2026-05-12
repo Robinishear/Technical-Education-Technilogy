@@ -1,7 +1,6 @@
 import ContactMessagesTable from '@/features/AdminDashboard/contacts/ContactMessagesTable';
-import React from 'react';
 
-const page = () => {
+const ContactMessagesTablePage = () => {
     return (
         <div>
             <ContactMessagesTable></ContactMessagesTable>
@@ -9,4 +8,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default ContactMessagesTablePage;
