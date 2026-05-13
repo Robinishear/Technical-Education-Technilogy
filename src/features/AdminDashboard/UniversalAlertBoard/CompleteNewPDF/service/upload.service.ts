@@ -1,8 +1,5 @@
 export const uploadPDFToCloudinary = async (file: File): Promise<string | null> => {
-  if (!file) {
-    console.error("No file found!");
-    return null;
-  }
+  if (!file) return null;
 
   if (file.type !== "application/pdf") {
     console.error("File is not a PDF!");
@@ -14,9 +11,10 @@ export const uploadPDFToCloudinary = async (file: File): Promise<string | null> 
     formData.append("file", file);
     formData.append("upload_preset", "zahid_preset");
     formData.append("resource_type", "raw"); 
+    formData.append("folder", "pdfs");
 
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/dr9gketux/raw/upload`, 
+      `https://api.cloudinary.com/v1_1/dr9gketux/raw/upload`,
       {
         method: "POST",
         body: formData,
