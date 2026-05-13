@@ -125,7 +125,7 @@ export const StudentIdModal = ({ student, onClose }: { student: Student; onClose
         <div class="info-row"><span class="lbl">Reg No</span><span class="val">: ${student.regNumber || "—"}</span></div>
         <div class="info-row"><span class="lbl">Session</span><span class="val">: ${student.month1}-${student.year1}</span></div>
         <div class="info-row"><span class="lbl">Course</span><span class="val">: ${student.educationQualification || "—"}</span></div>
-        <div class="info-row"><span class="lbl">Mobile</span><span class="val">: ${student.phone || "—"}</span></div>
+        <div class="info-row"><span class="lbl">Mobile</span><span class="val">: ${student.guardianPhone || "—"}</span></div>
       </div>
     </div>
 
@@ -198,7 +198,7 @@ export const StudentIdModal = ({ student, onClose }: { student: Student; onClose
             </div>
 
             {/* Back Part */}
-            <div className="w-[54mm] h-[86mm] bg-white shadow-lg relative overflow-hidden flex-shrink-0 p-4 flex flex-col items-center text-center">
+            <div className="w-[54mm] h-[86mm] bg-white shadow-lg relative overflow-hidden shrink-0 p-4 flex flex-col items-center text-center">
               <p className="text-[8pt] font-bold mb-1">Terms and conditions</p>
               <p className="text-[5.5pt] font-medium leading-tight mb-3">
                 This card is not transferable. If the card is found anywhere other than the user, it is requested to be returned.
