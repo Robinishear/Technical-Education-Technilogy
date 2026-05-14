@@ -16,7 +16,7 @@ export default function ContactMessagesTable() {
   const { data: unreadData } = useQuery({
     queryKey: ["unread-count"],
     queryFn: getUnreadCountAction,
-    refetchInterval: 30000,
+    refetchInterval: 90000,
   });
 
   const deleteMutation = useMutation({

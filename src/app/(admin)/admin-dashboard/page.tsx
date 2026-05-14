@@ -2,9 +2,10 @@
 // import { Users, BookOpen, DollarSign, Activity } from "lucide-react";
 import Link from "next/link";
 import { ChartAreaInteractive } from "./ChatWithAdminEndpointsApi/charts/ChartAreaInteractive";
-import { ChartPieDonutText } from "./ChatWithAdminEndpointsApi/charts/ChartPieDonutText";
-import { ChartRadialShape } from "./ChatWithAdminEndpointsApi/charts/ChartRadialShape";
+// import { ChartPieDonutText } from "./ChatWithAdminEndpointsApi/charts/ChartPieDonutText";
+// import { ChartRadialShape } from "./ChatWithAdminEndpointsApi/charts/ChartRadialShape";
 import { ChartSpline } from "lucide-react";
+import UsersTable from "@/features/AdminDashboard/users/users-table";
 
 
 
@@ -28,12 +29,12 @@ export default function AdminDashboard() {
 </Link>
 </div>
 
-     <ChartAreaInteractive></ChartAreaInteractive>
-     <div className="grid gap-4 md:grid-cols-2">
-    <ChartPieDonutText></ChartPieDonutText>
-     <ChartRadialShape></ChartRadialShape>
+      <UsersTable></UsersTable>
+           <ChartAreaInteractive></ChartAreaInteractive>
 
-     </div>
+    {/* <ChartPieDonutText></ChartPieDonutText>
+     <ChartRadialShape></ChartRadialShape> */}
+
      
     </div>
   );

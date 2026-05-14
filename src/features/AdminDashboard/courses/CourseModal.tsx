@@ -4,16 +4,9 @@
 import { useState, useEffect } from "react";
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
 import { createCourseAction, updateCourseAction } from "./actions";
-import { Category, Course, CreateCoursePayload } from "./types";
+import { CourseModalProps, CreateCoursePayload } from "./types";
 import { showSuccess, showError } from "@/core/utils/swal.utils";
 
-interface CourseModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
-  categories: Category[];
-  editingCourse?: Course | null;
-}
 
 const defaultForm: CreateCoursePayload = {
   title: "",
@@ -21,8 +14,8 @@ const defaultForm: CreateCoursePayload = {
   instructor: "",
   totalReviews: 0,
   rating: 0,
-  price: 0,
-  oldPrice: null,
+  // price: 0,
+  // oldPrice: null,
   categoryId: "",
 };
 
@@ -45,8 +38,8 @@ export default function CourseModal({
         instructor: editingCourse.instructor,
         totalReviews: Number(editingCourse.totalReviews),
         rating: Number(editingCourse.rating),
-        price: Number(editingCourse.price),
-        oldPrice: editingCourse.oldPrice ? Number(editingCourse.oldPrice) : null,
+        // price: Number(editingCourse.price),
+        // oldPrice: editingCourse.oldPrice ? Number(editingCourse.oldPrice) : null,
         categoryId: editingCourse.categoryId,
       });
     } else {
@@ -170,32 +163,7 @@ export default function CourseModal({
             </div>
           </div>
 
-          {/* Price & Old Price */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Price (৳) *</label>
-              <input
-                type="number"
-                min={0}
-                value={form.price}
-                onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-                className="border border-gray-200 dark:border-gray-700 p-3 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Old Price (optional)</label>
-              <input
-                type="number"
-                min={0}
-                value={form.oldPrice ?? ""}
-                onChange={(e) =>
-                  setForm({ ...form, oldPrice: e.target.value ? Number(e.target.value) : null })
-                }
-                className="border border-gray-200 dark:border-gray-700 p-3 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
-              />
-            </div>
-          </div>
+        
 
           {/* Category Selection */}
           <div className="flex flex-col gap-1.5">

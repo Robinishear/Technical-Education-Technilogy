@@ -16,6 +16,7 @@ export default function CourseSection() {
         Loading Courses... ⏳
       </div>
     );
+    console.log(courses.data);
 
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8  dark:bg-[#070707] transition-colors duration-300">
@@ -96,8 +97,7 @@ export default function CourseSection() {
         <div className="p-6 flex flex-col grow">
         
         <div className="flex items-center justify-between gap-2 mb-4 w-full">
-  {/* --- Instructor Badge --- */}
-  {/* 'min-w-0' and 'flex-1' ensures it takes available space without pushing others */}
+
   <div className="flex-1 min-w-0"> 
     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-100 dark:border-cyan-500/20 max-w-full">
       <User size={12} className="text-cyan-600 dark:text-cyan-400 shrink-0" />
@@ -107,8 +107,6 @@ export default function CourseSection() {
     </div>
   </div>
 
-  {/* --- Rating Section --- */}
-  {/* 'shrink-0' ensures the rating never gets squashed or overlapped */}
   <div className="flex items-center gap-1.5 shrink-0 ml-1">
     <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-100 dark:border-amber-500/20">
       <Star size={12} className="text-amber-500 fill-amber-500 shrink-0" />
@@ -150,7 +148,7 @@ export default function CourseSection() {
           {/* Price Section */}
         <div className="mt-auto pt-6 border-t border-gray-100 dark:border-white/5 flex items-center gap-4">
   {/* --- Price Section --- */}
-  <div className="flex flex-col shrink-0">
+  {/* <div className="flex flex-col shrink-0">
     <span className="text-2xl font-black text-gray-900 dark:text-white leading-none">
       ${course.price}
     </span>
@@ -159,7 +157,7 @@ export default function CourseSection() {
         ${course.oldPrice}
       </span>
     )}
-  </div>
+  </div> */}
   
   {/* --- Action Button --- */}
   <Link href={`/courses/${course.id}`} className="flex-1">

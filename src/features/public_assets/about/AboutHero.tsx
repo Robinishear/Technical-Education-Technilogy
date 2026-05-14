@@ -1,56 +1,73 @@
-"use client";
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @next/next/no-img-element */
+import React from 'react';
 
-import { motion } from "framer-motion";
-
-export default function AboutHero() {
+export const AboutHero = () => {
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
+    <section className="py-16 px-6 max-w-7xl mx-auto font-sans">
+      {/* Section Title */}
+      <h2 className="text-4xl font-extrabold text-center text-slate-900 mb-8">
+        About <span className="text-red-500">Us</span>
+      </h2>
 
-      <div className="absolute top-[-10%] left-[-10%] w-125 h-125 bg-cyan-400/20 dark:bg-cyan-500/20 rounded-full blur-[150px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-125 h-125 bg-blue-400/20 dark:bg-blue-600/20 rounded-full blur-[150px]" />
-
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[40px_40px]" />
-
-      <div className="container mx-auto px-6 z-10 text-center">
-
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight"
-        >
-          Empowering Education <br />
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-500 via-blue-500 to-indigo-500">
-            Through Smart Innovation
-          </span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="mt-6 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-base md:text-lg"
-        >
-          Our School Management System simplifies academic and administrative workflows, 
-          connecting students, teachers, and parents in one powerful digital ecosystem.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <button className="px-8 py-3 rounded-xl bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-            Get Started
+      {/* Main Content Grid */}
+      <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
+        <div className="rounded-xl overflow-hidden shadow-lg border border-slate-100">
+          <img 
+            src="/images/about-team.jpg" 
+            alt="Team collaboration at Training Institute" 
+            className="w-full h-auto object-cover"
+          />
+        </div>
+        <div className="space-y-4">
+          <h3 className="text-2xl font-bold text-slate-800">Welcome to Training Institute</h3>
+          <p className="text-slate-600 leading-relaxed text-sm">
+            We provide quality education and training to empower our students. The institute has been at the forefront of providing quality education and training to students from all walks of life. With a team of experienced instructors and state-of-the-art facilities, we ensure that every student receives personalized attention and the best possible learning experience.
+          </p>
+          <p className="text-slate-600 leading-relaxed text-sm">
+            At our core, we don't just develop technology; we engineer solutions that transform industries and enrich lives. Our rigorously tested designs promote seamless interaction with a commitment to human-centered design.
+          </p>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2.5 rounded shadow transition-all duration-200 text-sm">
+            Read More
           </button>
+        </div>
+      </div>
 
-          <button className="px-8 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition">
-            Learn More
-          </button>
-        </motion.div>
+      {/* Cards Grid (Vision, Mission, Values) */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* Vision Card */}
+        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl text-blue-600">💡</span>
+            <h4 className="text-xl font-bold text-slate-800">Vision</h4>
+          </div>
+          <p className="text-slate-600 text-xs leading-relaxed">
+            To be a leading technical education provider recognized for empowering future-ready professionals and setting new benchmarks in skill-based learning and technological advancement.
+          </p>
+        </div>
 
+        {/* Mission Card */}
+        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl text-blue-600">🎯</span>
+            <h4 className="text-xl font-bold text-slate-800">Mission</h4>
+          </div>
+          <p className="text-slate-600 text-xs leading-relaxed">
+            To deliver industry-aligned technical education powered by expert faculty, hands-on training, and cutting-edge resources, making world-class technical skills accessible to everyone.
+          </p>
+        </div>
+
+        {/* Our Values Card */}
+        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl text-blue-600">👤</span>
+            <h4 className="text-xl font-bold text-slate-800">Our Values</h4>
+          </div>
+          <p className="text-slate-600 text-xs leading-relaxed">
+            Bangladesh Technical Education Technology values guide every focus and our mission—building professional integrity, fostering accuracy, and driving excellence in technical expertise.
+          </p>
+        </div>
       </div>
     </section>
   );
-}
+};

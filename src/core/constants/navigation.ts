@@ -3,9 +3,9 @@ import {
    MessageSquare, ShieldCheck, 
   GraduationCap, History, FileText,  
   Images,
-  UserCheck,
   Webhook,
-  Home
+  Home,
+  ServerCrash
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
@@ -14,8 +14,9 @@ export const ADMIN_NAV_LINKS = [
   { label: "All Courses", href: "/admin-dashboard/courses", icon: BookOpen },
   { label: "Instructor Directory", href: "/admin-dashboard/InstructorDirectory", icon: ShieldCheck },
   { label: "Slider ", href: "/admin-dashboard/Slider", icon: Images },
-  { label: "users", href: "/admin-dashboard/users", icon: UserCheck },
+  // { label: "users", href: "/admin-dashboard/users", icon: UserCheck },
   { label: "Contact Messages", href: "/admin-dashboard/ContactMessagesTable", icon: MessageSquare },
+  { label: "Our-Story", href: "/admin-dashboard/Our-Story", icon: ServerCrash },
 
 ];
 

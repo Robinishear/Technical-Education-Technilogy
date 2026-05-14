@@ -1,6 +1,9 @@
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -10,6 +13,11 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  --font-anton: "Anton", sans-serif;
+  --font-arimo: "Arimo", sans-serif;
+  --font-bricolage: "Bricolage Grotesque", sans-serif;
+  --font-coiny: "Coiny", sans-serif;
+  --font-oswald: "Oswald", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -123,20 +131,25 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Arimo", sans-serif;
   }
   html {
     @apply font-sans;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Anton", sans-serif;
+  }
 }
+
 @layer base {
   *, ::after, ::before {
     border-color: var(--border);
   }
-  
+
   .dark {
     color-scheme: dark;
   }
-  
+
   :root {
     color-scheme: light;
   }

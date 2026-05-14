@@ -20,7 +20,7 @@ export const AdminDashboardNavbar = ({ onOpenMobileMenu }: { onOpenMobileMenu: (
   const { data: unreadData } = useQuery({
     queryKey: ["unread-count"],
     queryFn: getUnreadCountAction,
-    refetchInterval: 5000,
+    refetchInterval: 60000,
   });
 
   const unreadCount = (unreadData?.data as any)?.data?.count ?? 0;
