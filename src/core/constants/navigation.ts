@@ -4,7 +4,8 @@ import {
   GraduationCap, History, FileText,  
   Images,
   Webhook,
-  Home
+  Home,
+  ServerCrash
 } from "lucide-react";
 
 export const ADMIN_NAV_LINKS = [
@@ -15,6 +16,7 @@ export const ADMIN_NAV_LINKS = [
   { label: "Slider ", href: "/admin-dashboard/Slider", icon: Images },
   // { label: "users", href: "/admin-dashboard/users", icon: UserCheck },
   { label: "Contact Messages", href: "/admin-dashboard/ContactMessagesTable", icon: MessageSquare },
+  { label: "Our-Story", href: "/admin-dashboard/Our-Story", icon: ServerCrash },
 
 ];
 
