@@ -1,9 +1,9 @@
-import AboutHero from '@/features/public_assets/about/AboutHero';
 // import ContactPage from '@/features/public_assets/about/ContactPage';
-import MissionSection from '@/features/public_assets/about/MissionSection';
-import ServicesPage from '@/features/public_assets/about/ServicesPage';
-import StatsSection from '@/features/public_assets/about/StatsSection';
-import TeamSection from '@/features/public_assets/about/TeamSection';
+import { AboutHero } from '@/features/public_assets/about/AboutHero';
+import { MissionSection } from '@/features/public_assets/about/MissionSection';
+// import ServicesPage from '@/features/public_assets/about/ServicesPage';
+import { StatsSection } from '@/features/public_assets/about/StatsSection';
+import { TeamSection } from '@/features/public_assets/about/TeamSection';
 import React from 'react';
 
 const page = () => {
@@ -13,7 +13,7 @@ const page = () => {
             <MissionSection></MissionSection>
             <TeamSection></TeamSection>
             <StatsSection></StatsSection>
-            <ServicesPage></ServicesPage>
+            {/* <ServicesPage></ServicesPage> */}
             {/* <ContactPage></ContactPage> */}
         </div>
     );

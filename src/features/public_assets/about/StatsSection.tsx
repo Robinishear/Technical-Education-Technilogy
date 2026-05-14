@@ -1,79 +1,51 @@
-"use client";
+/* eslint-disable @next/next/no-img-element */
+import React from 'react';
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+export const StatsSection = () => {
+  const choices = [
+    { title: "Trusted Content", text: "Get access to verified and fully updated tech stacks and industry guidelines." },
+    { title: "Flexible Courses", text: "Pick schedule models that match your availability and lifestyle flawlessly." },
+    { title: "Flexible Hours", text: "Learn at your own pace with options for night-shifts and weekend classes." },
+    { title: "24/7 Support", text: "Our dedicated support team is always standing by to clear any development blockers." }
+  ];
 
-const stats = [
-  { label: "Active Students", value: 25000, suffix: "+" },
-  { label: "Expert Mentors", value: 150, suffix: "+" },
-  { label: "Courses Published", value: 400, suffix: "+" },
-  { label: "Success Rate", value: 98, suffix: "%" },
-];
-
-export default function StatsSection() {
   return (
-    <section className="relative py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden">
-
-      <div className="absolute top-[-10%] left-[-10%] w-100 h-100 bg-cyan-400/20 dark:bg-cyan-500/20 rounded-full blur-[140px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-100 h-100 bg-blue-400/20 dark:bg-blue-600/20 rounded-full blur-[140px]" />
-
-      <div className="container mx-auto px-6 relative z-10">
-
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
-            Our Impact in Numbers
-          </h2>
-          <p className="mt-3 text-gray-600 dark:text-gray-400">
-            Trusted by thousands of students and educators worldwide
-          </p>
+    <section className="py-16 px-6 max-w-7xl mx-auto font-sans">
+      <div className="grid md:grid-cols-2 gap-12 items-center">
+        
+        {/* Left Side Image Banner */}
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-slate-900 border border-slate-800">
+          <img 
+            src="/images/why-choose-us.jpg" 
+            alt="Instructor holding Why Choose Us sign" 
+            className="w-full h-auto object-cover opacity-90"
+          />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 backdrop-blur-md text-center hover:scale-105 hover:border-cyan-500/40 transition-all"
-            >
-              <Counter value={stat.value} suffix={stat.suffix} />
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm md:text-base font-medium">
-                {stat.label}
-              </p>
-            </motion.div>
-          ))}
+        {/* Right Side Options List */}
+        <div>
+          <h2 className="text-3xl font-extrabold text-blue-900 mb-2">Why Choose Us?</h2>
+          <div className="w-24 h-1 bg-yellow-500 rounded mb-8"></div>
+
+          <div className="space-y-4">
+            {choices.map((choice, i) => (
+              <div 
+                key={i} 
+                className="flex items-start gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-blue-200 transition-colors shadow-sm"
+              >
+                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mt-0.5">
+                  🛡️
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-1">{choice.title}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">{choice.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+
       </div>
     </section>
   );
-}
-
-function Counter({ value, suffix }: { value: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let start = 0;
-    const duration = 1500;
-    const increment = value / (duration / 16);
-
-    const counter = setInterval(() => {
-      start += increment;
-      if (start >= value) {
-        setCount(value);
-        clearInterval(counter);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-
-    return () => clearInterval(counter);
-  }, [value]);
-
-  return (
-    <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-      {count}
-      {suffix}
-    </h3>
-  );
-}
+};

@@ -2,7 +2,7 @@ import AboutFounderSection from '@/features/public_assets/Home/AboutFounderSecti
 import { Advantages } from '@/features/public_assets/Home/Advantages';
 import CircularProgress from '@/features/public_assets/Home/CircularProgress';
 import Instructors from '@/features/public_assets/Home/Instructors';
-import Slider from '@/features/public_assets/Home/Slider';
+import Slider from '@/features/public_assets/Home/Slider/Slider';
 import SuccessStudents from '@/features/public_assets/Home/successStudents';
 import Testimonials from '@/features/public_assets/Home/Testimonials';
 import React from 'react';

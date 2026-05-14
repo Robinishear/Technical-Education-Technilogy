@@ -66,7 +66,7 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-2">
+        {/* <nav className="hidden md:flex items-center gap-2">
           {PUBLIC_NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -79,11 +79,32 @@ export const Navbar = () => {
                 )}
               >
                 {/* <link.icon className="h-4 w-4" /> */}
-                {link.label}
+                {/* {link.label}
               </Link>
             );
           })}
-        </nav>
+        </nav> */} 
+        <nav className="hidden md:flex items-center gap-1 bg-secondary/40 p-1.5 rounded-full border border-border/50 backdrop-blur-md">
+  {PUBLIC_NAV_LINKS.map((link) => {
+    const isActive = pathname === link.href;
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        className={cn(
+          "relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ease-in-out",
+          isActive 
+            ? "text-primary-foreground bg-primary shadow-sm font-semibold" 
+            : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+        )}
+      >
+        {/* Icon jodi thake tahole low-opacity visual balance dibe */}
+        {/* <link.icon className={cn("h-4 w-4", isActive ? "opacity-100" : "opacity-70")} /> */}
+        <span className="relative z-10">{link.label}</span>
+      </Link>
+    );
+  })}
+</nav>
 
         {/* ⚙️ Actions Section */}
         <div className="flex items-center gap-3">

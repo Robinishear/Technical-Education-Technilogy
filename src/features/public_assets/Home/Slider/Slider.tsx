@@ -10,23 +10,16 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 
-interface SliderData {
-  id: string;
-  image: string;
-  caption?: string;
-}
+import { NoticeData, SliderData } from "./types";
 
-const updateTexts = [
-  "নতুন কোর্স শুরু হচ্ছে — এখনই রেজিস্ট্রেশন করুন!",
-  "বিদেশে কাজের সুযোগ পেতে আজই যোগাযোগ করুন।",
-  "কারিগরি শিক্ষা নিয়ে বিদেশ গেলে অর্থ সম্মান দুই মিলে।",
-  "আমাদের প্ল্যাটফর্মে ৫০০+ কোর্স উপলব্ধ।",
-];
+
 
 export default function Slider() {
   const [sliders, setSliders] = useState<SliderData[]>([]);
+  const [notices, setNotices] = useState<NoticeData[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Slider Fetch
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/slider/get-slider`)
       .then((res) => res.json())
@@ -36,8 +29,19 @@ export default function Slider() {
       .catch(() => setSliders([]));
   }, []);
 
+  // Notice Fetch
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notices/get-notices`)
+      .then((res) => res.json())
+      .then((data) => {
+        setNotices(Array.isArray(data?.data) ? data.data : []);
+      })
+      .catch(() => setNotices([]));
+  }, []);
+
   return (
     <section className="w-full relative group">
+      {/* SLIDER */}
       <div className="w-full h-[70vh] md:h-[85vh] lg:h-screen relative">
         <Swiper
           modules={[Autoplay, Pagination, EffectFade, Navigation]}
@@ -64,6 +68,7 @@ export default function Slider() {
                   alt="Slider Image"
                   className="w-full h-full object-cover"
                 />
+
                 <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent flex items-center">
                   <div className="container mx-auto px-6 md:px-12">
                     <AnimatePresence mode="wait">
@@ -77,6 +82,7 @@ export default function Slider() {
                           >
                             Welcome to our platform
                           </motion.span>
+
                           <motion.h1
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -85,6 +91,7 @@ export default function Slider() {
                           >
                             {item.caption || "Empowering Your Future"}
                           </motion.h1>
+
                           <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -94,6 +101,7 @@ export default function Slider() {
                             <button className="bg-[#678E1A] hover:bg-white hover:text-black text-white px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-[#678E1A]/20">
                               Get Started
                             </button>
+
                             <button className="bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-md px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest transition-all border border-white/20">
                               Explore More
                             </button>
@@ -106,23 +114,27 @@ export default function Slider() {
               </div>
             </SwiperSlide>
           ))}
+
+          {/* NAVIGATION */}
           <div className="swiper-button-prev text-white/50! hover:text-[#678E1A]! hidden! md:flex! after:text-2xl! transition-all" />
           <div className="swiper-button-next text-white/50! hover:text-[#678E1A]! hidden! md:flex! after:text-2xl! transition-all" />
         </Swiper>
       </div>
 
-      {/* Ticker */}
-      <div className="flex items-center bg-white shadow-md overflow-hidden h-10">
+      {/* NOTICE TICKER */}
+      <div className="flex items-center dark:bg-gray-800 bg-white shadow-md overflow-hidden h-10 border-t border-gray-200">
         <div className="bg-[#678E1A] text-white text-xs font-black uppercase tracking-widest px-5 h-full flex items-center shrink-0">
-          Update
+          Notice
         </div>
-        <div className="overflow-hidden w-full">
+
+        <div className="overflow-hidden w-full ">
           <div className="animate-marquee flex gap-16 whitespace-nowrap">
-            {[...updateTexts, ...updateTexts].map((text, i) => (
-              <span key={i} className="text-sm text-gray-700 font-medium shrink-0">
-                ● {text}
-              </span>
-            ))}
+            {[...notices, ...notices].map((notice, i) => (
+  <span key={i}>
+    📢 {notice.text}
+  </span>
+))}
+
           </div>
         </div>
       </div>
@@ -134,15 +146,23 @@ export default function Slider() {
           background: rgba(255, 255, 255, 0.5) !important;
           opacity: 1 !important;
         }
+
         .swiper-pagination-bullet-active {
           background: #678e1a !important;
           width: 35px !important;
           border-radius: 20px !important;
         }
+
         @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% {
+            transform: translateX(0);
+          }
+
+          100% {
+            transform: translateX(-50%);
+          }
         }
+
         .animate-marquee {
           animation: marquee 20s linear infinite;
         }

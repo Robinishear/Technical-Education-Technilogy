@@ -89,15 +89,22 @@ export default function CompleteNewDataModal({ isOpen, onClose, title }: DataMod
 
   if (!isOpen) return null;
 
-const handleDownload = (pdfUrl: string, date: string) => {
-  const proxyUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/complete-new/pdf-proxy?url=${encodeURIComponent(pdfUrl)}`;
-  const link = document.createElement('a');
-  link.href = proxyUrl;
-  link.download = `document-${date}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+// const handleDownload = (pdfUrl: string, date: string) => {
+//   const proxyUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/complete-new/pdf-proxy?url=${encodeURIComponent(pdfUrl)}`;
+//   const link = document.createElement('a');
+//   link.href = proxyUrl;
+//   link.download = `document-${date}.pdf`;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+const handleDownload = (pdfUrl: string) => {
+  const downloadUrl = pdfUrl.includes('/upload/') 
+    ? pdfUrl.replace('/upload/', '/upload/fl_attachment/')
+    : pdfUrl;
+  window.open(downloadUrl, '_blank');
 };
+
+
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-5 max-h-[90vh] flex flex-col">
@@ -180,8 +187,14 @@ const handleDownload = (pdfUrl: string, date: string) => {
                     </div>
                     <div className="space-y-1">
                       <p className="text-xs text-gray-400 uppercase tracking-wide">PDF</p>
- <button
+ {/* <button
   onClick={() => handleDownload(item.pdfUrl, item.date)}
+  className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+>
+  <Download size={14} /> Download PDF
+</button> */}
+<button
+  onClick={() => handleDownload(item.pdfUrl)}
   className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:underline"
 >
   <Download size={14} /> Download PDF
@@ -217,4 +230,6 @@ const handleDownload = (pdfUrl: string, date: string) => {
     </div>
 
   );
-}
+
+
+};
