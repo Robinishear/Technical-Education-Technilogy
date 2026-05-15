@@ -36,7 +36,7 @@ export default function AboutFounderSection() {
   }
 
   return (
-    <section className="container mx-auto px-6 py-20 space-y-24">
+    <section className="container mx-auto px-6 py-20 space-y-24 bg-white dark:bg-gray-900">
 
       {/* ================= ABOUT ================= */}
       <div className="flex flex-col lg:flex-row items-center gap-16">
@@ -76,9 +76,17 @@ export default function AboutFounderSection() {
           className="w-full lg:w-1/2 space-y-8"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">
-            ABOUT <span className="text-[#678E1A]">US</span>
+            {about?.title ? (
+              <span>{about.title}</span>
+            ) : (
+              <>ABOUT <span className="text-[#678E1A]">US</span></>
+            )}
           </h2>
-
+{about?.name && (
+            <p className="text-sm font-semibold text-[#678E1A] uppercase tracking-widest">
+              {about.name}
+            </p>
+          )}
           <div className="w-20 h-1 bg-gray-300 dark:bg-gray-600" />
 
           <div className="text-base text-gray-700 dark:text-gray-300 leading-relaxed space-y-5">
@@ -99,9 +107,9 @@ export default function AboutFounderSection() {
             )}
           </div>
 
-          <button className="mt-6 bg-[#678E1A] hover:bg-[#678E1A]/90 text-white px-8 py-3 rounded font-semibold text-sm transition">
-            READ MORE
-          </button>
+          
+
+        
         </motion.div>
       </div>
 
@@ -116,8 +124,20 @@ export default function AboutFounderSection() {
           className="w-full lg:w-1/2 space-y-8"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">
-            FOUNDER <span className="text-[#678E1A]">& CEO</span>
+            {founder?.title ? (
+              <span>{founder.title}</span>
+            ) : (
+              <>FOUNDER <span className="text-[#678E1A]">& CEO</span></>
+            )}
           </h2>
+              {founder?.name && (
+            <div className="space-y-1">
+              <p className="text-lg font-bold text-gray-800 dark:text-gray-200">{founder.name}</p>
+              {/* <p className="text-sm text-[#678E1A] font-semibold uppercase tracking-widest">
+                Founder & CEO
+              </p> */}
+            </div>
+          )}
 
           <div className="w-20 h-1 bg-gray-300 dark:bg-gray-600" />
 
@@ -125,26 +145,18 @@ export default function AboutFounderSection() {
             {founder?.text ? (
               <p>{founder.text}</p>
             ) : (
-              <>
-                <p>
-                  As the Founder and CEO, my vision is to bridge the gap between academic learning
-                  and the fast-evolving global tech industry.
-                </p>
-                <p>
-                  We are building a platform that empowers students with real-world technical skills,
-                  modern tools, and industry insights.
-                </p>
-                <p>
-                  Our mission is aligned with building a Smart Bangladesh through innovation,
-                  technical education, and digital transformation.
-                </p>
-              </>
+              <p>
+                Mosfiqur Rahman, the visionary founder and CEO of Bangladesh Technical Education
+                Technology, has been a driving force behind the organization&apos;s mission to revolutionize
+                technical education in Bangladesh. With a background in engineering and a passion for
+                education, Mosfiqur has dedicated his career to empowering the youth of Bangladesh.
+              </p>
             )}
           </div>
 
-          <button className="mt-6 bg-[#678E1A] hover:bg-[#678E1A]/90 text-white px-8 py-3 rounded font-semibold text-sm transition">
-            READ MORE
-          </button>
+      
+
+     
         </motion.div>
 
         {/* Image */}
@@ -170,18 +182,6 @@ export default function AboutFounderSection() {
                 className="object-cover brightness-100 dark:brightness-75 contrast-100 dark:contrast-110"
               />
             )}
-
-            {/* Overlay Card */}
-            {/* <div className="absolute -bottom-6 left-1/2 -translate-x-1/2
-                            bg-white/80 dark:bg-gray-900/80 backdrop-blur
-                            p-4 rounded shadow w-[80%] text-center">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">
-                Mosfiqur Rahman
-              </h3>
-              <p className="text-sm text-[#678E1A] font-semibold uppercase mt-1">
-                Founder & CEO
-              </p>
-            </div> */}
           </div>
         </motion.div>
 

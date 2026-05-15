@@ -8,6 +8,8 @@ import { heroImageTextService } from "./HeroImageText.service";
 export const addHeroImageTextAction = async (payload: {
   image: string;
   text?: string;
+  title?: string;
+  name?: string;
 }) => {
   try {
     const response = await heroImageTextService.create(payload);
@@ -23,7 +25,7 @@ export const addHeroImageTextAction = async (payload: {
 
 export const updateHeroImageTextAction = async (
   id: string,
-  payload: { image?: string; text?: string }
+  payload: { image?: string; text?: string; title?: string; name?: string }
 ) => {
   try {
     const response = await heroImageTextService.update(id, payload);

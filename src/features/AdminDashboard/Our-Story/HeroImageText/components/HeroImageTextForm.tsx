@@ -9,6 +9,8 @@ import { showError, showSuccess } from "@/core/utils/swal.utils";
 
 export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroImageTextModalProps) {
   const [text, setText] = useState("");
+  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -43,6 +45,8 @@ export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroIm
       const result = await addHeroImageTextAction({
         image: imageUrl,
         text: text || undefined,
+        title: title || undefined,
+        name: name || undefined,
       });
 
       if (result.success) {
@@ -50,6 +54,8 @@ export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroIm
         onSuccess();
         onClose();
         setText("");
+        setTitle("");
+        setName("");
         setImageFile(null);
         setPreview(null);
       } else {
@@ -100,9 +106,22 @@ export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroIm
               className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-100 outline-none focus:border-slate-500 transition resize-none"
             />
           </div>
+         <input
+  type="text"
+  value={title}
+  onChange={(e) => setTitle(e.target.value)}
+  placeholder="Enter hero title..."
+  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-100 outline-none focus:border-slate-500 transition"
+/>
+         <input
+  type="text"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  placeholder="Enter hero name..."
+  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-100 outline-none focus:border-slate-500 transition"
+/>
         </div>
 
-        {/* Footer */}
         <div className="flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800">
           <button onClick={onClose} className="flex-1 h-11 rounded-xl border border-gray-200 text-sm font-bold uppercase tracking-widest hover:bg-gray-50 transition-all">
             Cancel

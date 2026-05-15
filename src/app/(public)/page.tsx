@@ -1,4 +1,4 @@
-import AboutFounderSection from '@/features/public_assets/Home/AboutFounderSection';
+import AboutFounderSection from '@/features/public_assets/Home/AboutFounderSection/AboutFounderSection';
 import { Advantages } from '@/features/public_assets/Home/Advantages';
 import CircularProgress from '@/features/public_assets/Home/CircularProgress';
 import Instructors from '@/features/public_assets/Home/Instructors';

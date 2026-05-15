@@ -1,6 +1,8 @@
 export interface HeroImageText {
   id: string;
   image: string;
+  name?:      string;
+  title?:     string;
   text?: string;
   createdAt: string;
   updatedAt: string;

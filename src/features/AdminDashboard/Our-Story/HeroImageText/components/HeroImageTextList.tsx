@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,6 +15,8 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
 
   const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  const [editTitle, setEditTitle] = useState(""); // ✅
+  const [editName, setEditName] = useState("");   // ✅
   const [editImageFile, setEditImageFile] = useState<File | null>(null);
   const [editPreview, setEditPreview] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -31,6 +34,8 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
   const handleEditStart = (item: HeroImageText) => {
     setEditId(item.id);
     setEditText(item.text ?? "");
+    setEditTitle(item.title ?? ""); 
+    setEditName(item.name ?? "");   
     setEditPreview(item.image);
     setEditImageFile(null);
   };
@@ -57,6 +62,8 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
       const result = await updateHeroImageTextAction(editId, {
         ...(imageUrl && { image: imageUrl }),
         text: editText || undefined,
+        title: editTitle || undefined, 
+        name: editName || undefined,   
       });
 
       if (result.success) {
@@ -116,7 +123,6 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
 
           {/* Image */}
           <div className="relative w-full h-48 bg-gray-100 dark:bg-gray-800">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={editId === item.id && editPreview ? editPreview : item.image}
               alt="hero"
@@ -136,17 +142,46 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
           {/* Body */}
           <div className="p-4 space-y-3">
             {editId === item.id ? (
-              <textarea
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                rows={3}
-                placeholder="Enter text..."
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:border-slate-500 transition resize-none"
-              />
+              <>
+                {/* Text */}
+                <textarea
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  rows={3}
+                  placeholder="Enter text..."
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:border-slate-500 transition resize-none"
+                />
+
+                {/* Title ✅ */}
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  placeholder="Enter title..."
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:border-slate-500 transition"
+                />
+
+                {/* Name ✅ */}
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Enter name..."
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm outline-none focus:border-slate-500 transition"
+                />
+              </>
             ) : (
-              <p className="text-sm text-gray-600 dark:text-gray-300 min-h-10">
-                {item.text || <span className="text-gray-300 italic">No text</span>}
-              </p>
+              <div className="space-y-1">
+                {item.title && (
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{item.title}</p>
+                )}
+                {item.name && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{item.name}</p>
+                )}
+                <p className="text-sm text-gray-600 dark:text-gray-300 min-h-10">
+                  {item.text || <span className="text-gray-300 italic">No text</span>}
+                </p>
+              </div>
             )}
 
             <div className="flex gap-2">
@@ -187,7 +222,6 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
               )}
             </div>
           </div>
-
         </div>
       ))}
     </div>

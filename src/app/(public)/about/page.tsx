@@ -1,20 +1,14 @@
-// import ContactPage from '@/features/public_assets/about/ContactPage';
 import { AboutHero } from '@/features/public_assets/about/AboutHero';
-import { MissionSection } from '@/features/public_assets/about/MissionSection';
-// import ServicesPage from '@/features/public_assets/about/ServicesPage';
-import { StatsSection } from '@/features/public_assets/about/StatsSection';
-import { TeamSection } from '@/features/public_assets/about/TeamSection';
+import LoadingScreen from '@/features/public_assets/about/LoadingScreen';
+
 import React from 'react';
 
 const page = () => {
     return (
         <div>
+            <LoadingScreen></LoadingScreen>
             <AboutHero></AboutHero>
-            <MissionSection></MissionSection>
-            <TeamSection></TeamSection>
-            <StatsSection></StatsSection>
-            {/* <ServicesPage></ServicesPage> */}
-            {/* <ContactPage></ContactPage> */}
+          
         </div>
     );
 };
