@@ -1,22 +1,24 @@
-import AboutFounderSection from '@/features/public_assets/Home/AboutFounderSection';
+import AboutFounderSection from '@/features/public_assets/Home/AboutFounderSection/AboutFounderSection';
 import { Advantages } from '@/features/public_assets/Home/Advantages';
-import CircularProgress from '@/features/public_assets/Home/CircularProgress';
-import Instructors from '@/features/public_assets/Home/Instructors';
+import CircularProgress from '@/features/public_assets/Home/CircularProgress/CircularProgress';
+import Instructors from '@/features/public_assets/Home/Instructors/Instructors';
 import Slider from '@/features/public_assets/Home/Slider/Slider';
-import SuccessStudents from '@/features/public_assets/Home/successStudents';
-import Testimonials from '@/features/public_assets/Home/Testimonials';
+import SuccessStudents from '@/features/public_assets/Home/SuccessStudents/successStudents';
+import Testimonials from '@/features/public_assets/Home/Testimonials/Testimonials';
 import React from 'react';
 
 const page = () => {
 
     return (
-        <div>
+        <div className='flex flex-col gap-6'>
         <Slider></Slider>
         <Advantages></Advantages>
         <AboutFounderSection></AboutFounderSection>
         <Instructors></Instructors>
+
         <SuccessStudents></SuccessStudents>
-<CircularProgress></CircularProgress>
+
+       <CircularProgress></CircularProgress>
 
         <Testimonials></Testimonials>
      

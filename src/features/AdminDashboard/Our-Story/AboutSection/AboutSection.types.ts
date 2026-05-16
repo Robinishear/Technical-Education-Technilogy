@@ -1,4 +1,4 @@
-export interface HeroImageText {
+export interface AboutSection {
   id: string;
   image: string;
   name?:      string;
@@ -8,7 +8,7 @@ export interface HeroImageText {
   updatedAt: string;
 }
 
-export interface HeroImageTextModalProps {
+export interface AboutSectionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;

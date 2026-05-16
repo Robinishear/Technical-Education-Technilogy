@@ -3,19 +3,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { heroImageTextService } from "./HeroImageText.service";
+import { aboutSectionService } from "./AboutSection.service";
 
-export const addHeroImageTextAction = async (payload: {
+export const addAboutSectionAction = async (payload: {
   image: string;
   text?: string;
   title?: string;
   name?: string;
 }) => {
   try {
-    const response = await heroImageTextService.create(payload);
+    const response = await aboutSectionService.create(payload);
     if (response.success) {
-      revalidatePath("/admin/hero-image-text");
-      return { success: true, message: "Hero image text added successfully! ✨" };
+      revalidatePath("/admin/about-section");
+      return { success: true, message: "About section added successfully! ✨" };
     }
     return { success: false, message: response.message || "Failed to add" };
   } catch (error: any) {
@@ -23,14 +23,14 @@ export const addHeroImageTextAction = async (payload: {
   }
 };
 
-export const updateHeroImageTextAction = async (
+export const updateAboutSectionAction = async (
   id: string,
   payload: { image?: string; text?: string; title?: string; name?: string }
 ) => {
   try {
-    const response = await heroImageTextService.update(id, payload);
+    const response = await aboutSectionService.update(id, payload);
     if (response.success) {
-      revalidatePath("/admin/hero-image-text");
+      revalidatePath("/admin/about-section");
       return { success: true, message: "Updated successfully! ✨" };
     }
     return { success: false, message: response.message || "Failed to update" };
@@ -39,11 +39,11 @@ export const updateHeroImageTextAction = async (
   }
 };
 
-export const deleteHeroImageTextAction = async (id: string) => {
+export const deleteAboutSectionAction = async (id: string) => {
   try {
-    const response = await heroImageTextService.delete(id);
+    const response = await aboutSectionService.delete(id);
     if (response.success) {
-      revalidatePath("/admin/hero-image-text");
+      revalidatePath("/admin/about-section");
       return { success: true, message: "Deleted successfully!" };
     }
     return { success: false, message: "Delete failed" };
@@ -52,9 +52,9 @@ export const deleteHeroImageTextAction = async (id: string) => {
   }
 };
 
-export const getHeroImageTextsAction = async () => {
+export const getAboutSectionsAction = async () => {
   try {
-    const response = await heroImageTextService.getAll();
+    const response = await aboutSectionService.getAll();
     return { success: true, data: response.data || [] };
   } catch (error: any) {
     return { success: false, data: [] };

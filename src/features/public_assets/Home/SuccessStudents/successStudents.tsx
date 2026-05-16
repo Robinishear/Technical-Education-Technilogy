@@ -8,21 +8,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
-
-interface Student {
-  id: string;
-  name: string;
-  image: string;
-  position?: {
-    role?: string;
-    title?: string;
-  };
-  items?: {
-    title?: string;
-    feedback?: string;
-  }[];
-  bio?: string;
-}
+import { Student } from "./types";
 
 export default function SuccessStudents() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -44,17 +30,15 @@ export default function SuccessStudents() {
     fetchStudents();
   }, []);
 
+  if (!loading && !students.length) return null;
+
   return (
-    <section className="py-20 font-sans overflow-hidden bg-white dark:bg-gray-950">
+    <section className="py-3 font-sans overflow-hidden shadow-sm bg-white dark:bg-gray-950">
       <div className="container mx-auto px-6">
-        {/* 📢 Header Section */}
         <div className="text-center mb-20">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0066cc] dark:text-blue-400 uppercase tracking-tight">
             TESTIMONIAL <span className="text-gray-800 dark:text-white">OUR STUDENTS SAY</span>
           </h2>
-          <p className="max-w-2xl mx-auto mt-4 text-gray-500 dark:text-gray-400 text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.
-          </p>
         </div>
 
         {loading ? (
@@ -81,7 +65,6 @@ export default function SuccessStudents() {
             {students.map((student) => (
               <SwiperSlide key={student.id} className="pt-12">
                 <div className="relative bg-[#f8f9fa] dark:bg-gray-900 rounded-xl p-8 pt-16 text-center border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:shadow-xl group h-full flex flex-col">
-                  
                   <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 shadow-md overflow-hidden bg-white">
                     <Image
                       src={student.image || "/placeholder.png"}
@@ -91,16 +74,15 @@ export default function SuccessStudents() {
                       unoptimized
                     />
                   </div>
-
                   <div className="flex-1 flex flex-col items-center">
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 uppercase tracking-wide">
-                      {student.position?.role || student.position?.title || "WEB DESIGN"}
+                      {student.position?.role || student.position?.title}
                     </h3>
-                    
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-4 leading-relaxed line-clamp-3">
-                      {student.bio || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy eirmod."}
-                    </p>
-
+                    {student.bio && (
+                      <p className="text-gray-500 dark:text-gray-400 text-sm mt-4 leading-relaxed line-clamp-3">
+                        {student.bio}
+                      </p>
+                    )}
                     <button
                       onClick={() => setActiveStudent(student)}
                       className="mt-6 text-[#678E1A] font-bold border-b-2 border-[#678E1A] hover:text-[#567a16] hover:border-[#567a16] transition-colors text-sm uppercase inline-block pb-1"
@@ -116,7 +98,7 @@ export default function SuccessStudents() {
       </div>
 
       {activeStudent && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[100] p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-100 p-4 animate-in fade-in duration-200">
           <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-lg w-full relative shadow-2xl">
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
@@ -126,7 +108,6 @@ export default function SuccessStudents() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-
             <div className="flex flex-col items-center text-center">
               <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[#678E1A] mb-4">
                 <Image src={activeStudent.image} alt={activeStudent.name} fill className="object-cover" unoptimized />
@@ -136,9 +117,11 @@ export default function SuccessStudents() {
                 {activeStudent.position?.role || "Success Student"}
               </p>
               <div className="h-1 w-12 bg-gray-200 my-4 rounded-full" />
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed italic">
-                "{activeStudent.bio || "No bio available for this student."}"
-              </p>
+              {activeStudent.bio && (
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed italic">
+                  "{activeStudent.bio}"
+                </p>
+              )}
             </div>
           </div>
         </div>

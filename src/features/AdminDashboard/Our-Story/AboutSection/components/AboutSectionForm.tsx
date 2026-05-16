@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { X, ImagePlus, Loader2 } from "lucide-react";
-import { HeroImageTextModalProps } from "../HeroImageText.types";
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
-import { addHeroImageTextAction } from "../HeroImageText.actions";
-import { showError, showSuccess } from "@/core/utils/swal.utils";
 
-export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroImageTextModalProps) {
+import { showError, showSuccess } from "@/core/utils/swal.utils";
+import { AboutSectionModalProps } from "../AboutSection.types";
+import { addAboutSectionAction } from "../AboutSection.actions";
+
+export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: AboutSectionModalProps) {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");
@@ -42,7 +43,7 @@ export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroIm
       setUploading(false);
       setLoading(true);
 
-      const result = await addHeroImageTextAction({
+      const result = await addAboutSectionAction({
         image: imageUrl,
         text: text || undefined,
         title: title || undefined,
@@ -76,7 +77,7 @@ export default function HeroImageTextForm({ isOpen, onClose, onSuccess }: HeroIm
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
           <h2 className="text-base font-bold text-gray-800 dark:text-gray-100 uppercase tracking-widest">
-            Add Hero Image
+            Add About Section
           </h2>
           <button onClick={onClose} className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 transition">
             <X size={18} className="text-gray-500" />
