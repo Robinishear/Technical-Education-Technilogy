@@ -6,7 +6,7 @@ import React from 'react';
 
 const page = () => {
     return (
-        <div>
+        <div className='flex flex-col gap-6'>
             <LoadingScreen></LoadingScreen>
             <AboutHero></AboutHero>
             <About></About>

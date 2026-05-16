@@ -38,12 +38,10 @@ export default function About() {
   if (!about && !founder) return null;
 
   return (
-    <section className="container mx-auto px-6 py-20 space-y-4 ">
+    <section className="container  space-y-2 max-w-7xl">
 
-      {/* ================= ABOUT ================= */}
       {about && (
-        <div className="flex flex-col lg:flex-row items-center gap-16 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 ">
-
+        <div className="flex flex-col lg:flex-row items-center gap-16 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -85,14 +83,11 @@ export default function About() {
               </p>
             )}
           </motion.div>
-
         </div>
       )}
 
-      {/* ================= FOUNDER ================= */}
       {founder && (
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-16 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 ">
-
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-16 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -133,7 +128,6 @@ export default function About() {
               )}
             </div>
           </motion.div>
-
         </div>
       )}
 

@@ -7,21 +7,8 @@ import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import { Teacher } from "./types";
 
-interface Teacher {
-  id: string;
-  name: string;
-  image: string;
-  position?: {
-    role?: string;
-    title?: string;
-  };
-  items?: {
-    title?: string;
-    feedback?: string;
-  }[];
-  bio?: string;
-}
 
 export default function Instructors() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -43,10 +30,11 @@ export default function Instructors() {
     fetchTeachers();
   }, []);
 
+  if (!loading && !teachers.length) return null;
+
   return (
-    <section className="py-20 font-sans overflow-hidden bg-white dark:bg-gray-900">
+    <section className="py-3 font-sans overflow-hidden shadow-sm bg-white dark:bg-gray-900">
       <div className="container mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 uppercase">
             OUR <span className="text-[#678E1A]">TEACHERS</span>
@@ -56,10 +44,7 @@ export default function Instructors() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
             {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="h-80 rounded border border-gray-200 dark:border-gray-700"
-              />
+              <div key={i} className="h-80 rounded border border-gray-200 dark:border-gray-700" />
             ))}
           </div>
         ) : (
@@ -83,7 +68,6 @@ export default function Instructors() {
                 className="border border-gray-200 dark:border-gray-700 rounded-md p-3 flex flex-col min-h-95"
               >
                 <div className="flex flex-col flex-1">
-                  {/* Image */}
                   <div className="relative aspect-4/3 overflow-hidden rounded-md">
                     <Image
                       src={teacher.image || "/placeholder.png"}
@@ -93,19 +77,13 @@ export default function Instructors() {
                       unoptimized
                     />
                   </div>
-
-                  {/* Content */}
                   <div className="p-4 flex flex-col flex-1">
                     <h3 className="text-md font-bold text-gray-800 dark:text-gray-200">
                       {teacher.name}
                     </h3>
-
                     <p className="text-[#678E1A] text-[10px] font-bold uppercase mb-3 line-clamp-2">
-                      {teacher.position?.role ||
-                        teacher.position?.title ||
-                        "Instructor"}
+                      {teacher.position?.role || teacher.position?.title || "Instructor"}
                     </p>
-
                     <div className="flex flex-wrap gap-1 mb-3 overflow-hidden flex-1">
                       {teacher.items?.map((item, i) => (
                         <span
@@ -116,7 +94,6 @@ export default function Instructors() {
                         </span>
                       ))}
                     </div>
-
                     <button
                       onClick={() => setActiveTeacher(teacher)}
                       className="mt-auto bg-[#678E1A] hover:bg-[#678E1A]/90 text-white px-4 py-2 rounded font-semibold text-xs transition"
@@ -131,7 +108,6 @@ export default function Instructors() {
         )}
       </div>
 
-      {/* Modal */}
       {activeTeacher && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
           <div className="bg-white dark:bg-gray-800 rounded-md p-6 max-w-md w-full max-h-[80vh] overflow-y-auto relative">
@@ -141,7 +117,6 @@ export default function Instructors() {
             >
               ✕
             </button>
-
             <div className="mb-4 relative aspect-4/3">
               <Image
                 src={activeTeacher.image || "/placeholder.png"}
@@ -151,16 +126,12 @@ export default function Instructors() {
                 unoptimized
               />
             </div>
-
             <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">
               {activeTeacher.name}
             </h3>
             <p className="text-[#678E1A] text-[10px] font-bold uppercase mb-3">
-              {activeTeacher.position?.role ||
-                activeTeacher.position?.title ||
-                "Instructor"}
+              {activeTeacher.position?.role || activeTeacher.position?.title || "Instructor"}
             </p>
-
             {activeTeacher.items && (
               <div className="flex flex-wrap gap-2 mb-3">
                 {activeTeacher.items.map((item, i) => (
@@ -173,7 +144,6 @@ export default function Instructors() {
                 ))}
               </div>
             )}
-
             {activeTeacher.bio && (
               <p className="text-gray-700 dark:text-gray-300 text-sm">
                 {activeTeacher.bio}
@@ -183,7 +153,6 @@ export default function Instructors() {
         </div>
       )}
 
-      {/* Swiper Pagination Styles */}
       <style jsx global>{`
         .teachers-swiper .swiper-pagination-bullet {
           background: #9ca3af;

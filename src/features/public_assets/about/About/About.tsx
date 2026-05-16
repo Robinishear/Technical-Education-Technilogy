@@ -24,9 +24,6 @@ export default function About() {
     return () => { ignore = true; };
   }, []);
 
-  const about = items[0];
-  const founder = items[1];
-
   if (loading) {
     return (
       <div className="flex justify-center items-center py-32">
@@ -35,108 +32,64 @@ export default function About() {
     );
   }
 
-  if (!about && !founder) return null;
+  if (!items.length) return null;
 
   return (
-    <section className="container mx-auto px-6 py-20 space-y-24 bg-white dark:bg-gray-900">
+    <section className="container mx-auto px-6 py-4 space-y-8 bg-white dark:bg-gray-900">
+      {items.map((item, index) => {
+        const isEven = index % 2 === 0;
 
-      {/* ================= ABOUT ================= */}
-      {about && (
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="w-full lg:w-1/2"
+        return (
+          <div
+            key={item.id ?? index}
+            className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-16`}
           >
-            <div className="relative w-full h-87.5 rounded shadow overflow-hidden">
-              {about.image && (
-                <img
-                  src={about.image}
-                  alt="About Us"
-                  className="w-full h-full object-cover brightness-100 dark:brightness-75 contrast-100 dark:contrast-110"
-                />
+            {/* Image */}
+            <motion.div
+              initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="w-full lg:w-1/2"
+            >
+              <div className="relative w-full h-87.5 rounded shadow overflow-hidden">
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title ?? "Section Image"}
+                    className="w-full h-full object-cover brightness-100 dark:brightness-75 contrast-100 dark:contrast-110"
+                  />
+                )}
+                <div className="absolute inset-0 bg-black/0 dark:bg-black/20" />
+              </div>
+            </motion.div>
+
+            {/* Text */}
+            <motion.div
+              initial={{ opacity: 0, x: isEven ? 50 : -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="w-full lg:w-1/2 space-y-8"
+            >
+              {item.title && (
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">
+                  {item.title}
+                </h2>
               )}
-              <div className="absolute inset-0 bg-black/0 dark:bg-black/20" />
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="w-full lg:w-1/2 space-y-8"
-          >
-            {about.title && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">
-                {about.title}
-              </h2>
-            )}
-            {about.name && (
-              <p className="text-sm font-semibold text-[#678E1A] uppercase tracking-widest">
-                {about.name}
-              </p>
-            )}
-            <div className="w-20 h-1 bg-gray-300 dark:bg-gray-600" />
-            {about.text && (
-              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {about.text}
-              </p>
-            )}
-          </motion.div>
-
-        </div>
-      )}
-
-      {/* ================= FOUNDER ================= */}
-      {founder && (
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-16">
-
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="w-full lg:w-1/2 space-y-8"
-          >
-            {founder.title && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">
-                {founder.title}
-              </h2>
-            )}
-            {founder.name && (
-              <p className="text-lg font-bold text-gray-800 dark:text-gray-200">
-                {founder.name}
-              </p>
-            )}
-            <div className="w-20 h-1 bg-gray-300 dark:bg-gray-600" />
-            {founder.text && (
-              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {founder.text}
-              </p>
-            )}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="w-full lg:w-1/3"
-          >
-            <div className="relative w-full h-105 rounded shadow overflow-hidden">
-              {founder.image && (
-                <img
-                  src={founder.image}
-                  alt="Founder"
-                  className="w-full h-full object-cover brightness-100 dark:brightness-75 contrast-100 dark:contrast-110"
-                />
+              {item.name && (
+                <p className="text-sm font-semibold text-[#678E1A] uppercase tracking-widest">
+                  {item.name}
+                </p>
               )}
-            </div>
-          </motion.div>
-
-        </div>
-      )}
-
+              <div className="w-20 h-1 bg-gray-300 dark:bg-gray-600" />
+              {item.text && (
+                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {item.text}
+                </p>
+              )}
+            </motion.div>
+          </div>
+        );
+      })}
     </section>
   );
 }

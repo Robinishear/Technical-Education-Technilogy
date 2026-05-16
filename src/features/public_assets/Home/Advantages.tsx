@@ -33,14 +33,13 @@ const advantages = [
 
 export const Advantages = () => {
   return (
-    <div className="container mx-auto py-6 px-4 bg-white dark:bg-gray-900 shadow-sm">
+    <div className="container mx-auto py-2 px-4 rounded-2xl bg-white dark:bg-gray-900 shadow-sm">
       
       {/* Header */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-8">
         <h2 className="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4 tracking-tight">
           OUR <span className="text-[#678E1A]">ADVANTAGES</span>
         </h2>
-
         <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-sm md:text-lg">
           We combine technical expertise with innovative solutions for your platform.
         </p>
@@ -59,21 +58,15 @@ export const Advantages = () => {
                        hover:border-[#678E1A] transition-all duration-300 
                        flex flex-col items-center text-center min-h-60 justify-center"
           >
-            
-            {/* Icon */}
             <div className="w-16 h-16 rounded-xl border border-gray-200 dark:border-gray-700 
                             flex items-center justify-center mb-4 text-[#678E1A] 
                             group-hover:bg-[#678E1A]/10 transition-all duration-300">
               {item.icon}
             </div>
-
-            {/* Title */}
             <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-2 tracking-wider uppercase 
                            group-hover:text-[#678E1A] transition-colors duration-300">
               {item.title}
             </h3>
-
-            {/* Description */}
             <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-snug px-2">
               {item.description}
             </p>
