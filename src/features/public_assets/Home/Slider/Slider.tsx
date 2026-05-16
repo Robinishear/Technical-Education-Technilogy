@@ -122,7 +122,7 @@ export default function Slider() {
       </div>
 
       {/* NOTICE TICKER */}
-      <div className="flex items-center dark:bg-gray-800 bg-white shadow-md overflow-hidden h-10 border-t border-gray-200">
+      <div className="flex items-center dark:bg-gray-800 bg-white shadow-sm overflow-hidden h-10 border-t border-gray-200">
         <div className="bg-[#678E1A] text-white text-xs font-black uppercase tracking-widest px-5 h-full flex items-center shrink-0">
           Notice
         </div>

@@ -4,8 +4,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
+import { getAboutSectionsAction } from "@/features/AdminDashboard/Our-Story/AboutSection/AboutSection.actions";
 import { AboutSection } from "@/features/AdminDashboard/Our-Story/AboutSection/AboutSection.types";
-import { getHeroImageTextsAction } from "@/features/AdminDashboard/Our-Story/HeroImageText/HeroImageText.actions";
 
 export default function About() {
   const [items, setItems] = useState<AboutSection[]>([]);
@@ -14,7 +14,7 @@ export default function About() {
   useEffect(() => {
     let ignore = false;
     const fetchData = async () => {
-      const result = await getHeroImageTextsAction();
+      const result = await getAboutSectionsAction();
       if (!ignore) {
         setItems(result.data ?? []);
         setLoading(false);
@@ -38,11 +38,11 @@ export default function About() {
   if (!about && !founder) return null;
 
   return (
-    <section className="container mx-auto px-6 py-20 space-y-4 ">
+    <section className="container mx-auto px-6 py-20 space-y-24 bg-white dark:bg-gray-900">
 
       {/* ================= ABOUT ================= */}
       {about && (
-        <div className="flex flex-col lg:flex-row items-center gap-16 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 ">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
 
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -91,7 +91,7 @@ export default function About() {
 
       {/* ================= FOUNDER ================= */}
       {founder && (
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-16 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 ">
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-16">
 
           <motion.div
             initial={{ opacity: 0, x: -50 }}

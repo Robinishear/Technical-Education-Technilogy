@@ -1,3 +1,4 @@
+import About from '@/features/public_assets/about/About/About';
 import { AboutHero } from '@/features/public_assets/about/AboutHero';
 import LoadingScreen from '@/features/public_assets/about/LoadingScreen';
 
@@ -8,6 +9,7 @@ const page = () => {
         <div>
             <LoadingScreen></LoadingScreen>
             <AboutHero></AboutHero>
+            <About></About>
           
         </div>
     );

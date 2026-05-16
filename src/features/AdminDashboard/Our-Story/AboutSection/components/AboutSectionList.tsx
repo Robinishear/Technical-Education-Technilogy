@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import { Pencil, Trash2, Loader2, X, Save, ImagePlus } from "lucide-react";
 
 import { uploadToCloudinary } from "@/core/upload-image-function/upload.service";
-import { HeroImageText } from "../HeroImageText.types";
-import { deleteHeroImageTextAction, getHeroImageTextsAction, updateHeroImageTextAction } from "../HeroImageText.actions";
 import { confirmDelete, showError, showSuccess } from "@/core/utils/swal.utils";
+import { deleteAboutSectionAction,  getAboutSectionsAction, updateAboutSectionAction } from "../AboutSection.actions";
+import { AboutSection } from "../AboutSection.types";
 
 export default function HeroImageTextList({ refresh }: { refresh: number }) {
-  const [items, setItems] = useState<HeroImageText[]>([]);
+  const [items, setItems] = useState<AboutSection[]>([]);
   const [loading, setLoading] = useState(true);
+
 
   const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
@@ -24,14 +25,14 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
 
   const fetchData = async () => {
     setLoading(true);
-    const result = await getHeroImageTextsAction();
+    const result = await getAboutSectionsAction();
     setItems(result.data ?? []);
     setLoading(false);
   };
 
   useEffect(() => { fetchData(); }, [refresh]);
 
-  const handleEditStart = (item: HeroImageText) => {
+  const handleEditStart = (item: AboutSection) => {
     setEditId(item.id);
     setEditText(item.text ?? "");
     setEditTitle(item.title ?? ""); 
@@ -59,7 +60,7 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
         imageUrl = uploaded;
       }
 
-      const result = await updateHeroImageTextAction(editId, {
+      const result = await updateAboutSectionAction(editId, {
         ...(imageUrl && { image: imageUrl }),
         text: editText || undefined,
         title: editTitle || undefined, 
@@ -85,7 +86,7 @@ export default function HeroImageTextList({ refresh }: { refresh: number }) {
     if (!confirmed) return;
     try {
       setDeletingId(id);
-      const result = await deleteHeroImageTextAction(id);
+      const result = await deleteAboutSectionAction(id);
       if (result.success) {
         await showSuccess(result.message);
         fetchData();

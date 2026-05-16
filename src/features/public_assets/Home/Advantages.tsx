@@ -33,7 +33,7 @@ const advantages = [
 
 export const Advantages = () => {
   return (
-    <div className="container mx-auto py-20 px-4">
+    <div className="container mx-auto py-6 px-4 bg-white dark:bg-gray-900 shadow-sm">
       
       {/* Header */}
       <div className="text-center mb-16">

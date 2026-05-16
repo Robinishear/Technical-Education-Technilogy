@@ -10,13 +10,13 @@ import React from 'react';
 const page = () => {
 
     return (
-        <div>
+        <div className='flex flex-col gap-16'>
         <Slider></Slider>
         <Advantages></Advantages>
         <AboutFounderSection></AboutFounderSection>
         <Instructors></Instructors>
         <SuccessStudents></SuccessStudents>
-<CircularProgress></CircularProgress>
+       <CircularProgress></CircularProgress>
 
         <Testimonials></Testimonials>
      
