@@ -49,7 +49,7 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
         @media print {
           @page {
             size: A4 portrait;
-            margin: 5mm;
+            margin: 6mm;
           }
           html, body {
             background: #fff !important;
@@ -65,6 +65,11 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
             z-index: 999999 !important;
             padding: 0 !important;
             margin: 0 !important;
+          }
+          .transcript-sheet {
+            width: 100% !important;
+            border: none !important;
+            border-radius: 0 !important;
           }
           * {
             -webkit-print-color-adjust: exact !important;
@@ -146,11 +151,16 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
 function Sheet({ student, marks, avgCgpa, totalCredit }: {
   student: any; marks: Mark[]; avgCgpa: number; totalCredit: number;
 }) {
-  // Dynamic columns: ≤6 semesters → 2 col, 7-9 → 3 col, 10+ → 3 col tighter
-  const cols = marks.length <= 6 ? 2 : 2  // For simplicity, using 3 columns for 7 or more semesters. Adjust as needed.
+  // 2 columns for ≤8 semesters, 3 columns for more
+  const gridCols = marks.length <= 8 ? "1fr 1fr" : "1fr 1fr 1fr";
+
+  // Exactly same as ResultView QR
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=84x84&data=${encodeURIComponent(
+    `${typeof window !== "undefined" ? window.location.origin : process.env.NEXT_PUBLIC_APP_URL}/student-result-page?roll=${student?.roll}`
+  )}`;
 
   return (
-    <div style={{
+    <div className="transcript-sheet" style={{
       width: 794,
       backgroundColor: "#ffffff",
       color: "#000000",
@@ -161,29 +171,29 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
     }}>
 
       {/* HEADER */}
-      <div style={{ borderBottom: "2px solid #1e293b", padding: "5px 12px", backgroundColor: "#fff" }}>
+      <div style={{ borderBottom: "2px solid #1e293b", padding: "4px 10px", backgroundColor: "#fff" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <img
             src="https://i.ibb.co.com/r2dVnpdh/Screenshot-from-2026-03-04-16-25-16-removebg-preview.png"
             alt="Logo" crossOrigin="anonymous"
-            style={{ width: 40, height: 40, objectFit: "contain" }}
+            style={{ width: 38, height: 38, objectFit: "contain" }}
           />
           <div style={{ textAlign: "center", flex: 1, padding: "0 6px" }}>
-            <p style={{ fontSize: 6.5, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", margin: 0 }}>
+            <p style={{ fontSize: 6, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", margin: 0 }}>
               Government of the People's Republic of Bangladesh
             </p>
-            <p style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", margin: "2px 0 0", color: "#1e293b" }}>
+            <p style={{ fontSize: 9.5, fontWeight: 900, textTransform: "uppercase", margin: "2px 0 0", color: "#1e293b" }}>
               Bangladesh Technical Education Institute
             </p>
-            <p style={{ fontSize: 13, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.18em", margin: "2px 0 0", color: "#0f172a" }}>
+            <p style={{ fontSize: 12, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.18em", margin: "2px 0 0", color: "#0f172a" }}>
               RESULT SHEET
             </p>
           </div>
           {student?.picture ? (
             <img src={student.picture} alt="Student" crossOrigin="anonymous"
-              style={{ width: 38, height: 48, objectFit: "cover", border: "1px solid #cbd5e1" }} />
+              style={{ width: 36, height: 46, objectFit: "cover", border: "1px solid #cbd5e1" }} />
           ) : (
-            <div style={{ width: 38, height: 48, border: "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 6, color: "#94a3b8", fontWeight: 700 }}>
+            <div style={{ width: 36, height: 46, border: "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 6, color: "#94a3b8", fontWeight: 700 }}>
               PHOTO
             </div>
           )}
@@ -191,8 +201,8 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
       </div>
 
       {/* STUDENT INFO */}
-      <div style={{ padding: "4px 12px", borderBottom: "1px solid #cbd5e1", backgroundColor: "#fafafa" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 16px" }}>
+      <div style={{ padding: "3px 10px", borderBottom: "1px solid #cbd5e1", backgroundColor: "#fafafa" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 14px" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <tbody>
               <InfoRow label="Name of Student" value={student?.name} />
@@ -216,9 +226,13 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
         </div>
       </div>
 
-      {/* SEMESTER TABLES */}
-      <div style={{ padding: "4px 12px" }}>
-        <div style={{ columns: cols, columnGap: 6 }}>
+      {/* SEMESTER TABLES — grid instead of CSS columns */}
+      <div style={{ padding: "3px 10px" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: gridCols,
+          gap: 5,
+        }}>
           {marks.map((mark) => {
             const semCredit = mark.subjects.reduce((acc, s) => acc + s.credit, 0);
             return (
@@ -226,19 +240,31 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
                 breakInside: "avoid",
                 pageBreakInside: "avoid",
                 border: "1px solid #cbd5e1",
-                marginBottom: 4,
-                display: "inline-block",
-                width: "100%",
+                marginBottom: 0,
               }}>
+                {/* Semester Title Bar */}
                 <div style={{ backgroundColor: "#1e293b", padding: "1.5px 5px", textAlign: "center" }}>
-                  <p style={{ fontSize: 6, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff", margin: 0 }}>
+                  <p style={{ fontSize: 5.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff", margin: 0 }}>
                     {mark.semesterTitle}
                   </p>
                 </div>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+
+                {/* Subject Table */}
+                <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+                  <colgroup>
+                    <col style={{ width: "15%" }} />
+                    <col style={{ width: "47%" }} />
+                    <col style={{ width: "10%" }} />
+                    <col style={{ width: "15%" }} />
+                    <col style={{ width: "13%" }} />
+                  </colgroup>
                   <thead>
                     <tr style={{ backgroundColor: "#f1f5f9", borderBottom: "1px solid #cbd5e1" }}>
-                      <Th>Code</Th><Th>Title</Th><Th center>CR</Th><Th center>Grade</Th><Th center>GP</Th>
+                      <Th>Code</Th>
+                      <Th>Title</Th>
+                      <Th center>CR</Th>
+                      <Th center>Grade</Th>
+                      <Th center>GP</Th>
                     </tr>
                   </thead>
                   <tbody>
@@ -254,11 +280,11 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
                   </tbody>
                   <tfoot>
                     <tr style={{ borderTop: "1px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
-                      <td colSpan={2} style={{ padding: "1.5px 4px", fontWeight: 900, fontSize: 5.5, textTransform: "uppercase", color: "#475569" }}>
+                      <td colSpan={2} style={{ padding: "1.5px 4px", fontWeight: 900, fontSize: 5, textTransform: "uppercase", color: "#475569" }}>
                         Total Credit: {semCredit}
                       </td>
-                      <td colSpan={2} style={{ padding: "1.5px 4px", textAlign: "right", fontWeight: 900, fontSize: 5.5, color: "#475569" }}>GPA:</td>
-                      <td style={{ padding: "1.5px 4px", textAlign: "center", fontWeight: 900, fontSize: 6.5, color: "#0f172a" }}>
+                      <td colSpan={2} style={{ padding: "1.5px 4px", textAlign: "right", fontWeight: 900, fontSize: 5, color: "#475569" }}>GPA:</td>
+                      <td style={{ padding: "1.5px 4px", textAlign: "center", fontWeight: 900, fontSize: 6, color: "#0f172a" }}>
                         {mark.cgpa.toFixed(2)}
                       </td>
                     </tr>
@@ -271,28 +297,29 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
       </div>
 
       {/* FOOTER */}
-      <div style={{ padding: "4px 12px", borderTop: "2px solid #1e293b", backgroundColor: "#fafafa" }}>
+      <div style={{ padding: "4px 10px", borderTop: "2px solid #1e293b", backgroundColor: "#fafafa" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", gap: 16, fontSize: 8, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.06em", color: "#334155" }}>
+          <div style={{ display: "flex", gap: 14, fontSize: 7.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.06em", color: "#334155" }}>
             <span>Total Credit: {totalCredit}</span>
             <span>Credit Earned: {totalCredit}</span>
             <span>CGPA: {avgCgpa.toFixed(2)}</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
             <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=52x52&data=${encodeURIComponent(
-                `${process.env.NEXT_PUBLIC_APP_URL}/student-result-page?roll=${student?.roll}`
-              )}`}
-              alt="QR" crossOrigin="anonymous" width={42} height={42}
+              src={qrSrc}
+              alt="QR Code"
+              crossOrigin="anonymous"
+              width={64}
+              height={64}
             />
-            <p style={{ fontSize: 5.5, color: "#94a3b8", margin: 0, fontWeight: 700, textTransform: "uppercase" }}>Scan to verify</p>
+            <p style={{ fontSize: 5, color: "#94a3b8", margin: 0, fontWeight: 700, textTransform: "uppercase" }}>Scan to verify</p>
           </div>
         </div>
       </div>
 
       {/* NOTE */}
-      <div style={{ padding: "3px 12px", borderTop: "1px solid #e2e8f0", textAlign: "center", backgroundColor: "#fff" }}>
-        <p style={{ fontSize: 6, color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
+      <div style={{ padding: "2px 10px", borderTop: "1px solid #e2e8f0", textAlign: "center", backgroundColor: "#fff" }}>
+        <p style={{ fontSize: 5.5, color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
           Note: This is a computer-generated marksheet and does not require any signature.
         </p>
       </div>
@@ -302,7 +329,17 @@ function Sheet({ student, marks, avgCgpa, totalCredit }: {
 
 function Th({ children, center }: { children: React.ReactNode; center?: boolean }) {
   return (
-    <th style={{ padding: "1.5px 4px", textAlign: center ? "center" : "left", borderRight: "1px solid #e2e8f0", fontSize: 5.5, fontWeight: 900, textTransform: "uppercase", color: "#475569" }}>
+    <th style={{
+      padding: "1px 3px",
+      textAlign: center ? "center" : "left",
+      borderRight: "1px solid #e2e8f0",
+      fontSize: 5,
+      fontWeight: 900,
+      textTransform: "uppercase",
+      color: "#475569",
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+    }}>
       {children}
     </th>
   );
@@ -312,7 +349,17 @@ function Td({ children, center, bold, muted, color }: {
   children: React.ReactNode; center?: boolean; bold?: boolean; muted?: boolean; color?: string;
 }) {
   return (
-    <td style={{ padding: "1px 4px", textAlign: center ? "center" : "left", borderRight: "1px solid #f1f5f9", fontSize: 5.5, fontWeight: bold ? 700 : 400, color: color ?? (muted ? "#64748b" : "#1e293b") }}>
+    <td style={{
+      padding: "1px 3px",
+      textAlign: center ? "center" : "left",
+      borderRight: "1px solid #f1f5f9",
+      fontSize: 5,
+      fontWeight: bold ? 700 : 400,
+      color: color ?? (muted ? "#64748b" : "#1e293b"),
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+    }}>
       {children}
     </td>
   );
@@ -321,10 +368,10 @@ function Td({ children, center, bold, muted, color }: {
 function InfoRow({ label, value }: { label: string; value?: string | null }) {
   return (
     <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-      <td style={{ padding: "1.5px 8px 1.5px 0", fontWeight: 700, color: "#475569", fontSize: 7.5, whiteSpace: "nowrap", width: 110 }}>
+      <td style={{ padding: "1px 6px 1px 0", fontWeight: 700, color: "#475569", fontSize: 7, whiteSpace: "nowrap", width: 105 }}>
         {label}
       </td>
-      <td style={{ padding: "1.5px 0", color: "#1e293b", fontWeight: 600, fontSize: 7.5 }}>
+      <td style={{ padding: "1px 0", color: "#1e293b", fontWeight: 600, fontSize: 7 }}>
         {value || "—"}
       </td>
     </tr>
