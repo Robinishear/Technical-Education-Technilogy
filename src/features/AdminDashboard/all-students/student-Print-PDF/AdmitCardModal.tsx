@@ -70,7 +70,6 @@ export const AdmitCardModal = ({ student, onClose }: { student: Student; onClose
     position: absolute;
     inset: 0;
     z-index: 1;
-    /* বর্ডারের ভেতরে রাখার জন্য প্যাডিং বাড়ানো হয়েছে */
     padding: 18mm 32mm 18mm 32mm;
     display: flex;
     flex-direction: column;
