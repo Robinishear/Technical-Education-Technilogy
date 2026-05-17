@@ -1,3 +1,4 @@
+// PDFResourceTable.tsx
 "use client";
 
 import { CompleteNewData } from "@/features/AdminDashboard/UniversalAlertBoard/CompleteNewPDF/Types/complete-new.types";
@@ -6,6 +7,24 @@ import { FileText, Calendar, Download } from "lucide-react";
 interface Props {
   data: CompleteNewData[];
 }
+
+const handleDownload = async (pdfUrl: string, fileName: string) => {
+  try {
+    const response = await fetch(`/api/download-pdf?url=${encodeURIComponent(pdfUrl)}`);
+    if (!response.ok) throw new Error("Failed");
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = `${fileName}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+  } catch {
+    alert("PDF download করা যাচ্ছে না। Admin কে জানান।"); 
+  }
+};
 
 export default function PDFResourceTable({ data }: Props) {
   return (
@@ -31,9 +50,12 @@ export default function PDFResourceTable({ data }: Props) {
                   <div className="flex items-center gap-1.5"><Calendar size={14} /> {item.date}</div>
                 </td>
                 <td className="px-6 py-5 text-right">
-                  <a href={item.pdfUrl} target="_blank" className="inline-flex items-center gap-1 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition">
+                  <button
+                    onClick={() => handleDownload(item.pdfUrl, item.text)}
+                    className="inline-flex items-center gap-1 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition"
+                  >
                     Download <Download size={12} />
-                  </a>
+                  </button>
                 </td>
               </tr>
             )) : (

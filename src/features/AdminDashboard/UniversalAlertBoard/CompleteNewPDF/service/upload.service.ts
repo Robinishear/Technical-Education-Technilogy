@@ -12,6 +12,7 @@ export const uploadPDFToCloudinary = async (file: File): Promise<string | null> 
     formData.append("upload_preset", "zahid_preset");
     formData.append("resource_type", "raw"); 
     formData.append("folder", "pdfs");
+    // formData.append("type", "upload");
 
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/dr9gketux/raw/upload`,
