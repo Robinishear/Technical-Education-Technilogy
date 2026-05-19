@@ -23,18 +23,18 @@ export const CertificateModal = ({
 
   const monthName = (m: string | number) => {
     const months = [
-      "January",
-      "February",
-      "March",
-      "April",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
       "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     const idx = parseInt(String(m)) - 1;
     return months[idx] ?? m;

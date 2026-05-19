@@ -11,6 +11,7 @@ import { AdminDashboardNavbar } from "@/components/shared/admin/AdminDashboardNa
 import { cn } from "@/core/utils/utils";
 import { deleteCookie } from "@/core/utils/cookieUtils";
 import { toast } from "sonner";
+import { handleLogout } from "@/components/Authentication/Logout/auth.service";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -20,9 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleAdminLogout = async () => {
     await deleteCookie("accessToken");
     await deleteCookie("refreshToken");
-    toast.success("Admin Session Ended! 👋");
-    router.push("/login");
-    router.refresh();
+    await handleLogout(router);
   };
 
   const AdminNavContent = () => (

@@ -11,6 +11,7 @@ import { UserDashboardNavbar } from "@/components/shared/user/UserDashboardNavba
 import { cn } from "@/core/utils/utils";
 import { deleteCookie } from "@/core/utils/cookieUtils"; 
 import { toast } from "sonner";
+import { handleLogout } from "@/components/Authentication/Logout/auth.service";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -20,9 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const handleLogoutAction = async () => {
     await deleteCookie("accessToken");
     await deleteCookie("refreshToken");
-    toast.success("Logged out successfully! 👋");
-    router.push("/login");
-    router.refresh();
+    await handleLogout(router);
   };
 
   const NavContent = () => (

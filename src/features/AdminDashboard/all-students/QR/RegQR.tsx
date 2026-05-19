@@ -2,20 +2,19 @@ import QRCode from 'react-qr-code';
 import { Student } from '../admin-students/types/admin-students.types';
 
 export const buildRegQRData = (student: Student): string => {
-  const name = student.name || "Student";
-  const org = student.institute || "BTET";
-  const phone = student.guardianPhone || "";
-  const roll = student.roll || "N/A";
-  const reg = student.regNumber || "N/A";
-  const session = `${student.month1}-${student.month2} ${student.year1}`;
-  const course = student.educationQualification || "N/A";
-  
-  return `MECARD:N:${name};ORG:${org};TEL:${phone};NOTE:Roll: ${roll} | Reg: ${reg} | Session: ${session} | Course: ${course};;`;
+  return `STUDENT ID:
+------------------
+Name: ${student.name || "N/A"}
+Roll: ${student.roll || "N/A"}
+Reg: ${student.regNumber || "N/A"}
+Session: ${student.month1}-${student.month2} ${student.year1}
+Course: ${student.educationQualification || "N/A"}
+Institute: ${student.institute || "N/A"}`;
 };
 
 export const RegQR = ({ student, size = 60 }: { student: Student; size?: number }) => (
   <QRCode
-  
+
     value={buildRegQRData(student)}
     size={size}
     bgColor="#ffffff"
