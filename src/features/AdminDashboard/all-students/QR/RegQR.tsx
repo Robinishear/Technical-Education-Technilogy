@@ -2,20 +2,15 @@ import QRCode from 'react-qr-code';
 import { Student } from '../admin-students/types/admin-students.types';
 
 export const buildRegQRData = (student: Student): string => {
-  return JSON.stringify({
-    name: student.name,
-    regNumber: student.regNumber,
-    institute: student.institute,
-    fatherName: student.fatherName,
-    motherName: student.motherName,
-    gender: student.gender,
-    thana: student.thana,
-    district: student.district,
-    subject: student.educationQualification,
-    session: `${student.month1}-${student.month2} ${student.year1}`,
-    duration: student.duration,
-    instituteCode: student.studentId?.slice(0, 6),
-  });
+  const name = student.name || "Student";
+  const org = student.institute || "BTET";
+  const phone = student.guardianPhone || "";
+  const roll = student.roll || "N/A";
+  const reg = student.regNumber || "N/A";
+  const session = `${student.month1}-${student.month2} ${student.year1}`;
+  const course = student.educationQualification || "N/A";
+  
+  return `MECARD:N:${name};ORG:${org};TEL:${phone};NOTE:Roll: ${roll} | Reg: ${reg} | Session: ${session} | Course: ${course};;`;
 };
 
 export const RegQR = ({ student, size = 60 }: { student: Student; size?: number }) => (
