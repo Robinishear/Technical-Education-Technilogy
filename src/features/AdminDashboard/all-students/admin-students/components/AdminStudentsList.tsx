@@ -24,7 +24,6 @@ import {
 import MarkStudent from "../../markStudent/components/MarkStudent";
 import ViewMarks from "../../markStudent/components/ViewMarks";
 import DetailsModal from "./DetailsModal";
-import ExamModal from "@/features/AdminDashboard/exam/components/ExamModal";
 
 // Mobile Card Component
 const StudentMobileCard = ({
@@ -108,7 +107,6 @@ export default function AdminStudentsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchRoll, setSearchRoll] = useState("");
   const [viewingStudent, setViewingStudent] = useState<any>(null);
-  const [examStudent, setExamStudent] = useState<Student | null>(null); 
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -308,15 +306,7 @@ export default function AdminStudentsList() {
                       <Fullscreen size={13} className="text-blue-400" />
                     </button>
 
-                    {/* ✅ Exam Button */}
-                    <button
-                      className="h-8 px-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 flex items-center justify-center transition-colors text-emerald-600 text-[10px] font-bold uppercase tracking-wider"
-                      onClick={() => setExamStudent(student)}
-                      title="Exam"
-                    >
-                      Exam
-                    </button>
-
+                
                     <button
                       className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
                       onClick={() => handleDelete(student.id)}
@@ -406,8 +396,6 @@ export default function AdminStudentsList() {
         />
       )}
 
-{examStudent && (
-  <ExamModal student={examStudent} onClose={() => setExamStudent(null)} />
-)}    </div>
+    </div>
   );
 }

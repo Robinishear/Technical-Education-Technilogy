@@ -47,5 +47,5 @@ export const PUBLIC_NAV_LINKS = [
     href: "/student-result-page",
     icon: GraduationCap,
   },
-  { label: "Exam", href: "/Online Exam", icon: MessageSquare },
+  { label: "Exam", href: "/onlineExam", icon: MessageSquare },
 ];

@@ -33,3 +33,32 @@ export interface ExamResult {
   attemptCount: number;
   canRetry: boolean;
 }
+
+
+
+export interface Answer {
+  id: string;
+  questionId: string;
+  isCorrect: boolean;
+}
+
+export interface ExamResult {
+  id: string;
+  score: number;
+  totalMarks: number;
+  canRetry: boolean;
+  createdAt: string;
+  student: {
+    id: string;
+    name: string;
+    email: string;
+    roll: string;
+    studentId: string;
+    guardianPhone: string;
+  };
+  answers: Answer[];
+}
+
+export interface Props {
+  results: ExamResult[];
+}

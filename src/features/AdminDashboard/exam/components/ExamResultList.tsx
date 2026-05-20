@@ -4,33 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2, RotateCcw, Trophy } from "lucide-react";
 import { giveRetryAction } from "../exam.actions";
-
-interface Answer {
-  id: string;
-  questionId: string;
-  isCorrect: boolean;
-}
-
-interface ExamResult {
-  id: string;
-  score: number;
-  totalMarks: number;
-  canRetry: boolean;
-  createdAt: string;
-  student: {
-    id: string;
-    name: string;
-    email: string;
-    roll: string;
-    studentId: string;
-    guardianPhone: string;
-  };
-  answers: Answer[];
-}
-
-interface Props {
-  results: ExamResult[];
-}
+import { ExamResult, Props } from "../types";
 
 const ExamResultList = ({ results }: Props) => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
