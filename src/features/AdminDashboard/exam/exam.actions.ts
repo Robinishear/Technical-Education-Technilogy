@@ -55,3 +55,18 @@ export const getStudentResultAction = async (studentId: string) => {
     return { success: false, message: err?.message || error.message };
   }
 };
+
+export const giveRetryAction = async (studentId: string) => {
+  try {
+    const res = await examService.giveRetry(studentId);
+    revalidatePath("/admin/exam");
+    return { success: true, message: "Retry granted!", data: res.data };
+  } catch (error: any) {
+    const err = error?.response?.data as ApiErrorResponse;
+    return { success: false, message: err?.message || error.message };
+  }
+};
+export const getAllResultsAction = async () => {
+  const res = await examService.getAllResults();
+  return res.data ?? [];
+};

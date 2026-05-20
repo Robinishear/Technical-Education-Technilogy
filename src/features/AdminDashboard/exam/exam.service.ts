@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { httpClient } from "@/core/axios/httpClient";
 import { CreateQuestionPayload, ExamAnswer, ExamResult, Question } from "./types";
 
@@ -23,5 +24,13 @@ export const examService = {
 
   getStudentResult: async (studentId: string) => {
     return await httpClient.get<ExamResult[]>(`/exam/result/${studentId}`);
+  },
+
+  getAllResults: async () => {
+    return await httpClient.get<any[]>("/exam/results");
+  },
+
+  giveRetry: async (studentId: string) => {
+    return await httpClient.post(`/exam/retry/${studentId}`, {});
   },
 };
