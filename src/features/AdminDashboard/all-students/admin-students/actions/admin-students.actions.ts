@@ -45,3 +45,16 @@ export const adminUpdateStudentAction = async (id: string, data: any) => {
         return { success: false, message: errorRes?.message || error.message || "Server Error" };
     }
 };
+
+
+//  Admin: Student exam allow/disallow
+export const toggleExamAllowedAction = async (id: string) => {
+  try {
+    const res = await AdminStudentService.toggleExamAllowed(id);
+    revalidatePath("/admin/AllStudents");
+    return { success: true, data: res.data };
+  } catch (error: any) {
+    const err = error?.response?.data as ApiErrorResponse;
+    return { success: false, message: err?.message || error.message };
+  }
+};

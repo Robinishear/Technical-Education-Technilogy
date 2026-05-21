@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 
 import { NoticeData, SliderData } from "./types";
+import Link from "next/link";
 
 export default function Slider() {
   const [sliders, setSliders] = useState<SliderData[]>([]);
@@ -86,14 +87,28 @@ export default function Slider() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.8 }}
-                            className="flex gap-4"
+                            className="flex flex-wrap items-center gap-4"
                           >
-                            <button className="bg-[#678E1A] hover:bg-white hover:text-black text-white px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-[#678E1A]/20">
-                              Get Started
+                            <button className="group relative overflow-hidden bg-[#678E1A] hover:bg-white text-white hover:text-black px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 shadow-2xl shadow-[#678E1A]/30 border border-transparent hover:border-white">
+                              <span className="relative z-10 flex items-center gap-2">
+                                Get Started
+                                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                  →
+                                </span>
+                              </span>
                             </button>
-                            <button className="bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-md px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest transition-all border border-white/20">
-                              Explore More
-                            </button>
+
+                            <Link
+                              href="/contact"
+                              className="group bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-xl px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 border border-white/20 hover:border-white/60 shadow-lg"
+                            >
+                              <span className="flex items-center gap-2">
+                                Contact Us
+                                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                  ↗
+                                </span>
+                              </span>
+                            </Link>
                           </motion.div>
                         </div>
                       )}
@@ -137,8 +152,12 @@ export default function Slider() {
           border-radius: 20px !important;
         }
         @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
         }
         .animate-marquee {
           animation: marquee 20s linear infinite;
