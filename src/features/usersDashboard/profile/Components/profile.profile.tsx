@@ -1,175 +1,334 @@
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion, Variants } from "framer-motion";
 import {
-  ShieldCheck, Settings, MapPin, BookOpen, User,
-  CalendarDays, GraduationCap, Building2, Fingerprint,
+  User,
+  MapPin,
+  GraduationCap,
+  Building2,
+  Settings,
+  ShieldCheck,
+  CalendarDays,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ProfileUpdateForm } from "./ProfileUpdateForm";
 
 const getImageUrl = (src?: string | null) =>
-  src ? (src.startsWith("http") ? src : `${process.env.BASE_URL}/uploads/${src}`) : null;
+  src
+    ? src.startsWith("http")
+      ? src
+      : `${process.env.BASE_URL}/uploads/${src}`
+    : null;
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, delay: i * 0.06 },
+  }),
 };
 
-const itemVariants: Variants = {
-  hidden: { y: 10, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { duration: 0.4 } },
-};
-
-const InfoCard = ({ label, value, icon: Icon, isSpecial }: any) => (
-  <motion.div
-    variants={itemVariants}
-    className={`group grid grid-cols-1 md:grid-cols-[1.2fr_2fr] items-center p-4 rounded-xl border-2 transition-all
-    ${isSpecial ? "border-primary/30 bg-primary/5 shadow-sm" : "border-border/40 hover:border-primary/30"}`}
-  >
-    <div className="flex items-center gap-3 overflow-hidden">
-      <div className={`shrink-0 p-2 rounded-lg ${isSpecial ? "text-primary bg-primary/10" : "text-muted-foreground group-hover:text-primary bg-muted/50"}`}>
-        {Icon ? <Icon size={16} /> : <Fingerprint size={16} />}
+function SectionHeading({
+  icon: Icon,
+  title,
+}: {
+  icon: React.ElementType;
+  title: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 mb-4">
+      <div className="h-8 w-8 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400">
+        <Icon size={16} />
       </div>
-      <span className="text-[11px] font-black uppercase tracking-wider truncate">{label}</span>
+      <span className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+        {title}
+      </span>
+      <div className="flex-1 h-px bg-gray-100 dark:bg-white/5" />
     </div>
-    <span className="text-sm font-bold md:text-right wrap-break-word mt-1 md:mt-0">{value || "—"}</span>
-  </motion.div>
-);
+  );
+}
 
-const SectionHeader = ({ title, icon: Icon }: any) => (
-  <div className="flex items-center gap-4 mb-6 pt-4">
-    <div className="h-10 w-10 flex items-center justify-center rounded-xl border-2 border-primary/20 text-primary bg-primary/5">
-      <Icon size={20} />
+function InfoTile({
+  label,
+  value,
+  full = false,
+}: {
+  label: string;
+  value?: string | null;
+  full?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-xl bg-gray-50 dark:bg-white/5 px-4 py-3 ${
+        full ? "col-span-2" : ""
+      }`}
+    >
+      <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
+        {label}
+      </p>
+      <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+        {value || "—"}
+      </p>
     </div>
-    <h2 className="text-lg font-black uppercase tracking-tight">{title}</h2>
-    <div className="h-0.5 flex-1 bg-linear-to-r from-border via-border/50 to-transparent" />
-  </div>
-);
+  );
+}
 
 export const ProfileContent = ({ user }: { user: any }) => {
   const [showUpdate, setShowUpdate] = useState(false);
   const isAdmin = user?.role === "ADMIN";
+  const photoUrl = getImageUrl(user?.directorPhoto);
+  const initials = user?.name
+    ?.split(" ")
+    .map((w: string) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <div className="min-h-screen p-4 md:p-8 bg-background/50">
-      <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-6xl mx-auto space-y-10">
-        
-        <motion.div variants={itemVariants} className="p-6 md:p-10 rounded-[2.5rem] border bg-card shadow-sm">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-36 h-36 rounded-3xl overflow-hidden border-4 border-primary/10 shadow-2xl transition-transform hover:scale-105">
-              <img
-                src={getImageUrl(user?.directorPhoto) || `https://api.dicebear.com/7.x/initials/svg?seed=${user?.name}`}
-                className="w-full h-full object-cover"
-              />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 md:p-8">
+      <div className="max-w-5xl mx-auto space-y-6">
+        {/* ── Hero card ── */}
+        <motion.div
+          variants={fadeUp}
+          custom={0}
+          initial="hidden"
+          animate="show"
+          className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-white/10 p-6 md:p-8"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            {/* Avatar */}
+            <div className="relative shrink-0">
+              {photoUrl ? (
+                <img
+                  src={photoUrl}
+                  alt={user?.name}
+                  className="h-20 w-20 md:h-24 md:w-24 rounded-2xl object-cover border border-gray-200 dark:border-white/10"
+                />
+              ) : (
+                <div className="h-20 w-20 md:h-24 md:w-24 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl font-semibold">
+                  {initials}
+                </div>
+              )}
+              <span className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-emerald-400 border-2 border-white dark:border-gray-900" />
             </div>
 
-            <div className="flex-1 text-center md:text-left space-y-3">
-              <h1 className="text-4xl md:text-6xl font-black tracking-tighter bg-linear-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+            {/* Info */}
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white truncate">
                 {user?.name}
               </h1>
-              <div className="flex flex-wrap justify-center md:justify-start items-center gap-3">
-                <span className="text-sm font-mono text-muted-foreground bg-muted px-2 py-1 rounded-md">@{user?.username}</span>
-                <span className={`px-4 py-1 text-[10px] font-black uppercase rounded-full border-2 ${isAdmin ? "text-rose-500 border-rose-500/20 bg-rose-500/5" : "text-emerald-500 border-emerald-500/20 bg-emerald-500/5"}`}>
-                  {user?.role || "STUDENT"}
+              <p className="text-sm text-gray-400 font-mono mt-1">
+                @{user?.username}
+              </p>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span
+                  className={`text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full border ${
+                    isAdmin
+                      ? "text-rose-600 bg-rose-50 border-rose-200 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400"
+                      : "text-blue-600 bg-blue-50 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20 dark:text-blue-400"
+                  }`}
+                >
+                  {user?.role || "Student"}
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full border text-emerald-600 bg-emerald-50 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400">
+                  Active
                 </span>
               </div>
             </div>
 
-            <Button variant="outline" size="lg" className="rounded-2xl border-2 hover:bg-primary hover:text-white transition-all shadow-md" onClick={() => setShowUpdate(true)}>
-              <Settings size={18} className="mr-2 animate-spin-slow" /> Settings
+            {/* Settings */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowUpdate(true)}
+              className="shrink-0 rounded-xl gap-2 border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-300"
+            >
+              <Settings size={15} />
+              Settings
             </Button>
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-[1fr_380px] gap-10">
-          
-          <div className="space-y-12">
-            <section>
-              <SectionHeader title="Personal Profile" icon={User} />
-              <div className="grid gap-3">
-                <InfoCard label="Full Name" value={user?.name} isSpecial icon={Fingerprint} />
-                <div className="grid md:grid-cols-2 gap-3">
-                   <InfoCard label="Gender" value={user?.gender} />
-                   <InfoCard label="Religion" value={user?.religion} />
-                </div>
-                <InfoCard label="Nationality" value={user?.nationality} />
-                <div className="grid md:grid-cols-2 gap-3">
-                  <InfoCard label="Father" value={user?.fatherName} />
-                  <InfoCard label="Mother" value={user?.motherName} />
-                </div>
+        {/* ── Main grid ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+          {/* LEFT */}
+          <div className="space-y-6">
+            {/* Personal */}
+            <motion.div
+              variants={fadeUp}
+              custom={1}
+              initial="hidden"
+              animate="show"
+              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-white/10 p-6"
+            >
+              <SectionHeading icon={User} title="Personal profile" />
+              <div className="grid grid-cols-2 gap-3">
+                <InfoTile label="Full name" value={user?.name} full />
+                <InfoTile label="Gender" value={user?.gender} />
+                <InfoTile label="Religion" value={user?.religion} />
+                <InfoTile label="Nationality" value={user?.nationality} full />
+                <InfoTile label="Father's name" value={user?.fatherName} />
+                <InfoTile label="Mother's name" value={user?.motherName} />
               </div>
-            </section>
+            </motion.div>
 
-            <section>
-              <SectionHeader title="Location Details" icon={MapPin} />
-              <div className="grid gap-3">
-                <InfoCard label="Address" value={user?.fullAddress} isSpecial />
-                <div className="grid md:grid-cols-2 gap-3">
-                  <InfoCard label="Village" value={user?.village} />
-                  <InfoCard label="Post Office" value={user?.postOffice} />
-                  <InfoCard label="Upazila" value={user?.thanaUpazila} />
-                  <InfoCard label="District" value={user?.district} />
-                </div>
+            {/* Location */}
+            <motion.div
+              variants={fadeUp}
+              custom={2}
+              initial="hidden"
+              animate="show"
+              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-white/10 p-6"
+            >
+              <SectionHeading icon={MapPin} title="Location details" />
+              <div className="grid grid-cols-2 gap-3">
+                <InfoTile label="Full address" value={user?.fullAddress} full />
+                <InfoTile label="Village" value={user?.village} />
+                <InfoTile label="Post office" value={user?.postOffice} />
+                <InfoTile label="Upazila" value={user?.thanaUpazila} />
+                <InfoTile label="District" value={user?.district} />
               </div>
-            </section>
+            </motion.div>
 
-            <section>
-              <SectionHeader title="Academic Status" icon={GraduationCap} />
-              <div className="grid gap-4">
-                <InfoCard label="Course" value={user?.courseName} isSpecial icon={BookOpen} />
-                <div className="grid md:grid-cols-2 gap-3">
-                  <InfoCard label="Qualification" value={user?.educationQualification} />
-                  <InfoCard label="Duration" value={user?.duration} />
-                </div>
-                <InfoCard 
-                  label="Session Period" 
-                  value={`${user?.startMonth} ${user?.startYear} — ${user?.endMonth} ${user?.endYear}`} 
-                  icon={CalendarDays} 
+            {/* Academic */}
+            <motion.div
+              variants={fadeUp}
+              custom={3}
+              initial="hidden"
+              animate="show"
+              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-white/10 p-6"
+            >
+              <SectionHeading icon={GraduationCap} title="Academic status" />
+              <div className="grid grid-cols-2 gap-3">
+                <InfoTile label="Course" value={user?.courseName} full />
+                <InfoTile
+                  label="Qualification"
+                  value={user?.educationQualification}
                 />
+                <InfoTile label="Duration" value={user?.duration} />
+                <div className="col-span-2 rounded-xl bg-gray-50 dark:bg-white/5 px-4 py-3 flex items-start gap-3">
+                  <div className="mt-0.5 h-7 w-7 rounded-lg bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 flex items-center justify-center shrink-0">
+                    <CalendarDays size={14} className="text-gray-500" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
+                      Session period
+                    </p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                      {user?.startMonth} {user?.startYear} — {user?.endMonth}{" "}
+                      {user?.endYear}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-span-2 rounded-xl bg-gray-50 dark:bg-white/5 px-4 py-3 flex items-start gap-3">
+                  <div className="mt-0.5 h-7 w-7 rounded-lg bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 flex items-center justify-center shrink-0">
+                    <BookOpen size={14} className="text-gray-500" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
+                      Institute
+                    </p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                      {user?.institute || "—"}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </section>
+            </motion.div>
           </div>
 
-          {/* RIGHT: SIDEBAR INFO */}
-          <div className="space-y-8">
-            <div className="p-8 border-2 border-primary/10 rounded-[2rem] bg-card/50 backdrop-blur-sm space-y-6 shadow-lg">
-              <h3 className="font-black text-sm uppercase tracking-widest flex items-center gap-3 text-primary">
-                <Building2 size={20} /> Institute Info
-              </h3>
-              <InfoCard label="Name" value={user?.instituteName} />
-              <InfoCard label="Director" value={user?.directorName} />
-              <InfoCard label="Age" value={`${user?.instituteAge} Years`} />
-            </div>
+          {/* RIGHT SIDEBAR */}
+          <div className="space-y-4">
+            {/* Director photo */}
+            <motion.div
+              variants={fadeUp}
+              custom={1}
+              initial="hidden"
+              animate="show"
+              className="overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 aspect-4/3 bg-gray-100 dark:bg-white/5"
+            >
+              {photoUrl ? (
+                <img
+                  src={photoUrl}
+                  alt="Director"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-gray-300 dark:text-gray-600 gap-2">
+                  <User size={32} />
+                  <span className="text-xs">No photo</span>
+                </div>
+              )}
+            </motion.div>
 
-            <div className="aspect-4/5 border-2 border-border/50 rounded-[2rem] overflow-hidden shadow-inner group">
-              <img
-                src={getImageUrl(user?.directorPhoto) || ""}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-            </div>
+            {/* Institute info */}
+            <motion.div
+              variants={fadeUp}
+              custom={2}
+              initial="hidden"
+              animate="show"
+              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-white/10 p-5"
+            >
+              <SectionHeading icon={Building2} title="Institute info" />
+              <div className="space-y-3">
+                {[
+                  { label: "Name", value: user?.instituteName },
+                  { label: "Director", value: user?.directorName },
+                  {
+                    label: "Established",
+                    value: user?.instituteAge
+                      ? `${user.instituteAge} years ago`
+                      : null,
+                  },
+                ].map(({ label, value }) => (
+                  <div
+                    key={label}
+                    className="flex items-start justify-between gap-4 py-2 border-b border-gray-100 dark:border-white/5 last:border-0"
+                  >
+                    <span className="text-xs text-gray-400 shrink-0">
+                      {label}
+                    </span>
+                    <span className="text-xs font-medium text-gray-800 dark:text-gray-100 text-right">
+                      {value || "—"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
 
-            <div className="p-6 border-2 border-emerald-500/20 rounded-3xl flex items-center justify-between bg-emerald-500/5 shadow-sm">
-              <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Account Status</p>
-                <h4 className="font-bold text-emerald-600 text-lg flex items-center gap-1">Active <ShieldCheck size={18}/></h4>
+            {/* Account status */}
+            <motion.div
+              variants={fadeUp}
+              custom={3}
+              initial="hidden"
+              animate="show"
+              className="rounded-2xl border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 p-5 flex items-center justify-between"
+            >
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-1">
+                  Account status
+                </p>
+                <p className="text-base font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+                  <ShieldCheck size={18} />
+                  Active
+                </p>
               </div>
-              <div className="p-3 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/20">
-                <ShieldCheck size={24} />
+              <div className="h-12 w-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
+                <ShieldCheck size={22} />
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
+      </div>
 
-        {/* ⚙️ UPDATE MODAL */}
-        {showUpdate && (
-          <ProfileUpdateForm user={user} onClose={() => setShowUpdate(false)} />
-        )}
-      </motion.div>
+      {showUpdate && (
+        <ProfileUpdateForm user={user} onClose={() => setShowUpdate(false)} />
+      )}
     </div>
   );
 };
