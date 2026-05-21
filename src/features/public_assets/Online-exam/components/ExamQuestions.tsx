@@ -60,6 +60,7 @@ const ExamQuestions = ({ studentId, onSubmit }: Props) => {
       setError(res.message || "Submit failed!");
     }
   };
+  // UI States
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center py-20 gap-3">
