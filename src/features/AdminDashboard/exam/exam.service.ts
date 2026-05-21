@@ -33,4 +33,12 @@ export const examService = {
   giveRetry: async (studentId: string) => {
     return await httpClient.post(`/exam/retry/${studentId}`, {});
   },
+
+  deleteQuestion: async (id: string) => {
+    return await httpClient.delete(`/exam/questions/${id}`);
+  },
+
+  updateQuestion: async (id: string, payload: CreateQuestionPayload) => {
+    return await httpClient.patch(`/exam/questions/${id}`, payload);
+  },
 };

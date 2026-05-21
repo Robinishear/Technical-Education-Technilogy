@@ -70,3 +70,25 @@ export const getAllResultsAction = async () => {
   const res = await examService.getAllResults();
   return res.data ?? [];
 };
+
+export const deleteQuestionAction = async (id: string) => {
+  try {
+    const res = await examService.deleteQuestion(id);
+    revalidatePath("/admin/exam");
+    return { success: true, message: "Question deleted!", data: res.data };
+  } catch (error: any) {
+    const err = error?.response?.data as ApiErrorResponse;
+    return { success: false, message: err?.message || error.message };
+  }
+};
+
+export const updateQuestionAction = async (id: string, payload: CreateQuestionPayload) => {
+  try {
+    const res = await examService.updateQuestion(id, payload);
+    revalidatePath("/admin/exam");
+    return { success: true, message: "Question updated!", data: res.data };
+  } catch (error: any) {
+    const err = error?.response?.data as ApiErrorResponse;
+    return { success: false, message: err?.message || error.message };
+  }
+};
