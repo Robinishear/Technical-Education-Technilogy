@@ -1,7 +1,7 @@
 import QRCode from "react-qr-code";
 import { Student } from "../admin-students/types/admin-students.types";
 
-export const buildRegQRData = (student: Student): string => {
+export const buildIdQRData = (student: Student): string => {
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
     (typeof window !== "undefined"
@@ -9,10 +9,10 @@ export const buildRegQRData = (student: Student): string => {
       : "https://btetbd.com");
   const sess =
     student.month1 && student.year1 ? `${student.month1}-${student.year1}` : "";
-  return `${baseUrl}/verify-student/reg?roll=${student.roll || ""}${sess ? `&sess=${encodeURIComponent(sess)}` : ""}`;
+  return `${baseUrl}/verify-student/id?roll=${student.roll || ""}${sess ? `&sess=${encodeURIComponent(sess)}` : ""}`;
 };
 
-export const RegQR = ({
+export const StudentIdQR = ({
   student,
   size = 60,
 }: {
@@ -20,18 +20,18 @@ export const RegQR = ({
   size?: number;
 }) => (
   <QRCode
-    value={buildRegQRData(student)}
+    value={buildIdQRData(student)}
     size={size}
     bgColor="#ffffff"
     fgColor="#000000"
   />
 );
 
-export const RegQRHidden = ({ student }: { student: Student }) => (
+export const StudentIdQRHidden = ({ student }: { student: Student }) => (
   <div className="hidden">
     <QRCode
       id="reg-qr-code"
-      value={buildRegQRData(student)}
+      value={buildIdQRData(student)}
       size={80}
       bgColor="#ffffff"
       fgColor="#000000"
