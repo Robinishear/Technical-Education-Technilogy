@@ -20,6 +20,7 @@ import { Meta, Student } from "../types/admin-students.types";
 import {
   adminDeleteStudentAction,
   getAdminStudentsAction,
+  toggleExamAllowedAction,
 } from "../actions/admin-students.actions";
 import MarkStudent from "../../markStudent/components/MarkStudent";
 import ViewMarks from "../../markStudent/components/ViewMarks";
@@ -107,6 +108,7 @@ export default function AdminStudentsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchRoll, setSearchRoll] = useState("");
   const [viewingStudent, setViewingStudent] = useState<any>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -159,6 +161,21 @@ export default function AdminStudentsList() {
       </div>
     );
 
+    const handleToggleExam = async (id: string) => {
+      setTogglingId(id);
+      const result = await toggleExamAllowedAction(id);
+      if (result.success) {
+        toast.success("Updated!");
+        setStudents((prev) =>
+          prev.map((s) =>
+            s.id === id ? { ...s, examAllowed: !s.examAllowed } : s,
+          ),
+        );
+      } else {
+        toast.error(result.message || "Failed!");
+      }
+      setTogglingId(null);
+    };
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 bg-stone-50 dark:bg-gray-900 min-h-screen">
       {/* Header */}
@@ -277,6 +294,26 @@ export default function AdminStudentsList() {
                   </p>
                 </td>
                 <td className="px-6 py-4">
+                  <button
+                    className={`h-8 px-3 rounded-lg border flex items-center justify-center transition-colors text-[10px] font-bold uppercase tracking-wider ${
+                      student.examAllowed
+                        ? "bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-600"
+                        : "bg-stone-50 hover:bg-stone-100 border-stone-200 text-stone-400"
+                    }`}
+                    onClick={() => handleToggleExam(student.id)}
+                    disabled={togglingId === student.id}
+                    title={
+                      student.examAllowed ? "Exam Allowed" : "Exam Not Allowed"
+                    }
+                  >
+                    {togglingId === student.id ? (
+                      <Loader2 size={12} className="animate-spin" />
+                    ) : student.examAllowed ? (
+                      "✅ Exam"
+                    ) : (
+                      "❌ Exam"
+                    )}
+                  </button>
                   <div className="flex justify-end gap-1.5">
                     <button
                       className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-amber-50 border border-stone-200 hover:border-amber-200 flex items-center justify-center transition-colors"
@@ -306,7 +343,6 @@ export default function AdminStudentsList() {
                       <Fullscreen size={13} className="text-blue-400" />
                     </button>
 
-                
                     <button
                       className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-200 flex items-center justify-center transition-colors"
                       onClick={() => handleDelete(student.id)}
@@ -395,7 +431,6 @@ export default function AdminStudentsList() {
           onClose={() => setViewingStudent(null)}
         />
       )}
-
     </div>
   );
 }
