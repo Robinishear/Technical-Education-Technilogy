@@ -8,7 +8,7 @@ const ExamPage = async () => {
   const results = await getAllResultsAction();
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-stone-50 min-h-screen">
+    <div className="max-w-7xl mx-auto p-4 md:p-8 dark:bg-black bg-stone-50 min-h-screen">
       {/* Header */}
       <header className="mb-10">
         <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-stone-800">
