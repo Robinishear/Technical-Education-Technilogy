@@ -32,7 +32,7 @@ const ExamPage = async () => {
         <h3 className="text-lg font-black text-stone-700 mb-4 uppercase tracking-wider">
           Student Results ({results?.length || 0}টা)
         </h3>
-        <ExamResultList results={results || []} />
+        <ExamResultList results={results ?? []} />{" "}
       </div>
     </div>
   );

@@ -23,7 +23,9 @@ const emptyOptions = [
 ];
 
 const ExamPageClient = ({ questions: initialQuestions }: Props) => {
-  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [questions, setQuestions] = useState<Question[]>(
+    initialQuestions ?? [],
+  );
   const [questionText, setQuestionText] = useState("");
   const [options, setOptions] = useState(emptyOptions);
   const [loading, setLoading] = useState(false);

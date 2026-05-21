@@ -26,16 +26,6 @@ export interface ExamAnswer {
   selectedOptionId: string;
 }
 
-export interface ExamResult {
-  score: number;
-  totalMarks: number;
-  percentage: string;
-  attemptCount: number;
-  canRetry: boolean;
-}
-
-
-
 export interface Answer {
   id: string;
   questionId: string;
@@ -46,6 +36,8 @@ export interface ExamResult {
   id: string;
   score: number;
   totalMarks: number;
+  percentage: string;
+  attemptCount: number;
   canRetry: boolean;
   createdAt: string;
   student: {
@@ -61,4 +53,8 @@ export interface ExamResult {
 
 export interface Props {
   results: ExamResult[];
+}
+
+export interface QuestionProps {
+  questions: Question[];
 }
