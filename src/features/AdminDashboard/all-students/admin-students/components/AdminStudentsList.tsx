@@ -294,27 +294,29 @@ export default function AdminStudentsList() {
                   </p>
                 </td>
                 <td className="px-6 py-4">
-                  <button
-                    className={`h-8 px-3 rounded-lg border flex items-center justify-center transition-colors text-[10px] font-bold uppercase tracking-wider ${
-                      student.examAllowed
-                        ? "bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-600"
-                        : "bg-stone-50 hover:bg-stone-100 border-stone-200 text-stone-400"
-                    }`}
-                    onClick={() => handleToggleExam(student.id)}
-                    disabled={togglingId === student.id}
-                    title={
-                      student.examAllowed ? "Exam Allowed" : "Exam Not Allowed"
-                    }
-                  >
-                    {togglingId === student.id ? (
-                      <Loader2 size={12} className="animate-spin" />
-                    ) : student.examAllowed ? (
-                      "✅ Exam"
-                    ) : (
-                      "❌ Exam"
-                    )}
-                  </button>
                   <div className="flex justify-end gap-1.5">
+                    <button
+                      className={`h-8 px-3 rounded-lg border flex items-center justify-center transition-colors text-[10px] font-bold uppercase tracking-wider ${
+                        student.examAllowed
+                          ? "bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-600"
+                          : "bg-stone-50 hover:bg-stone-100 border-stone-200 text-stone-400"
+                      }`}
+                      onClick={() => handleToggleExam(student.id)}
+                      disabled={togglingId === student.id}
+                      title={
+                        student.examAllowed
+                          ? "Exam Allowed"
+                          : "Exam Not Allowed"
+                      }
+                    >
+                      {togglingId === student.id ? (
+                        <Loader2 size={12} className="animate-spin" />
+                      ) : student.examAllowed ? (
+                        "✅"
+                      ) : (
+                        "❌"
+                      )}
+                    </button>
                     <button
                       className="h-8 w-8 rounded-lg bg-stone-50 hover:bg-amber-50 border border-stone-200 hover:border-amber-200 flex items-center justify-center transition-colors"
                       onClick={() => setSelectedStudent(student)}
