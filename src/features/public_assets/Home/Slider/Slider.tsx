@@ -17,22 +17,48 @@ export default function Slider() {
   const [sliders, setSliders] = useState<SliderData[]>([]);
   const [notices, setNotices] = useState<NoticeData[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/slider/get-slider`)
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/slider/get-slider`, {
+      cache: "no-store",
+    })
       .then((res) => res.json())
-      .then((data) => setSliders(Array.isArray(data?.data) ? data.data : []))
-      .catch(() => setSliders([]));
+      .then((data) => {
+        setSliders(Array.isArray(data?.data) ? data.data : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setSliders([]);
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notices/get-notices`)
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notices/get-notices`, {
+      cache: "no-store",
+    })
       .then((res) => res.json())
       .then((data) => setNotices(Array.isArray(data?.data) ? data.data : []))
       .catch(() => setNotices([]));
   }, []);
 
-  if (!sliders.length) return null;
+  if (loading)
+    return (
+      <div className="w-full h-[70vh] md:h-[85vh] lg:h-screen bg-stone-200 animate-pulse flex items-center justify-center">
+        <div className="space-y-4 text-center">
+          <div className="h-8 w-64 bg-stone-300 rounded-xl mx-auto animate-pulse" />
+          <div className="h-4 w-40 bg-stone-300 rounded-xl mx-auto animate-pulse" />
+        </div>
+      </div>
+    );
+
+  if (!sliders.length)
+    return (
+      <div className="w-full h-[70vh] md:h-[85vh] lg:h-screen bg-stone-100 flex items-center justify-center">
+        <p className="text-stone-400 text-sm">কোনো slider নেই</p>
+      </div>
+    );
 
   return (
     <section className="w-full relative group">
@@ -97,7 +123,6 @@ export default function Slider() {
                                 </span>
                               </span>
                             </button>
-
                             <Link
                               href="/contact"
                               className="group bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-xl px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 border border-white/20 hover:border-white/60 shadow-lg"
