@@ -5,47 +5,51 @@ import animationData from "@/animations/about-us.json";
 
 export default function LoadingScreen() {
   return (
-    <section className="relative overflow-hidden shadow-sm bg-white dark:bg-[#090d16] flex items-center justify-center">
-
+    <section className="relative overflow-hidden shadow-sm bg-[#090d16] flex items-center justify-center">
+      {/* Background blobs */}
       <div className="absolute -top-40 -left-20 w-150 h-150 bg-cyan-400/15 blur-[140px] rounded-full pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-87.5 bg-white/6 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute -bottom-45 -right-20 w-150 h-150 bg-pink-500/15 blur-[140px] rounded-full pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-size-[4rem_4rem] pointer-events-none" />
 
-      <div className="relative z-10 container mx-auto px-6 py-4">
+      <div className="relative z-10 container mx-auto px-6 py-19">
         <div className="grid lg:grid-cols-2 items-center gap-8">
-
+          {/* Left: Text */}
           <div className="text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0">
-
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-cyan-300 text-xs md:text-sm font-medium tracking-wide shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-xl text-cyan-300 text-xs md:text-sm font-medium tracking-wide shadow-[0_0_15px_rgba(34,211,238,0.1)]">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               Modern Digital Experience
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-none">
-              <span className="text-white drop-shadow-sm">Building Creative</span> <br />
+              <span className="text-white drop-shadow-sm">
+                Building Creative
+              </span>
+              <br />
               <span className="bg-linear-to-r from-cyan-400 via-white to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(255,255,255,0.15)]">
                 Web Experiences
               </span>
             </h1>
 
             <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Please wait while we prepare something beautiful for you.
-              Our system is loading animations, content, and interactive experiences.
+              Please wait while we prepare something beautiful for you. Our
+              system is loading animations, content, and interactive
+              experiences.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <button className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black hover:bg-cyan-400 hover:text-black transition-all duration-300 font-bold shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-cyan-400/30 hover:scale-105 active:scale-95 cursor-pointer">
+              <button className="w-full sm:w-auto px-8 py-4 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all duration-300 font-bold shadow-[0_0_30px_rgba(34,211,238,0.25)] hover:shadow-cyan-400/40 hover:scale-105 active:scale-95 cursor-pointer">
                 🚀 Get Started
               </button>
-              <button className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-white/2 hover:bg-white/10 backdrop-blur-md transition-all duration-300 text-white font-semibold hover:scale-105 active:scale-95 cursor-pointer">
+              <button className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all duration-300 text-white font-semibold hover:scale-105 active:scale-95 cursor-pointer">
                 ✨ Explore More
               </button>
             </div>
           </div>
 
+          {/* Right: Lottie */}
           <div className="flex justify-center items-center">
-            <div className="relative w-full max-w-[320px] sm:max-w-112.5 md:max-w-137.5 lg:max-w-none transform hover:scale-102 transition-transform duration-500">
+            <div className="relative w-full max-w-[320px] sm:max-w-112.5 md:max-w-137.5 lg:max-w-none transform hover:scale-105 transition-transform duration-500">
               <div className="absolute inset-0 bg-linear-to-tr from-cyan-500/10 to-pink-500/10 rounded-full blur-3xl opacity-40 -z-10" />
               <Lottie
                 animationData={animationData}
@@ -54,7 +58,6 @@ export default function LoadingScreen() {
               />
             </div>
           </div>
-
         </div>
       </div>
     </section>

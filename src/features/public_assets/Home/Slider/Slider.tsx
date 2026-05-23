@@ -93,19 +93,12 @@ export default function Slider() {
                     <AnimatePresence mode="wait">
                       {activeIndex === index && (
                         <div className="max-w-3xl">
-                          <motion.span
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3, duration: 0.8 }}
-                            className="text-[#678E1A] font-bold tracking-[0.3em] uppercase text-sm md:text-base block mb-4"
-                          >
-                            Welcome to our platform
-                          </motion.span>
+
                           <motion.h1
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.5, duration: 0.8 }}
-                            className="text-white text-4xl md:text-6xl lg:text-8xl font-black leading-tight mb-8"
+                            className="text-white text-1xl md:text-3xl lg:text-5xl font-black leading-tight mb-8"
                           >
                             {item.caption}
                           </motion.h1>
@@ -115,14 +108,18 @@ export default function Slider() {
                             transition={{ delay: 0.8, duration: 0.8 }}
                             className="flex flex-wrap items-center gap-4"
                           >
-                            <button className="group relative overflow-hidden bg-[#678E1A] hover:bg-white text-white hover:text-black px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 shadow-2xl shadow-[#678E1A]/30 border border-transparent hover:border-white">
-                              <span className="relative z-10 flex items-center gap-2">
+                            
+                            <Link
+                              href="/login"
+                              className="group bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-xl px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 border border-white/20 hover:border-white/60 shadow-lg"
+                            >
+                              <span className="flex items-center gap-2">
                                 Get Started
                                 <span className="transition-transform duration-300 group-hover:translate-x-1">
-                                  →
+                                  ↗
                                 </span>
                               </span>
-                            </button>
+                            </Link>
                             <Link
                               href="/contact"
                               className="group bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-xl px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 border border-white/20 hover:border-white/60 shadow-lg"

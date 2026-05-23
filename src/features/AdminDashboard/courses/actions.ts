@@ -20,7 +20,7 @@ export const createCourseAction = async (payload: CreateCoursePayload) => {
 
 export const updateCourseAction = async (
   id: string,
-  payload: Partial<CreateCoursePayload>
+  payload: Partial<CreateCoursePayload>,
 ) => {
   const res = await coursesService.update(id, payload);
   revalidatePath("/admin/courses");
@@ -44,12 +44,19 @@ export const createCategoryAction = async (payload: { name: string }) => {
   return res.data;
 };
 
-export const updateCategoryAction = async (id: string, payload: { name: string }) => {
+export const updateCategoryAction = async (
+  id: string,
+  payload: { name: string },
+) => {
   try {
     const res = await categoriesService.update(id, payload);
     if (res.success) {
       revalidatePath("/admin/courses");
-      return { success: true, message: res.message || "Updated!", data: res.data };
+      return {
+        success: true,
+        message: res.message || "Updated!",
+        data: res.data,
+      };
     }
     return { success: false, message: res.message || "Failed" };
   } catch (error: any) {
