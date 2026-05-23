@@ -30,7 +30,7 @@ export default function EnrollmentPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Enrollment Details</h1>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+          <span className={`px-3 py-1 rounded-full text-sm font-medium {
             enrollment.status === "ACTIVE"
               ? "bg-green-100 text-green-700"
               : "bg-gray-200"

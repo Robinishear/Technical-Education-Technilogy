@@ -16,7 +16,7 @@ export default function CourseSection() {
         Loading Courses... ⏳
       </div>
     );
-    console.log(courses.data);
+    // console.log(courses.data);
 
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8  dark:bg-[#070707] transition-colors duration-300">

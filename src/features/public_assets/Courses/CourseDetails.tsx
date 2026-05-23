@@ -38,9 +38,9 @@ export default function CourseDetails() {
     <div className="text-center py-20 dark:text-white">Course not found! </div>
   );
 
-  const discount = course.oldPrice && course.price 
-    ? Math.round(((Number(course.oldPrice) - Number(course.price)) / Number(course.oldPrice)) * 100) 
-    : 0;
+  // const discount = course.oldPrice && course.price 
+  //   ? Math.round(((Number(course.oldPrice) - Number(course.price)) / Number(course.oldPrice)) * 100) 
+  //   : 0;
 
 const handleShare = async () => {
   const shareData = {
@@ -127,7 +127,7 @@ const handleShare = async () => {
         <div className="lg:col-span-1">
           <div className="sticky top-8 bg-white dark:bg-[#121212] rounded-3xl border border-gray-100 dark:border-white/5  overflow-hidden">
             <div className="p-8">
-              <div className="flex items-end gap-3 mb-6">
+              {/* <div className="flex items-end gap-3 mb-6">
                 <span className="text-4xl font-black text-gray-900 dark:text-white">${course.price}</span>
                 {course.oldPrice && (
                   <span className="text-lg text-gray-400 line-through mb-1">${course.oldPrice}</span>
@@ -137,16 +137,16 @@ const handleShare = async () => {
                      {discount}% OFF
                    </span>
                 )}
-              </div>
+              </div> */}
 
-              <div className="space-y-4">
+              {/* <div className="space-y-4">
                 <button className="w-full py-4 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-cyan-500/25 active:scale-[0.98]">
                   Enroll in Course
                 </button>
                 <button className="w-full py-4 bg-gray-100 dark:bg-white/5 text-gray-900 dark:text-white font-bold rounded-2xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
                   Add to Wishlist
                 </button>
-              </div>
+              </div> */}
 
               <div className="mt-8 space-y-5">
                 <p className="text-sm font-bold dark:text-gray-200 uppercase tracking-wider">Course Details</p>
