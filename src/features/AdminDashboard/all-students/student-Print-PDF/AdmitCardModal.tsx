@@ -539,7 +539,6 @@ export const AdmitCardModal = ({
                 </p>
               </div>
 
-              {/* Printing Date */}
               <div
                 style={{
                   position: "absolute",
@@ -558,7 +557,6 @@ export const AdmitCardModal = ({
                 </p>
               </div>
 
-              {/* QR Code */}
               <div
                 style={{
                   position: "absolute",
