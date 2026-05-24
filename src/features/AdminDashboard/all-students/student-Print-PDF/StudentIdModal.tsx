@@ -36,7 +36,7 @@ export const StudentIdModal = ({
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
 
-    const qrSvgEl = document.getElementById("reg-qr-code");
+    const qrSvgEl = document.getElementById("id-qr-code");
     const qrSvgString = qrSvgEl ? qrSvgEl.outerHTML : "";
 
     printWindow.document.write(`<!DOCTYPE html>
