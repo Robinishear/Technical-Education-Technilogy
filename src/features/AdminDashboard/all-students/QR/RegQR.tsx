@@ -6,7 +6,7 @@ export const buildRegQRData = (student: Student): string => {
     process.env.NEXT_PUBLIC_APP_URL ||
     (typeof window !== "undefined"
       ? window.location.origin
-      : "https://btetbd.com");
+      : "");
   const sess =
     student.month1 && student.year1 ? `${student.month1}-${student.year1}` : "";
   return `${baseUrl}/verify-student/reg?roll=${student.roll || ""}${sess ? `&sess=${encodeURIComponent(sess)}` : ""}`;

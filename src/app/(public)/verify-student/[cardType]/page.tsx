@@ -57,6 +57,17 @@ const monthName = (m: string | number) => {
   return months[idx] ?? m;
 };
 
+const formatSession = (student: any) => {
+  if (!student) return "—";
+  if (!student.month1 && !student.year1) return "—";
+  const m1 = student.month1 ? monthName(student.month1) : "";
+  const m2 = student.month2 ? monthName(student.month2) : "";
+  const y1 = student.year1 || "";
+  if (m1 && m2) return `${m1} - ${m2} ${y1}`.trim();
+  if (m1) return `${m1} ${y1}`.trim();
+  return y1 || "—";
+};
+
 // Sub-component to render the dynamic QR inside the card preview
 const CardQRCode = ({ value, size = 60 }: { value: string; size?: number }) => (
   <QRCode
@@ -563,63 +574,65 @@ body { margin: 0; font-family: Arial, sans-serif; }
     );
   }
 
-  // Rows of student details for the readable list at the bottom
-  const studentRows = [
-    { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
-    { label: "Father's Name", value: student.fatherName, icon: <User size={16} className="text-slate-400" /> },
-    { label: "Mother's Name", value: student.motherName, icon: <User size={16} className="text-slate-400" /> },
-    { label: "Roll Number", value: student.roll, icon: <CreditCard size={16} className="text-amber-500" /> },
-    { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
-    { label: "Session", value: `${monthName(student.month1)} - ${monthName(student.month2)} ${student.year1}`, icon: <Calendar size={16} className="text-rose-500" /> },
-    { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
-    { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
-    { label: "Contact Phone", value: student.guardianPhone || "—", icon: <Phone size={16} className="text-sky-500" /> },
-  ];
+  // Define dynamic content based on cardType
+  let badgeText = "● Registry Record Verified";
+  let titleText = "Official Student Record";
+  let descText = "This student record has been validated against the official registry of Bangladesh Technical Education Technology. All signatures and certifications are verified.";
+  let studentRows = [];
+
+  if (cardType === "reg") {
+    badgeText = "● Registration Record Verified";
+    titleText = "Official Registration Record";
+    descText = "This student registration record has been validated against the official registry of Bangladesh Technical Education Technology. All credentials and enrollment parameters are active and verified.";
+    studentRows = [
+      { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
+      { label: "Father's Name", value: student.fatherName, icon: <User size={16} className="text-slate-400" /> },
+      { label: "Mother's Name", value: student.motherName, icon: <User size={16} className="text-slate-400" /> },
+      { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
+      { label: "Session", value: formatSession(student), icon: <Calendar size={16} className="text-rose-500" /> },
+      { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
+      { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
+      { label: "Course Duration", value: student.duration || "—", icon: <Calendar size={16} className="text-amber-500" /> },
+      { label: "Sex / Gender", value: student.gender || "—", icon: <User size={16} className="text-sky-500" /> },
+      { label: "Upazilla / Thana", value: student.thana || "—", icon: <FileText size={16} className="text-slate-500" /> },
+      { label: "District", value: student.district || "—", icon: <Building2 size={16} className="text-slate-500" /> },
+    ];
+  } else if (cardType === "id") {
+    badgeText = "● Student Identity Verified";
+    titleText = "Official Student ID Record";
+    descText = "This student identity card has been validated against the official registry of Bangladesh Technical Education Technology. All active status privileges and identity credentials are fully verified.";
+    studentRows = [
+      { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
+      { label: "Roll Number", value: student.roll, icon: <CreditCard size={16} className="text-amber-500" /> },
+      { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
+      { label: "Session", value: formatSession(student), icon: <Calendar size={16} className="text-rose-500" /> },
+      { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
+      { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
+      { label: "Mobile / Phone", value: student.guardianPhone || "—", icon: <Phone size={16} className="text-sky-500" /> },
+      { label: "Joined Date", value: student.joinedDate ? formatDOB(student.joinedDate) : "—", icon: <Calendar size={16} className="text-teal-500" /> },
+      { label: "Expire Date", value: student.expireDate ? formatDOB(student.expireDate) : "—", icon: <Calendar size={16} className="text-rose-500" /> },
+    ];
+  } else {
+    // admit
+    badgeText = "● Admit Card Record Verified";
+    titleText = "Official Examinee Admit Card";
+    descText = "This examinee admit card has been validated against the official registry of Bangladesh Technical Education Technology. All examination permits and subject details are verified.";
+    studentRows = [
+      { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
+      { label: "Father's Name", value: student.fatherName, icon: <User size={16} className="text-slate-400" /> },
+      { label: "Mother's Name", value: student.motherName, icon: <User size={16} className="text-slate-400" /> },
+      { label: "Roll Number", value: student.roll, icon: <CreditCard size={16} className="text-amber-500" /> },
+      { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
+      { label: "Session", value: formatSession(student), icon: <Calendar size={16} className="text-rose-500" /> },
+      { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
+      { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
+      { label: "Type of Examinee", value: "Regular", icon: <User size={16} className="text-sky-500" /> },
+    ];
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
       
-      {/* Dynamic Header Verified Panel */}
-      <div className="relative overflow-hidden rounded-[24px] bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border-2 border-emerald-500/30 dark:border-emerald-500/20 p-6 sm:p-8 md:p-10 shadow-lg flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none -mr-8 -mt-8"></div>
-        <div className="relative shrink-0 flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-emerald-500/10 dark:bg-emerald-500/20 border-2 border-emerald-500/50 rounded-full shadow-inner animate-pulse">
-          <ShieldCheck size={40} className="text-emerald-600 dark:text-emerald-400" />
-        </div>
-        <div className="flex-1 space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 uppercase tracking-widest">
-            ● Registry Record Verified
-          </div>
-          <h1 className="text-2xl sm:text-3.5xl font-black text-slate-800 dark:text-white tracking-tight uppercase leading-none">
-            Official Student Record
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold max-w-xl leading-relaxed">
-            This student record has been validated against the official registry of **Bangladesh Technical Education Technology**. All signatures and certifications are verified.
-          </p>
-        </div>
-      </div>
-
-      {/* Selector Tabs to toggle between Admit, Reg, and ID cards */}
-      <div className="flex p-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl gap-1 print:hidden shadow-inner">
-        {[
-          { key: "admit", label: "Admit Card", icon: <FileText size={16} /> },
-          { key: "reg", label: "Registration Card", icon: <FileText size={16} /> },
-          { key: "id", label: "Student ID Card", icon: <CreditCard size={16} /> }
-        ].map((tab) => (
-          <Link
-            key={tab.key}
-            href={`/verify-student/${tab.key}?roll=${roll}${sess ? `&sess=${sess}` : ""}`}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all ${
-              cardType === tab.key
-                ? "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-md font-extrabold"
-                : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
-            }`}
-          >
-            {tab.icon}
-            {tab.label}
-          </Link>
-        ))}
-      </div>
-
       {/* Card Render Section */}
       <div className="bg-slate-950 rounded-[28px] border-4 border-slate-900 overflow-hidden shadow-2xl p-4 sm:p-6 md:p-8 flex justify-center items-center print:bg-white print:border-none print:shadow-none">
         
@@ -764,24 +777,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
                   Verified Date: {formatDOB(student.joinedDate || new Date().toISOString())}
                 </p>
               </div>
-
-              {/* Dynamic QR overlay */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "2.69cqw",
-                  left: "54.5cqw",
-                  transform: "translateX(-50%)",
-                  width: "6.06cqw",
-                  height: "6.06cqw",
-                  backgroundColor: "white",
-                  zIndex: 10,
-                }}
-              >
-                <div className="w-full h-full [&>svg]:w-full! [&>svg]:h-full!">
-                  <CardQRCode value={getQRData("admit")} size={60} />
-                </div>
-              </div>
             </div>
           </div>
         )}
@@ -797,36 +792,58 @@ body { margin: 0; font-family: Arial, sans-serif; }
           >
             <img src="/reg.png" alt="" className="absolute inset-0 w-full h-full object-fill pointer-events-none" />
 
-            <div className="absolute inset-0 overflow-hidden" style={{ padding: "18.5% 5% 4% 5%" }}>
-              <div className="h-[25cqw]" />
-              <p style={{ fontSize: "1.5cqw", color: "#cc0000", marginBottom: "1.5%", fontWeight: 700 }}>
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{
+                top: "39cqw",
+                left: "10.5cqw",
+                right: "10.5cqw",
+                bottom: "0",
+                fontFamily: "Arial, sans-serif",
+              }}
+            >
+              {/* Serial No */}
+              <p
+                style={{
+                  position: "absolute",
+                  top: "-4.76cqw",
+                  left: "0",
+                  fontSize: "1.43cqw",
+                  color: "red",
+                  fontWeight: "bold",
+                  margin: 0,
+                }}
+              >
                 Serial: <strong>{student.studentId}</strong>
               </p>
 
-              {/* Photo + QR — top right */}
+              {/* Photo — top right (Matching A4 dimensions) */}
               <div
                 style={{
                   position: "absolute",
-                  top: "23.5%",
-                  right: "6%",
+                  top: "0",
+                  right: "0",
+                  width: "18.1cqw",
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-end",
-                  gap: "1.2cqw",
+                  alignItems: "center",
                 }}
               >
                 <img
                   src={student.picture}
                   alt=""
-                  style={{ width: "15cqw", height: "18cqw", objectFit: "cover", border: "1px solid #aaa" }}
+                  style={{
+                    width: "15.24cqw",
+                    height: "18.1cqw",
+                    objectFit: "cover",
+                    border: "1px solid #aaa",
+                    display: "block",
+                  }}
                 />
-                <div style={{ width: "15cqw", height: "15cqw" }} className="[&>svg]:w-full! [&>svg]:h-full!">
-                  <CardQRCode value={getQRData("reg")} size={100} />
-                </div>
               </div>
 
               {/* Info rows */}
-              <div style={{ paddingRight: "25%", marginTop: "1cqw" }}>
+              <div style={{ width: "calc(100% - 20cqw)", marginTop: "0.5cqw" }}>
                 {[
                   ["Student Name", student.name],
                   ["Father's Name", student.fatherName],
@@ -840,28 +857,30 @@ body { margin: 0; font-family: Arial, sans-serif; }
                   ["District", student.district],
                   ["Trade Code & Name", student.educationQualification],
                   ["Registration Number", student.regNumber],
-                  ["Session", `${student.month1} - ${student.month2} ${student.year1}`],
+                  ["Session", formatSession(student)],
                   ["Course Duration", student.duration],
                 ].map(([label, value], i) => (
                   <div
                     key={i}
                     style={{
                       display: "flex",
-                      fontSize: "1.45cqw",
-                      marginBottom: "0.85cqw",
-                      lineHeight: 1.35,
+                      fontSize: "1.35cqw",
+                      marginBottom: "1.52cqw",
+                      lineHeight: 1.3,
                     }}
                   >
-                    <span style={{
-                      fontWeight: 900,
-                      width: "20cqw",
-                      flexShrink: 0,
-                      color: "#111",
-                      whiteSpace: "nowrap",
-                    }}>
+                    <span
+                      style={{
+                        fontWeight: 900,
+                        width: "27.6cqw",
+                        flexShrink: 0,
+                        color: "#111",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
                       {label}
                     </span>
-                    <span style={{ color: "#111", fontWeight: 900, flexShrink: 0, marginRight: "0.8cqw" }}>:</span>
+                    <span style={{ color: "#111", fontWeight: 900, flexShrink: 0, marginRight: "2.4cqw" }}>:</span>
                     <span style={{ color: "#111", wordBreak: "break-word", fontWeight: 500 }}>
                       {value || "—"}
                     </span>
@@ -874,18 +893,19 @@ body { margin: 0; font-family: Arial, sans-serif; }
                 style={{
                   position: "absolute",
                   bottom: "7%",
-                  left: "6%",
-                  right: "6%",
-                  fontSize: "1.05cqw",
+                  left: "0",
+                  right: "0",
+                  fontSize: "1.0cqw",
                   color: "#555",
                   lineHeight: 1.5,
+                  textAlign: "justify",
                 }}
               >
                 Note: This registration card is valid for six (6) months. For all communications with the board, the institute code, registration number and study session are to be mentioned.
               </div>
 
               {/* Print date */}
-              <div style={{ position: "absolute", bottom: "3.5%", left: "6%", fontSize: "1.1cqw", color: "#555" }}>
+              <div style={{ position: "absolute", bottom: "3.5%", left: "0", fontSize: "1.0cqw", color: "#555" }}>
                 Verified Date: {formatDOB(student.joinedDate || new Date().toISOString())}
               </div>
             </div>
@@ -972,9 +992,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
                 </div>
               </div>
 
-              <div className="w-[20mm] h-[20mm] border border-gray-200 rounded-lg p-[1.5mm] mb-[2mm] bg-white flex items-center justify-center shadow-sm">
-                <CardQRCode value={getQRData("id")} size={60} />
-              </div>
+
 
               <div className="text-[6.5pt] font-bold text-gray-800 mb-[3mm] leading-relaxed">
                 Joined Date: {student.joinedDate ? new Date(student.joinedDate).toLocaleDateString("en-GB").replace(/ /g, "-") : "N/A"}
@@ -1022,51 +1040,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
           <ArrowLeft size={18} />
           Back to Verification Portal
         </Link>
-      </div>
-
-      {/* Readable Verification Metadata Panel */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-[24px] p-6 sm:p-8 md:p-10 shadow-lg space-y-6">
-        <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
-          <h2 className="text-lg sm:text-xl font-black text-slate-800 dark:text-white tracking-tight uppercase">
-            Official Registry Metadata
-          </h2>
-          <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-1">
-            Raw student record query data from digital board server.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {studentRows.map((row, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-4 p-4 rounded-xl border border-slate-50 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/40 hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
-            >
-              <div className="w-10 h-10 shrink-0 bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/80 rounded-xl flex items-center justify-center shadow-sm">
-                {row.icon}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-                  {row.label}
-                </p>
-                <p className="text-sm font-extrabold text-slate-700 dark:text-slate-200 truncate mt-0.5">
-                  {row.value || "—"}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="border-t border-slate-100 dark:border-slate-800 pt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-              Server status: Online & Active
-            </span>
-          </div>
-          <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold italic text-center sm:text-right">
-            System generated verification report. No physical signatures required.
-          </p>
-        </div>
       </div>
     </div>
   );
