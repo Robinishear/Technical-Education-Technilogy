@@ -117,9 +117,9 @@ export const AdmitCardModal = ({
   .rr-box { border: 1.5px solid #333; min-width: 26mm; text-align: center; padding: 0.8mm 2mm; font-weight: 700; font-size: 11.5pt; background: #fff; }
   .sex-line { font-size: 11pt; font-weight: 700; color: #111; text-align: right; font-family: 'Times New Roman', serif; margin-top: 1.5mm; white-space: nowrap; }
   .print-date { position: absolute; bottom: 12mm; left: 35mm; font-size: 9pt; color: #111; font-weight: bold; }
-  .qr-cover { position: absolute; bottom: 8mm; left: 136mm; transform: translateX(-50%); width: 18mm; height: 18mm; background: #fff; z-index: 8; }
-  .qr-block { position: absolute; bottom: 8mm; left: 162mm; transform: translateX(-50%); background: #fff; z-index: 10; }
-  .qr-block svg { width: 18mm !important; height: 18mm !important; }
+  .qr-cover { position: absolute; bottom: 21mm; left: 183.5mm; transform: translateX(-50%); width: 21.5mm; height: 21.5mm; background: #fff; z-index: 8; }
+  .qr-block { position: absolute; bottom: 21mm; left: 183.5mm; transform: translateX(-50%); background: #fff; z-index: 10; display: flex; align-items: center; justify-content: center; }
+  .qr-block svg { width: 21.5mm !important; height: 21.5mm !important; }
 </style>
 </head>
 <body>
@@ -560,11 +560,11 @@ export const AdmitCardModal = ({
               <div
                 style={{
                   position: "absolute",
-                  bottom: "2.69cqw",
-                  left: "54.5cqw",
+                  bottom: "7.0cqw",
+                  left: "61.8cqw",
                   transform: "translateX(-50%)",
-                  width: "6.06cqw",
-                  height: "6.06cqw",
+                  width: "7.2cqw",
+                  height: "7.2cqw",
                   backgroundColor: "white",
                   zIndex: 10,
                 }}

@@ -198,8 +198,9 @@ function VerificationPortalContent() {
   .rr-box { border: 1.5px solid #333; min-width: 26mm; text-align: center; padding: 0.8mm 2mm; font-weight: 700; font-size: 11.5pt; background: #fff; }
   .sex-line { font-size: 11pt; font-weight: 700; color: #111; text-align: right; font-family: 'Times New Roman', serif; margin-top: 1.5mm; white-space: nowrap; }
   .print-date { position: absolute; bottom: 12mm; left: 35mm; font-size: 9pt; color: #111; font-weight: bold; }
-  .qr-cover { position: absolute; bottom: 8mm; left: 136mm; transform: translateX(-50%); width: 18mm; height: 18mm; background: #fff; z-index: 8; }
-  .qr-block { position: absolute; bottom: 8mm; left: 162mm; transform: translateX(-50%); background: #fff; z-index: 10; width: 18mm; height: 18mm; display: flex; align-items: center; justify-content: center; }
+  .qr-cover { position: absolute; bottom: 21mm; left: 183.5mm; transform: translateX(-50%); width: 21.5mm; height: 21.5mm; background: #fff; z-index: 8; }
+  .qr-block { position: absolute; bottom: 21mm; left: 183.5mm; transform: translateX(-50%); background: #fff; z-index: 10; width: 21.5mm; height: 21.5mm; display: flex; align-items: center; justify-content: center; }
+  .qr-block img, .qr-block canvas { width: 21.5mm !important; height: 21.5mm !important; }
 </style>
 </head>
 <body>
@@ -253,8 +254,8 @@ function VerificationPortalContent() {
 <script>
   new QRCode(document.getElementById("print-qr-target"), {
     text: "${qrUrl}",
-    width: 68,
-    height: 68,
+    width: 90,
+    height: 90,
     colorDark : "#000000",
     colorLight : "#ffffff",
     correctLevel : QRCode.CorrectLevel.H
