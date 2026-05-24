@@ -28,9 +28,9 @@ export const StudentIdQR = ({
 );
 
 export const StudentIdQRHidden = ({ student }: { student: Student }) => (
-  <div className="hidden">
+  <div style={{ display: "none" }}>
     <QRCode
-      id="reg-qr-code"
+      id="id-qr-code"
       value={buildIdQRData(student)}
       size={80}
       bgColor="#ffffff"

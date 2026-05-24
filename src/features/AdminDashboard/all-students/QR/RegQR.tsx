@@ -28,7 +28,7 @@ export const RegQR = ({
 );
 
 export const RegQRHidden = ({ student }: { student: Student }) => (
-  <div className="hidden">
+  <div style={{ display: "none" }}>
     <QRCode
       id="reg-qr-code"
       value={buildRegQRData(student)}
