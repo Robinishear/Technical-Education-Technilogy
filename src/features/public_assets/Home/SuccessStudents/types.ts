@@ -6,9 +6,6 @@ export interface Student {
     role?: string;
     title?: string;
   };
-  items?: {
-    title?: string;
-    feedback?: string;
-  }[];
+  items?: string[] | { title?: string; feedback?: string }[];
   bio?: string;
 }

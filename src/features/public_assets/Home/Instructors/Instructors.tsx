@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
-import "swiper/css/pagination";
 import { Teacher } from "./types";
 
 export default function Instructors() {
@@ -36,7 +35,6 @@ export default function Instructors() {
   return (
     <section className="py-12 font-sans overflow-hidden dark:bg-gray-900">
       <div className="container mx-auto px-6">
-        {/* Title */}
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 uppercase">
             OUR <span className="text-[#678E1A]">TEACHERS</span>
@@ -54,34 +52,31 @@ export default function Instructors() {
           </div>
         ) : (
           <Swiper
-            modules={[Autoplay, Pagination]}
+            modules={[Autoplay]}
             spaceBetween={20}
             slidesPerView={1}
             loop
             autoplay={{ delay: 3000, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
             breakpoints={{
               640: { slidesPerView: 2 },
               1024: { slidesPerView: 4 },
             }}
-            className="pb-14 teachers-swiper items-stretch!"
+            className="teachers-swiper items-stretch!"
           >
             {teachers.map((teacher) => (
               <SwiperSlide key={teacher.id} className="h-auto!">
-                <div className="h-full bg-white dark:bg-gray-800 rounded-lg  dark:border-gray-700 overflow-hidden flex flex-col">
-                  {/* Image — fixed height, সব card same size */}
-                  <div className="w-full h-56 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                <div className="h-full bg-white dark:bg-gray-800 rounded-lg dark:border-gray-700 overflow-hidden flex flex-col">
+                  <div className="w-full h-80 overflow-hidden">
                     <Image
                       src={teacher.image || "/placeholder.png"}
                       alt={teacher.name || "Teacher"}
                       width={400}
                       height={400}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover object-top"
                       unoptimized
                     />
                   </div>
 
-                  {/* Info */}
                   <div className="px-4 py-3 flex flex-col gap-1">
                     <h3 className="text-sm font-bold text-gray-800 dark:text-gray-100 line-clamp-1">
                       {teacher.name}
@@ -91,18 +86,6 @@ export default function Instructors() {
                         teacher.position?.title ||
                         "Instructor"}
                     </p>
-                    {teacher.items && teacher.items.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {teacher.items.slice(0, 3).map((item, i) => (
-                          <span
-                            key={i}
-                            className="text-[9px] px-1.5 py-0.5 rounded italic text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600"
-                          >
-                            {item.title || item.feedback || "Skill"}
-                          </span>
-                        ))}
-                      </div>
-                    )}
                     <button
                       onClick={() => setActiveTeacher(teacher)}
                       className="mt-2 w-full bg-[#678E1A] hover:bg-[#678E1A]/90 text-white py-1.5 rounded text-[10px] font-bold uppercase tracking-wide transition"
@@ -117,7 +100,6 @@ export default function Instructors() {
         )}
       </div>
 
-      {/* Modal */}
       {activeTeacher && (
         <div
           className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4"
@@ -134,13 +116,13 @@ export default function Instructors() {
               ✕
             </button>
 
-            <div className="w-full h-64 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
+            <div className="w-full h-80 overflow-hidden rounded-lg mb-4">
               <Image
                 src={activeTeacher.image || "/placeholder.png"}
                 alt={activeTeacher.name}
                 width={400}
                 height={320}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-top"
                 unoptimized
               />
             </div>
@@ -160,7 +142,7 @@ export default function Instructors() {
                     key={i}
                     className="text-[10px] px-2 py-0.5 rounded italic text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600"
                   >
-                    {item.title || item.feedback || "Skill"}
+                    {item.title}
                   </span>
                 ))}
               </div>
@@ -173,17 +155,6 @@ export default function Instructors() {
           </div>
         </div>
       )}
-
-      <style jsx global>{`
-        .teachers-swiper .swiper-pagination-bullet {
-          background: #9ca3af;
-        }
-        .teachers-swiper .swiper-pagination-bullet-active {
-          background: #678e1a !important;
-          width: 30px !important;
-          border-radius: 2px;
-        }
-      `}</style>
     </section>
   );
 }

@@ -62,7 +62,7 @@ export default function Slider() {
 
   return (
     <section className="w-full relative group">
-      <div className="w-full h-[70vh] md:h-[85vh] lg:h-screen relative">
+      <div className="w-full h-[50vh] md:h-[65vh] lg:h-[75vh] relative">
         <Swiper
           modules={[Autoplay, Pagination, EffectFade, Navigation]}
           effect="fade"
@@ -93,7 +93,6 @@ export default function Slider() {
                     <AnimatePresence mode="wait">
                       {activeIndex === index && (
                         <div className="max-w-3xl">
-
                           <motion.h1
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -108,7 +107,6 @@ export default function Slider() {
                             transition={{ delay: 0.8, duration: 0.8 }}
                             className="flex flex-wrap items-center gap-4"
                           >
-                            
                             <Link
                               href="/login"
                               className="group bg-white/10 hover:bg-white hover:text-black text-white backdrop-blur-xl px-8 py-4 rounded-full font-black text-xs uppercase tracking-[0.25em] transition-all duration-300 border border-white/20 hover:border-white/60 shadow-lg"
@@ -145,7 +143,6 @@ export default function Slider() {
         </Swiper>
       </div>
 
-      {/* NOTICE TICKER */}
       {notices.length > 0 && (
         <div className="flex items-center dark:bg-gray-800 bg-white shadow-sm overflow-hidden h-10 border-t border-gray-200">
           <div className="bg-[#678E1A] text-white text-xs font-black uppercase tracking-widest px-5 h-full flex items-center shrink-0">

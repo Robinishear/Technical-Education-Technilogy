@@ -47,7 +47,8 @@ export default function Coursess() {
         <p className="text-gray-700 dark:text-gray-300 text-xs font-semibold line-clamp-1">
           {course.title}
         </p>
-        <Link href={`/courses/${course.id}`}>
+        {/* <Link href={`/courses/${course.id}`}> */}
+        <Link href="/login">
           <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-lg text-[11px] uppercase tracking-wide transition-all duration-300 active:scale-95">
             <span>View Details</span>
             <ArrowRight

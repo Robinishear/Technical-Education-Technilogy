@@ -32,12 +32,11 @@ export default function LoginPage() {
   return (
     <div className="relative z-50 flex items-center justify-center min-h-[70vh] px-4">
       <div className="w-full max-w-sm p-8 space-y-5 border border-gray-200 dark:border-gray-700 rounded-3xl bg-white dark:bg-gray-900 shadow-xl">
-
         {/* ── Avatar ── */}
         <div className="flex flex-col items-center gap-2">
-          <div className="w-24 h-24 rounded-full bg-blue-50 dark:bg-blue-900/30 border-4 border-blue-100 dark:border-blue-800 flex items-center justify-center overflow-hidden">
+          <Link href="/" className="w-24 h-24 rounded-full bg-blue-50 dark:bg-blue-900/30 border-4 border-blue-100 dark:border-blue-800 flex items-center justify-center overflow-hidden">
             <Image
-              src="/student-avatar.png"
+              src="/image.png"
               alt="Student"
               width={96}
               height={96}
@@ -47,23 +46,24 @@ export default function LoginPage() {
                 (e.target as HTMLImageElement).style.display = "none";
               }}
             />
-          </div>
+          </Link>
           <div className="text-center">
             <h1 className="text-xl font-bold">
-              <span className="text-red-500">Student</span>{" "}
+              <span className="text-red-500">Branch</span>{" "}
               <span className="text-blue-700 dark:text-blue-400">Login</span>
             </h1>
-            <p className="text-xs text-gray-400 mt-0.5">Log in with your information.</p>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Log in with your information.
+            </p>
           </div>
         </div>
 
         {/* ── Form ── */}
         <form onSubmit={handleSubmit} className="space-y-4">
-
           {/* Mobile Number */}
           <div className="space-y-1">
             <label className="text-xs font-medium text-gray-600 dark:text-gray-400">
-             Email 
+              Email
             </label>
             <div className="relative">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -118,28 +118,38 @@ export default function LoginPage() {
             className="w-full h-11 text-base font-bold rounded-lg bg-blue-700 hover:bg-blue-800 text-white transition"
           >
             {loading ? (
-              <><Loader2 className="animate-spin mr-2 h-4 w-4" /> Signing In...</>
+              <>
+                <Loader2 className="animate-spin mr-2 h-4 w-4" /> Signing In...
+              </>
             ) : (
               "Login"
             )}
           </Button>
 
           {/* Cancel Button */}
-          <button
-            type="button"
-            className="w-full h-11 text-base font-bold rounded-lg bg-gray-600 hover:bg-gray-700 text-white transition"
-          >
-            Cancel
-          </button>
+          <Link href="/" passHref>
+            <button
+              type="button"
+              className="w-full h-11 text-base font-bold rounded-lg bg-gray-600 hover:bg-gray-700 text-white transition"
+            >
+              Cancel
+            </button>
+          </Link>
 
           {/* Bottom links */}
           <div className="flex items-center justify-center gap-1 text-xs pt-1">
             <span className="text-gray-500">Don&apos;t Have an Account?</span>
-            <Link href="/register" className="text-green-600 dark:text-green-400 font-medium hover:underline">
+            <Link
+              href="/register"
+              className="text-green-600 dark:text-green-400 font-medium hover:underline"
+            >
               Sign up
             </Link>
             <span className="text-gray-300 dark:text-gray-600">|</span>
-            <Link href="/contact" className="text-blue-600 dark:text-blue-400 font-medium hover:underline">
+            <Link
+              href="/contact"
+              className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+            >
               Contact
             </Link>
           </div>

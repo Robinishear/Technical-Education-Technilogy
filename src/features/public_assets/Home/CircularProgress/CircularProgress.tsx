@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ImpactStat } from "./types";
 import { impactData, newsData } from "./data";
-
-
+import Link from "next/dist/client/link";
 
 const AnimatedRing = ({ value, color, label }: ImpactStat) => {
   const [count, setCount] = useState(0);
@@ -59,21 +58,27 @@ const AnimatedRing = ({ value, color, label }: ImpactStat) => {
 export default function CircularProgress() {
   return (
     <div className="bg-white shadow-sm dark:bg-black font-sans">
-
       {/* ── Recent News ── */}
       <section className="py-12 container mx-auto px-6">
         <div className="flex justify-between items-end mb-10">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white">
             Recent <span className="text-[#678E1A]">News</span>
           </h2>
-          <a href="#" className="text-[#678E1A] font-bold text-sm hover:underline">View All →</a>
+          <a
+            href="#"
+            className="text-[#678E1A] font-bold text-sm hover:underline"
+          >
+            View All →
+          </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Highlight Card */}
           <div className="bg-[#678E1A] p-10 flex items-center justify-center rounded-lg shadow-lg">
             <h3 className="text-4xl font-black text-white leading-tight text-center">
-              Recent<br />News
+              Recent
+              <br />
+              News
             </h3>
           </div>
 
@@ -85,7 +90,9 @@ export default function CircularProgress() {
               <div className="flex gap-4 items-start">
                 <div className="bg-[#678E1A] text-white min-w-14 h-14 flex flex-col items-center justify-center rounded-md shrink-0">
                   <span className="text-xl font-black">{news.date}</span>
-                  <span className="text-[8px] font-semibold uppercase leading-none">{news.monthYear}</span>
+                  <span className="text-[8px] font-semibold uppercase leading-none">
+                    {news.monthYear}
+                  </span>
                 </div>
                 <h4 className="font-bold text-gray-800 dark:text-gray-100 text-sm leading-snug line-clamp-3">
                   {news.title}
@@ -157,14 +164,18 @@ export default function CircularProgress() {
             <h3 className="text-2xl md:text-3xl font-black text-white mb-1">
               Apply now for your Branch Registration
             </h3>
-            <p className="text-blue-200/50 text-sm">Subscribe & get latest news and growth opportunities!</p>
+            <p className="text-blue-200/50 text-sm">
+              Subscribe & get latest news and growth opportunities!
+            </p>
           </div>
-          <button className="bg-[#678E1A] hover:bg-[#567a16] text-white px-12 py-4 rounded-lg font-black text-base transition-all shadow-lg shadow-[#678E1A]/30 shrink-0">
+          <Link
+            href="/register"
+            className="bg-[#678E1A] hover:bg-[#567a16] text-white px-12 py-4 rounded-lg font-black text-base transition-all shadow-lg shadow-[#678E1A]/30 shrink-0"
+          >
             Apply Now
-          </button>
+          </Link>
         </div>
       </section>
-
     </div>
   );
 }

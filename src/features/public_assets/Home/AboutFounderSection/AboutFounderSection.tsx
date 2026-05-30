@@ -7,7 +7,7 @@ import { Loader2, X } from "lucide-react";
 import { AboutSection } from "@/features/AdminDashboard/Our-Story/AboutSection/AboutSection.types";
 import { getHeroImageTextsAction } from "@/features/AdminDashboard/Our-Story/HeroImageText/HeroImageText.actions";
 
-const TEXT_LIMIT = 1800;
+const TEXT_LIMIT = 1690;
 
 export default function About() {
   const [items, setItems] = useState<AboutSection[]>([]);
@@ -64,7 +64,7 @@ export default function About() {
             className={`mt-4 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-all transform hover:scale-[1.02] ${
               buttonVariant === "black"
                 ? "bg-black hover:bg-black/90"
-                : "bg-[#678E1A] hover:bg-[#678E1A]/90"
+                : "bg-black hover:bg-black/90"
             }`}
           >
             Read More
@@ -76,45 +76,48 @@ export default function About() {
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-12 space-y-24 bg-white dark:bg-transparent">
-      {/* ── 1. ABOUT US / FIRST SECTION ── */}
+      {/* ── 1. ABOUT SECTION ── */}
       {about && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch"
         >
           {/* Left Side: Image */}
-          <div className="order-2 lg:order-1 lg:col-span-5 flex flex-col items-center w-full max-w-95 mx-auto">
-            <div className="w-full relative border-[1.5px] border-slate-300 dark:border-slate-700 rounded-[20px] overflow-hidden p-0.5 bg-gray-50 dark:bg-slate-900 shadow-md">
-              <div className="w-full bg-white dark:bg-slate-950 flex justify-center items-center rounded-t-[18px] p-2">
+          <div className="lg:col-span-5 flex flex-col items-center w-full max-w-95 mx-auto h-full">
+            <div className="w-full h-full relative border-[1.5px] border-slate-300 dark:border-slate-700 rounded-[20px] overflow-hidden p-0.5 bg-gray-50 dark:bg-slate-900 shadow-md">
+              <div className="w-full bg-white dark:bg-slate-950 flex justify-center items-center rounded-t-[18px] p-2 flex-1">
                 {about.image && (
                   <img
                     src={about.image}
-                    alt={about.title || "About Image"}
-                    className="w-auto h-full max-h-105 object-contain rounded-t-[14px]"
+                    alt={about.name || "about"}
+                    className="w-auto object-cover rounded-t-[14px]"
                   />
                 )}
               </div>
               <div className="w-full bg-[#0D1E3D] text-center py-4 px-4 rounded-b-[18px] relative z-10">
                 <h3 className="text-white font-bold text-xl tracking-wide">
-                  {about.name || "MR ROBIN AHMED"}
+                  {about.name || "Mosfiqur Rahman"}
                 </h3>
                 <p className="text-gray-300 text-sm font-medium mt-1">
-                  {about.title || "Executive Director"}
+                  {about.title || "about & CEO"}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Right Side: Text */}
-          <div className="order-1 lg:order-2 lg:col-span-7 flex flex-col justify-start">
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-4">
-              {about.title || "MR ROBIN AHMED"}
-            </h2>
-            <div className="flex-1 overflow-y-auto max-h-105 pr-2 custom-scrollbar">
-              {renderText(about.text, about, "black")}
+          <div className="lg:col-span-7 flex flex-col justify-start">
+            <div className="flex items-center gap-2 mb-6 border-b border-gray-200 pb-2">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                About <span className="text-[#678E1A]">Us</span>
+              </h2>
+              <div className="flex-1 h-0.75 bg-[#678E1A] ml-2 max-w-30" />
+            </div>
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+              {renderText(about.text, about, "green")}
             </div>
           </div>
         </motion.div>
@@ -127,7 +130,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch pt-6"
         >
           {/* Left Side: Text */}
           <div className="lg:col-span-7 flex flex-col justify-start">
@@ -137,29 +140,20 @@ export default function About() {
               </h2>
               <div className="flex-1 h-0.75 bg-[#678E1A] ml-2 max-w-30" />
             </div>
-
-            <div className="flex-1 overflow-y-auto max-h-112.5 pr-2 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
               {renderText(founder.text, founder, "green")}
-
-              <div className="mt-6 border-t border-gray-100 dark:border-slate-800 pt-4 text-xs text-gray-500">
-                <p className="font-bold text-gray-800 dark:text-gray-200">Sincerely,</p>
-                <p className="font-extrabold text-sm text-gray-900 dark:text-white mt-1 uppercase">
-                  Kosuke Yoshida
-                </p>
-                <p className="text-gray-500">CEO, SK Japan Export Co. Ltd</p>
-              </div>
             </div>
           </div>
 
           {/* Right Side: Image */}
-          <div className="lg:col-span-5 flex flex-col items-center w-full max-w-95 mx-auto">
-            <div className="w-full relative border-[1.5px] border-slate-300 dark:border-slate-700 rounded-[20px] overflow-hidden p-0.5 bg-gray-50 dark:bg-slate-900 shadow-md">
+          <div className="lg:col-span-5 flex flex-col items-center w-full max-w-95 mx-auto h-full">
+            <div className="w-full h-full relative border-[1.5px] border-slate-300 dark:border-slate-700 rounded-[20px] overflow-hidden p-0.5 bg-gray-50 dark:bg-slate-900 shadow-md">
               <div className="w-full bg-white dark:bg-slate-950 flex justify-center items-center rounded-t-[18px] p-2">
                 {founder.image && (
                   <img
                     src={founder.image}
                     alt={founder.name || "Founder"}
-                    className="w-auto h-full max-h-105 object-contain rounded-t-[14px]"
+                    className="w-auto w-full object-cover rounded-t-[14px]"
                   />
                 )}
               </div>
@@ -216,6 +210,21 @@ export default function About() {
               <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                 {modalItem.text}
               </p>
+              <div className="mt-6 border-t border-gray-100 dark:border-slate-800 pt-4 text-xs text-gray-500">
+                <p className="font-bold text-gray-800 dark:text-gray-200">
+                  Sincerely,
+                </p>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                    {modalItem.title || "Details"}
+                  </h3>
+                  {modalItem.name && (
+                    <p className="text-sm font-semibold text-[#678E1A] mt-1">
+                      {modalItem.name}
+                    </p>
+                  )}
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
