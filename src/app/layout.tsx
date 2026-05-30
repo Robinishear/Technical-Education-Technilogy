@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Love You",
+  title: "Bangladesh Technical Education Technology",
   description: "Advanced Learning Management System",
+
 };
 
 export default function RootLayout({
@@ -27,11 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
-      {/* <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" /> 
-         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Arimo:ital,wght@0,400..700;1,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Coiny&family=Oswald:wght@200..700&display=swap" rel="stylesheet" />
-      </head> */}
+     
       <body className="min-h-screen bg-background antialiased selection:bg-primary/10 selection:text-primary transition-colors duration-500">
         <ThemeProvider
           attribute="class"

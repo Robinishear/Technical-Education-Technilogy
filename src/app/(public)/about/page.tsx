@@ -1,5 +1,5 @@
 import About from '@/features/public_assets/about/About/About';
-import { AboutHero } from '@/features/public_assets/about/AboutHero';
+// import { AboutHero } from '@/features/public_assets/about/AboutHero';
 import FeaturesGrid from '@/features/public_assets/about/components/FeaturesGrid';
 import ProjectSpecialty from '@/features/public_assets/about/components/ProjectSpecialty';
 import VisionMission from '@/features/public_assets/about/components/VisionMission';
@@ -12,7 +12,7 @@ const page = () => {
     return (
       <div className="flex flex-col gap-6">
         <LoadingScreen></LoadingScreen>
-        <AboutHero></AboutHero>
+        {/* <AboutHero></AboutHero> */}
         <About></About>
        
 <VisionMission></VisionMission>
