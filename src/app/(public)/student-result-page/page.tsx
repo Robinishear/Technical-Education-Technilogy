@@ -67,7 +67,7 @@ function StudentResultContent() {
               </div>
               <input
                 type="text"
-                placeholder="Enter Student Roll Number, e.g., 750279"
+                placeholder="Enter Student Roll Number,"
                 value={roll}
                 onChange={(e) => setRoll(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}

@@ -15,7 +15,7 @@ export default function AdminDashboard() {
     <div className="flex items-center justify-between">
   <div>
     <h1 className="text-3xl font-bold tracking-tight">
-      Admin Overview 🛠️
+      Admin Overview 
     </h1>
     <p className="text-muted-foreground font-medium">
       Current status of the system and management reports.

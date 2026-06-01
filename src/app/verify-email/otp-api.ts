@@ -7,7 +7,6 @@ export const api = axios.create({
   withCredentials: true, 
 });
 
-// Optional: error handling interceptor
 api.interceptors.response.use(
   (res) => res,
   (err) => {
