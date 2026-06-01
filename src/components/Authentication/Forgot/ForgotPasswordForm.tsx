@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import { useState } from "react";
+import { useRouter } from "next/navigation"; 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { forgotPasswordSchema, ForgotPasswordValues } from "./forgotPasswordSche
 import { api } from "@/app/verify-email/otp-api";
 
 export default function ForgotPasswordForm() {
+    const router = useRouter(); 
   const [loading, setLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
@@ -29,9 +30,10 @@ export default function ForgotPasswordForm() {
       if (response.data.success) {
         setIsSent(true);
         toast.success("পাসওয়ার্ড রিসেট লিঙ্ক পাঠানো হয়েছে!");
+         router.push(`/reset-password?email=${values.email}`);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "কিছু একটা ভুল হয়েছে!");
+      toast.error(error.response?.data?.message || "কিছু একটা ভুল হয়েছে!");
     } finally {
       setLoading(false);
     }

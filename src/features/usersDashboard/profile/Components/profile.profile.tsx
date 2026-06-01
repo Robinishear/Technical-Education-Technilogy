@@ -145,7 +145,7 @@ export const ProfileContent = ({ user }: { user: any }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowUpdate(true)}
+              // onClick={() => setShowUpdate(true)}
               className="shrink-0 rounded-xl gap-2 border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-300"
             >
               <Settings size={15} />
