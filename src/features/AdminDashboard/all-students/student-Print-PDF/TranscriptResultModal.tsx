@@ -5,8 +5,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, GraduationCap, ZoomIn, ZoomOut, X, Printer } from "lucide-react";
-import { getSemesterGrade, Mark } from "@/features/AdminDashboard/all-students/markStudent/types/markStudent.types";
+import {
+  Loader2,
+  GraduationCap,
+  ZoomIn,
+  ZoomOut,
+  X,
+  Printer,
+} from "lucide-react";
+import {
+  getSemesterGrade,
+  Mark,
+} from "@/features/AdminDashboard/all-students/markStudent/types/markStudent.types";
 import { getMarksAction } from "@/features/AdminDashboard/all-students/markStudent/actions/markStudent.actions";
 
 interface Props {
@@ -15,7 +25,13 @@ interface Props {
   onClose: () => void;
 }
 
-export default function TranscriptResultModal({ studentId, student, onClose }: Props) {
+const SHEET_H = 1105;
+
+export default function TranscriptResultModal({
+  studentId,
+  student,
+  onClose,
+}: Props) {
   const [marks, setMarks] = useState<Mark[]>([]);
   const [loading, setLoading] = useState(true);
   const [scale, setScale] = useState(0.75);
@@ -32,7 +48,9 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
       }
     };
     fetchMarks();
-    return () => { ignore = true; };
+    return () => {
+      ignore = true;
+    };
   }, [studentId]);
 
   const avgCgpa =
@@ -47,10 +65,7 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
         #transcript-print-only { display: none; }
 
         @media print {
-          @page {
-            size: A4 portrait;
-            margin: 6mm;
-          }
+          @page { size: A4 portrait; margin: 0; }
           html, body {
             background: #fff !important;
             margin: 0 !important;
@@ -60,14 +75,18 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
           #transcript-print-only {
             display: block !important;
             position: fixed !important;
-            inset: 0 !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 794px !important;
+            height: ${SHEET_H}px !important;
             background: #ffffff !important;
             z-index: 999999 !important;
             padding: 0 !important;
             margin: 0 !important;
           }
           .transcript-sheet {
-            width: 100% !important;
+            width: 794px !important;
+            height: ${SHEET_H}px !important;
             border: none !important;
             border-radius: 0 !important;
           }
@@ -77,53 +96,153 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
             color-adjust: exact !important;
           }
         }
+
+        .transcript-scroll-area::-webkit-scrollbar { width: 6px; height: 6px; }
+        .transcript-scroll-area::-webkit-scrollbar-track { background: transparent; }
+        .transcript-scroll-area::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .transcript-scroll-area::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
       `}</style>
 
-      {/* MODAL */}
-      <div id="transcript-modal-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-5xl shadow-2xl flex flex-col max-h-[95vh]">
-
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+      {/* MODAL OVERLAY */}
+      <div
+        id="transcript-modal-overlay"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col"
+          style={{
+            width: "min(95vw, 1000px)",
+            maxHeight: "95vh",
+            height: "95vh",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
             <div>
-              <h2 className="text-base font-bold text-gray-800 dark:text-gray-100">Result Sheet Preview</h2>
-              <p className="text-xs text-gray-400 mt-0.5">{student?.name} · {student?.roll}</p>
+              <h2 className="text-base font-bold text-gray-800 dark:text-gray-100">
+                Academic Transcript Preview
+              </h2>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {student?.name} · {student?.roll}
+              </p>
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={() => setScale((s) => Math.max(0.3, +(s - 0.1).toFixed(1)))} className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 transition">
-                <ZoomOut size={16} className="text-gray-600 dark:text-gray-300" />
+              <button
+                onClick={() =>
+                  setScale((s) => Math.max(0.3, +(s - 0.1).toFixed(1)))
+                }
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                title="Zoom Out"
+              >
+                <ZoomOut
+                  size={16}
+                  className="text-gray-600 dark:text-gray-300"
+                />
               </button>
-              <span className="text-xs font-mono text-gray-500 w-10 text-center">{Math.round(scale * 100)}%</span>
-              <button onClick={() => setScale((s) => Math.min(2, +(s + 0.1).toFixed(1)))} className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 transition">
-                <ZoomIn size={16} className="text-gray-600 dark:text-gray-300" />
+              <span className="text-xs font-mono text-gray-500 w-10 text-center select-none">
+                {Math.round(scale * 100)}%
+              </span>
+              <button
+                onClick={() =>
+                  setScale((s) => Math.min(2, +(s + 0.1).toFixed(1)))
+                }
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                title="Zoom In"
+              >
+                <ZoomIn
+                  size={16}
+                  className="text-gray-600 dark:text-gray-300"
+                />
               </button>
-              <button onClick={onClose} className="ml-2 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-red-100 transition">
+              <button
+                onClick={onClose}
+                className="ml-2 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-900/30 transition"
+                title="Close"
+              >
                 <X size={18} className="text-gray-600 dark:text-gray-400" />
               </button>
             </div>
           </div>
 
-          <div className="overflow-auto flex-1 p-6 bg-gray-50 dark:bg-gray-950">
+          {/* Scrollable Preview */}
+          <div
+            className="transcript-scroll-area flex-1 overflow-auto bg-gray-100 dark:bg-gray-950"
+            style={{ minHeight: 0 }}
+          >
             {loading && (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="flex flex-col items-center justify-center h-full gap-4">
                 <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Loading Results...</p>
+                <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">
+                  Loading Results...
+                </p>
               </div>
             )}
             {!loading && marks.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-20 gap-3">
+              <div className="flex flex-col items-center justify-center h-full gap-3">
                 <GraduationCap size={48} className="text-slate-300" />
-                <p className="text-slate-400 font-bold uppercase tracking-widest text-sm">কোনো Result পাওয়া যায়নি</p>
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-sm">
+                  কোনো Result পাওয়া যায়নি
+                </p>
               </div>
             )}
             {!loading && marks.length > 0 && (
-              <div style={{ transform: `scale(${scale})`, transformOrigin: "top center", transition: "transform 0.2s ease" }}>
-                <Sheet student={student} marks={marks} avgCgpa={avgCgpa} totalCredit={totalCredit} />
+              <div
+                style={{
+                  minWidth: "100%",
+                  minHeight: "100%",
+                  display: "inline-flex",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  padding: "28px",
+                  boxSizing: "border-box",
+                }}
+              >
+                {/* proxy sized to scaled sheet */}
+                <div
+                  style={{
+                    width: `${794 * scale}px`,
+                    height: `${SHEET_H * scale}px`,
+                    flexShrink: 0,
+                    position: "relative",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "794px",
+                      height: `${SHEET_H}px`,
+                      transform: `scale(${scale})`,
+                      transformOrigin: "top left",
+                      transition: "transform 0.2s ease",
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+                      borderRadius: "3px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Sheet
+                      student={student}
+                      marks={marks}
+                      avgCgpa={avgCgpa}
+                      totalCredit={totalCredit}
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800">
-            <button onClick={onClose} className="flex-1 h-11 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+          {/* Footer */}
+          <div className="flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex-shrink-0">
+            <button
+              onClick={onClose}
+              className="flex-1 h-11 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-gray-700 dark:text-gray-300"
+            >
               Cancel
             </button>
             <button
@@ -138,242 +257,681 @@ export default function TranscriptResultModal({ studentId, student, onClose }: P
         </div>
       </div>
 
-      {/* PRINT ONLY */}
+      {/* PRINT-ONLY */}
       <div id="transcript-print-only">
         {!loading && marks.length > 0 && (
-          <Sheet student={student} marks={marks} avgCgpa={avgCgpa} totalCredit={totalCredit} />
+          <Sheet
+            student={student}
+            marks={marks}
+            avgCgpa={avgCgpa}
+            totalCredit={totalCredit}
+          />
         )}
       </div>
     </>
   );
 }
 
-function Sheet({ student, marks, avgCgpa, totalCredit }: {
-  student: any; marks: Mark[]; avgCgpa: number; totalCredit: number;
-}) {
-  // 2 columns for ≤8 semesters, 3 columns for more
-  const gridCols = marks.length <= 8 ? "1fr 1fr" : "1fr 1fr 1fr";
+/* ── helpers ── */
+const monthName = (m: string | number) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return months[parseInt(String(m)) - 1] ?? m;
+};
 
-  // Exactly same as ResultView QR
-  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=84x84&data=${encodeURIComponent(
-    `${typeof window !== "undefined" ? window.location.origin : process.env.NEXT_PUBLIC_APP_URL}/student-result-page?roll=${student?.roll}`
+/* ── Sheet ── */
+function Sheet({
+  student,
+  marks,
+  avgCgpa,
+  totalCredit,
+}: {
+  student: any;
+  marks: Mark[];
+  avgCgpa: number;
+  totalCredit: number;
+}) {
+  const count = marks.length;
+
+  // Auto-scale based on semester count
+  const fontSize =
+    count <= 4
+      ? "8px"
+      : count <= 6
+        ? "7px"
+        : count <= 8
+          ? "6px"
+          : count <= 10
+            ? "5.5px"
+            : "5px";
+  const thPad =
+    count <= 4
+      ? "4px 4px"
+      : count <= 6
+        ? "3px 3px"
+        : count <= 8
+          ? "2px 3px"
+          : "1.5px 2px";
+  const tdPad =
+    count <= 4
+      ? "3px 3px"
+      : count <= 6
+        ? "2px 3px"
+        : count <= 8
+          ? "2px 2px"
+          : "1px 2px";
+  const tdPadWide =
+    count <= 4
+      ? "3px 5px"
+      : count <= 6
+        ? "2px 4px"
+        : count <= 8
+          ? "2px 4px"
+          : "1px 3px";
+  const rowGap =
+    count <= 4
+      ? "12px"
+      : count <= 6
+        ? "10px"
+        : count <= 8
+          ? "8px"
+          : count <= 10
+            ? "6px"
+            : "4px";
+  const lineH = count <= 6 ? "1.4" : count <= 8 ? "1.3" : "1.1";
+  const footerPad =
+    count <= 6 ? "3px 4px" : count <= 8 ? "2px 4px" : "1.5px 4px";
+
+  const gridCols = "1fr 1fr";
+
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(
+    `${typeof window !== "undefined" ? window.location.origin : process.env.NEXT_PUBLIC_APP_URL}/student-result-page?roll=${student?.roll}`,
   )}`;
 
   return (
-    <div className="transcript-sheet" style={{
-      width: 794,
-      backgroundColor: "#ffffff",
-      color: "#000000",
-      fontFamily: "'Arial', sans-serif",
-      border: "1px solid #cbd5e1",
-      borderRadius: 4,
-      overflow: "hidden",
-    }}>
+    <div
+      className="transcript-sheet"
+      style={{
+        width: "794px",
+        height: `${SHEET_H}px`,
+        color: "#000",
+        fontFamily: "'Arial', 'Helvetica', sans-serif",
+        fontSize: "9px",
+        position: "relative",
+        backgroundImage: "url('/transcript.png')",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundSize: "100% 100%",
+        backgroundColor: "#fff",
+        boxSizing: "border-box",
+        overflow: "hidden",
+        paddingLeft: "50px",
+        paddingRight: "50px",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Header spacer */}
+      <div style={{ height: "172px" }} />
 
-      {/* HEADER */}
-      <div style={{ borderBottom: "2px solid #1e293b", padding: "4px 10px", backgroundColor: "#fff" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <img
-            src="https://i.ibb.co.com/r2dVnpdh/Screenshot-from-2026-03-04-16-25-16-removebg-preview.png"
-            alt="Logo" crossOrigin="anonymous"
-            style={{ width: 38, height: 38, objectFit: "contain" }}
+      {/* Serial No */}
+      <div
+        style={{
+          fontSize: "8px",
+          fontWeight: "bold",
+          color: "#000",
+          marginBottom: "4px",
+          paddingLeft: "40px",
+          paddingTop: "8px",
+        }}
+      >
+        Serial No:{" "}
+        <span style={{ color: "#0b3a7d" }}>
+          {student?.studentId || "001131"}
+        </span>
+      </div>
+
+      {/* Info Section */}
+      <div
+        style={{
+          display: "flex",
+          gap: "0px",
+          marginBottom: "8px",
+          alignItems: "flex-start",
+          paddingLeft: "31px",
+          paddingRight: "10px",
+        }}
+      >
+        {/* Left col */}
+        <div
+          style={{
+            flex: "1 1 0",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5px",
+          }}
+        >
+          <InfoRow label="Name of Student" value={student?.name} />
+          <InfoRow label="Father's Name" value={student?.fatherName} />
+          <InfoRow label="Mother's Name" value={student?.motherName} />
+          <InfoRow label="Institution" value={student?.institute} />
+          <InfoRow
+            label="Technology"
+            value={student?.courseName || student?.educationQualification}
           />
-          <div style={{ textAlign: "center", flex: 1, padding: "0 6px" }}>
-            <p style={{ fontSize: 6, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", margin: 0 }}>
-              Government of the People's Republic of Bangladesh
-            </p>
-            <p style={{ fontSize: 9.5, fontWeight: 900, textTransform: "uppercase", margin: "2px 0 0", color: "#1e293b" }}>
-              Bangladesh Technical Education Institute
-            </p>
-            <p style={{ fontSize: 12, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.18em", margin: "2px 0 0", color: "#0f172a" }}>
-              RESULT SHEET
-            </p>
-          </div>
-          {student?.picture ? (
-            <img src={student.picture} alt="Student" crossOrigin="anonymous"
-              style={{ width: 36, height: 46, objectFit: "cover", border: "1px solid #cbd5e1" }} />
-          ) : (
-            <div style={{ width: 36, height: 46, border: "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 6, color: "#94a3b8", fontWeight: 700 }}>
-              PHOTO
-            </div>
-          )}
+          <InfoRow
+            label="Final CGPA"
+            value={avgCgpa > 0 ? avgCgpa.toFixed(2) : "0.00"}
+          />
+        </div>
+        {/* Middle col */}
+        <div
+          style={{
+            flex: "1 1 0",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5px",
+            paddingLeft: "10px",
+          }}
+        >
+          <InfoRow label="Roll No" value={student?.roll} />
+          <InfoRow label="Registration No" value={student?.regNumber} />
+          <InfoRow label="Course Duration" value={student?.duration} />
+          <InfoRow
+            label="Session"
+            value={
+              student?.month1
+                ? `${monthName(student.month1)} - ${monthName(student.month2)} ${student.year1}`
+                : "—"
+            }
+          />
+          <InfoRow label="Earned Credit" value={totalCredit} />
+          <InfoRow label="Letter Grade" value={getSemesterGrade(avgCgpa)} />
+        </div>
+        {/* Grading table */}
+        <div
+          style={{
+            width: "130px",
+            flexShrink: 0,
+            marginRight: "5px",
+            alignSelf: "flex-start",
+            marginTop: "-18px",
+          }}
+        >
+          <GradingSystemTable />
         </div>
       </div>
 
-      {/* STUDENT INFO */}
-      <div style={{ padding: "3px 10px", borderBottom: "1px solid #cbd5e1", backgroundColor: "#fafafa" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 14px" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <tbody>
-              <InfoRow label="Name of Student" value={student?.name} />
-              <InfoRow label="Father's Name"   value={student?.fatherName} />
-              <InfoRow label="Mother's Name"   value={student?.motherName} />
-              <InfoRow label="Date of Birth"   value={student?.dob ? new Date(student.dob).toLocaleDateString("en-GB") : "—"} />
-              <InfoRow label="Institute Name"  value={student?.institute} />
-              <InfoRow label="District"        value={student?.district} />
-            </tbody>
-          </table>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <tbody>
-              <InfoRow label="Roll"            value={student?.roll} />
-              <InfoRow label="Registration No" value={student?.regNumber} />
-              <InfoRow label="Course Duration" value={student?.duration} />
-              <InfoRow label="Education"       value={student?.educationQualification} />
-              <InfoRow label="Director"        value={student?.directorName} />
-              <InfoRow label="Overall CGPA"    value={getSemesterGrade(avgCgpa)} />
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* SEMESTER TABLES — grid instead of CSS columns */}
-      <div style={{ padding: "3px 10px" }}>
-        <div style={{
+      {/* Semester Grid */}
+      <div
+        style={{
           display: "grid",
           gridTemplateColumns: gridCols,
-          gap: 5,
-        }}>
-          {marks.map((mark) => {
-            const semCredit = mark.subjects.reduce((acc, s) => acc + s.credit, 0);
-            return (
-              <div key={mark.id} style={{
-                breakInside: "avoid",
-                pageBreakInside: "avoid",
-                border: "1px solid #cbd5e1",
-                marginBottom: 0,
-              }}>
-                {/* Semester Title Bar */}
-                <div style={{ backgroundColor: "#1e293b", padding: "1.5px 5px", textAlign: "center" }}>
-                  <p style={{ fontSize: 5.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff", margin: 0 }}>
-                    {mark.semesterTitle}
-                  </p>
-                </div>
-
-                {/* Subject Table */}
-                <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
-                  <colgroup>
-                    <col style={{ width: "15%" }} />
-                    <col style={{ width: "47%" }} />
-                    <col style={{ width: "10%" }} />
-                    <col style={{ width: "15%" }} />
-                    <col style={{ width: "13%" }} />
-                  </colgroup>
-                  <thead>
-                    <tr style={{ backgroundColor: "#f1f5f9", borderBottom: "1px solid #cbd5e1" }}>
-                      <Th>Code</Th>
-                      <Th>Title</Th>
-                      <Th center>CR</Th>
-                      <Th center>Grade</Th>
-                      <Th center>GP</Th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mark.subjects.map((sub, idx) => (
-                      <tr key={idx} style={{ backgroundColor: idx % 2 === 0 ? "#fff" : "#f8fafc", borderBottom: "1px solid #f1f5f9" }}>
-                        <Td muted>{sub.subjectCode}</Td>
-                        <Td bold>{sub.subjectName}</Td>
-                        <Td center>{sub.credit}</Td>
-                        <Td center bold color={sub.grade === "F" ? "#ef4444" : "#0f172a"}>{sub.grade}</Td>
-                        <Td center>{sub.gradePoint.toFixed(2)}</Td>
-                      </tr>
-                    ))}
-                  </tbody>
-                  <tfoot>
-                    <tr style={{ borderTop: "1px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
-                      <td colSpan={2} style={{ padding: "1.5px 4px", fontWeight: 900, fontSize: 5, textTransform: "uppercase", color: "#475569" }}>
-                        Total Credit: {semCredit}
+          gap: `${rowGap} 10px`,
+          marginTop: "10px",
+          marginBottom: "6px",
+          paddingLeft: "40px",
+          paddingRight: "40px",
+          alignItems: "start",
+          alignContent: "start",
+          flex: 1,
+          overflow: "hidden",
+        }}
+      >
+        {marks.map((mark) => (
+          <div
+            key={mark.id}
+            style={{
+              border: "1px solid #999",
+              overflow: "hidden",
+              backgroundColor: "#fff",
+            }}
+          >
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize,
+                tableLayout: "fixed",
+                lineHeight: lineH,
+              }}
+            >
+              <thead>
+                <tr
+                  style={{
+                    backgroundColor: "#d8d8d8",
+                    borderBottom: "1px solid #999",
+                  }}
+                >
+                  <th
+                    style={{
+                      width: "15%",
+                      padding: thPad,
+                      textAlign: "center",
+                      fontWeight: 700,
+                      fontSize,
+                      borderRight: "1px solid #999",
+                      color: "#000",
+                    }}
+                  >
+                    Sub Code
+                  </th>
+                  <th
+                    style={{
+                      width: "43%",
+                      padding: thPad,
+                      textAlign: "center",
+                      fontWeight: 700,
+                      fontSize,
+                      borderRight: "1px solid #999",
+                      color: "#000",
+                    }}
+                  >
+                    Subject Name
+                  </th>
+                  <th
+                    style={{
+                      width: "10%",
+                      padding: thPad,
+                      textAlign: "center",
+                      fontWeight: 700,
+                      fontSize,
+                      borderRight: "1px solid #999",
+                      color: "#000",
+                    }}
+                  >
+                    Credit
+                  </th>
+                  <th
+                    style={{
+                      width: "16%",
+                      padding: thPad,
+                      textAlign: "center",
+                      fontWeight: 700,
+                      fontSize,
+                      borderRight: "1px solid #999",
+                      color: "#000",
+                    }}
+                  >
+                    Grade
+                  </th>
+                  <th
+                    style={{
+                      width: "16%",
+                      padding: thPad,
+                      textAlign: "center",
+                      fontWeight: 700,
+                      fontSize,
+                      color: "#000",
+                    }}
+                  >
+                    Point
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {mark.subjects
+                  .filter(
+                    (sub) =>
+                      sub.subjectCode?.trim() !== "" &&
+                      sub.subjectCode !== "750XXX",
+                  )
+                  .map((sub, idx) => (
+                    <tr
+                      key={idx}
+                      style={{
+                        borderBottom: "1px solid #e0e0e0",
+                        backgroundColor: "#fff",
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: tdPad,
+                          textAlign: "center",
+                          fontSize,
+                          borderRight: "1px solid #e0e0e0",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          color: "#000",
+                        }}
+                      >
+                        {sub.subjectCode}
                       </td>
-                      <td colSpan={2} style={{ padding: "1.5px 4px", textAlign: "right", fontWeight: 900, fontSize: 5, color: "#475569" }}>GPA:</td>
-                      <td style={{ padding: "1.5px 4px", textAlign: "center", fontWeight: 900, fontSize: 6, color: "#0f172a" }}>
-                        {mark.cgpa.toFixed(2)}
+                      <td
+                        style={{
+                          padding: tdPadWide,
+                          textAlign: "center",
+                          fontSize,
+                          borderRight: "1px solid #e0e0e0",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          color: "#000",
+                        }}
+                      >
+                        {sub.subjectName}
+                      </td>
+                      <td
+                        style={{
+                          padding: tdPad,
+                          textAlign: "center",
+                          fontSize,
+                          borderRight: "1px solid #e0e0e0",
+                          color: "#000",
+                        }}
+                      >
+                        {sub.credit}
+                      </td>
+                      <td
+                        style={{
+                          padding: tdPad,
+                          textAlign: "center",
+                          fontSize,
+                          fontWeight: 700,
+                          color: sub.grade === "F" ? "#cc0000" : "#000",
+                          borderRight: "1px solid #e0e0e0",
+                        }}
+                      >
+                        {sub.grade}
+                      </td>
+                      <td
+                        style={{
+                          padding: tdPad,
+                          textAlign: "center",
+                          fontSize,
+                          color: "#000",
+                        }}
+                      >
+                        {sub.gradePoint.toFixed(2)}
                       </td>
                     </tr>
-                  </tfoot>
-                </table>
-              </div>
-            );
-          })}
-        </div>
+                  ))}
+              </tbody>
+            </table>
+            <div
+              style={{
+                borderTop: "1px solid #999",
+                backgroundColor: "#e8e8e8",
+                padding: footerPad,
+                fontSize,
+                fontWeight: 700,
+                color: "#000",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span>
+                Semester: {mark.semesterTitle.replace(/semester/i, "").trim()} |
+                GPA: {mark.cgpa.toFixed(2)}
+              </span>
+              <span>Grade: {mark.grade || getSemesterGrade(mark.cgpa)}</span>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* FOOTER */}
-      <div style={{ padding: "4px 10px", borderTop: "2px solid #1e293b", backgroundColor: "#fafafa" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", gap: 14, fontSize: 7.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.06em", color: "#334155" }}>
-            <span>Total Credit: {totalCredit}</span>
-            <span>Credit Earned: {totalCredit}</span>
-            <span>CGPA: {avgCgpa.toFixed(2)}</span>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+      {/* Footer Signatures */}
+      <div
+        style={{
+          marginTop: "auto",
+          paddingTop: "10px",
+          paddingLeft: "50px",
+          paddingRight: "50px",
+          flexShrink: 0,
+          paddingBottom: "75px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
+          {/* QR */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "3px",
+              alignItems: "center",
+            }}
+          >
             <img
               src={qrSrc}
-              alt="QR Code"
+              alt="QR"
               crossOrigin="anonymous"
-              width={64}
-              height={64}
+              style={{ width: "56px", height: "56px", display: "block" }}
             />
-            <p style={{ fontSize: 5, color: "#94a3b8", margin: 0, fontWeight: 700, textTransform: "uppercase" }}>Scan to verify</p>
+            <span
+              style={{
+                fontSize: "7.5px",
+                fontWeight: 700,
+                color: "#000",
+                textAlign: "center",
+              }}
+            >
+              Result Published:{" "}
+              {marks.length > 0
+                ? new Date(
+                    Math.max(
+                      ...marks.map((m) => new Date(m.createdAt).getTime()),
+                    ),
+                  ).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : new Date().toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
+            </span>
+          </div>
+          {/* Compared By */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "130px",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "cursive",
+                fontSize: "15px",
+                color: "#000",
+                display: "block",
+                marginBottom: "2px",
+              }}
+            >
+              Zahid
+            </span>
+            <div
+              style={{
+                width: "100%",
+                borderTop: "1px solid #000",
+                marginBottom: "2px",
+              }}
+            />
+            <span style={{ fontSize: "8px", fontWeight: 700, color: "#000" }}>
+              Compared By
+            </span>
+          </div>
+          {/* Controller */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "200px",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "cursive",
+                fontSize: "16px",
+                color: "#000",
+                display: "block",
+                marginBottom: "2px",
+              }}
+            >
+              Sayful
+            </span>
+            <div
+              style={{
+                width: "100%",
+                borderTop: "1px solid #000",
+                marginBottom: "2px",
+              }}
+            />
+            <span
+              style={{
+                fontSize: "8px",
+                fontWeight: 700,
+                color: "#000",
+                textAlign: "center",
+                lineHeight: "1.3",
+              }}
+            >
+              Controller of Examinations
+              <br />
+              Bangladesh National Technical Education Institute
+            </span>
           </div>
         </div>
-      </div>
-
-      {/* NOTE */}
-      <div style={{ padding: "2px 10px", borderTop: "1px solid #e2e8f0", textAlign: "center", backgroundColor: "#fff" }}>
-        <p style={{ fontSize: 5.5, color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
-          Note: This is a computer-generated marksheet and does not require any signature.
+        <p
+          style={{
+            color: "#cc0000",
+            fontSize: "7.5px",
+            fontWeight: 700,
+            textAlign: "center",
+            marginTop: "10px",
+            letterSpacing: "0.03em",
+          }}
+        >
+          For verification please visit BNTEI website: www.bntei.com
         </p>
       </div>
     </div>
   );
 }
 
-function Th({ children, center }: { children: React.ReactNode; center?: boolean }) {
+/* ── sub-components ── */
+function InfoRow({ label, value }: { label: string; value?: any }) {
   return (
-    <th style={{
-      padding: "1px 3px",
-      textAlign: center ? "center" : "left",
-      borderRight: "1px solid #e2e8f0",
-      fontSize: 5,
-      fontWeight: 900,
-      textTransform: "uppercase",
-      color: "#475569",
-      overflow: "hidden",
-      whiteSpace: "nowrap",
-    }}>
-      {children}
-    </th>
-  );
-}
-
-function Td({ children, center, bold, muted, color }: {
-  children: React.ReactNode; center?: boolean; bold?: boolean; muted?: boolean; color?: string;
-}) {
-  return (
-    <td style={{
-      padding: "1px 3px",
-      textAlign: center ? "center" : "left",
-      borderRight: "1px solid #f1f5f9",
-      fontSize: 5,
-      fontWeight: bold ? 700 : 400,
-      color: color ?? (muted ? "#64748b" : "#1e293b"),
-      overflow: "hidden",
-      whiteSpace: "nowrap",
-      textOverflow: "ellipsis",
-    }}>
-      {children}
-    </td>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value?: string | null }) {
-  return (
-    <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-      <td style={{ padding: "1px 6px 1px 0", fontWeight: 700, color: "#475569", fontSize: 7, whiteSpace: "nowrap", width: 105 }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "baseline",
+        fontSize: "9px",
+        lineHeight: "1.45",
+        color: "#000",
+      }}
+    >
+      <span style={{ fontWeight: 600, width: "105px", flexShrink: 0 }}>
         {label}
-      </td>
-      <td style={{ padding: "1px 0", color: "#1e293b", fontWeight: 600, fontSize: 7 }}>
-        {value || "—"}
-      </td>
-    </tr>
+      </span>
+      <span style={{ marginRight: "6px", fontWeight: 600 }}>:</span>
+      <span
+        style={{
+          fontWeight: 700,
+          color: "#0b3a7d",
+          flex: 1,
+          wordBreak: "break-word",
+        }}
+      >
+        {value !== undefined && value !== null && value !== "" ? value : "—"}
+      </span>
+    </div>
+  );
+}
+
+function GradingSystemTable() {
+  const thS: React.CSSProperties = {
+    padding: "2px 3px",
+    border: "1px solid #888",
+    fontWeight: "bold",
+    fontSize: "6px",
+    whiteSpace: "nowrap",
+  };
+  const tdS: React.CSSProperties = {
+    padding: "1.5px 3px",
+    border: "1px solid #ccc",
+    fontSize: "6px",
+    whiteSpace: "nowrap",
+  };
+  return (
+    <table
+      style={{
+        width: "85%",
+        borderCollapse: "collapse",
+        fontSize: "6.5px",
+        textAlign: "center",
+        lineHeight: "1.2",
+        backgroundColor: "#fff",
+        border: "1px solid #aaa",
+      }}
+    >
+      <thead>
+        <tr style={{ backgroundColor: "#e8e8e8" }}>
+          <th
+            colSpan={3}
+            style={{
+              padding: "2px 3px",
+              fontWeight: "bold",
+              fontSize: "6.5px",
+              borderBottom: "1px solid #aaa",
+              textAlign: "center",
+            }}
+          >
+            Grading System
+          </th>
+        </tr>
+        <tr style={{ backgroundColor: "#e8e8e8" }}>
+          <th style={thS}>% of Marks</th>
+          <th style={thS}>Grade</th>
+          <th style={thS}>GP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {[
+          { range: "80 or Above", grade: "A+", gp: "4.00" },
+          { range: "75 - Below 80", grade: "A", gp: "3.75" },
+          { range: "70 - Below 75", grade: "A-", gp: "3.50" },
+          { range: "65 - Below 70", grade: "B+", gp: "3.25" },
+          { range: "60 - Below 65", grade: "B", gp: "3.00" },
+          { range: "55 - Below 60", grade: "B-", gp: "2.75" },
+          { range: "50 - Below 55", grade: "C+", gp: "2.50" },
+          { range: "45 - Below 50", grade: "C", gp: "2.25" },
+          { range: "40 - Below 45", grade: "D", gp: "2.00" },
+          { range: "Below 40", grade: "F", gp: "0.00" },
+        ].map((row, idx) => (
+          <tr
+            key={idx}
+            style={{ backgroundColor: idx % 2 === 0 ? "#f5f5f5" : "#fff" }}
+          >
+            <td style={tdS}>{row.range}</td>
+            <td style={{ ...tdS, fontWeight: 700 }}>{row.grade}</td>
+            <td style={tdS}>{row.gp}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

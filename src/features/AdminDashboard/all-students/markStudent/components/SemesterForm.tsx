@@ -29,60 +29,60 @@ export default function SemesterForm({
       </div>
 
       <div className="overflow-x-auto p-4 bg-white">
-        <table className="w-full border-collapse border-2 border-zinc-800 text-center text-[11px]">
+        <table className="w-full border-collapse border-2 border-zinc-800 text-center text-[11px]" style={{ tableLayout: "fixed" }}>
           <thead className="bg-[#4a90e2] text-white uppercase">
             <tr className="divide-x divide-zinc-800">
-              <th className="p-2 border-b-2 border-zinc-800">Code</th>
-              <th className="p-2 border-b-2 border-zinc-800 min-w-50">Subject Name</th>
-              <th className="p-2 border-b-2 border-zinc-800">Credit</th>
-              <th className="p-2 border-b-2 border-zinc-800">Written</th>
-              <th className="p-2 border-b-2 border-zinc-800">Practical</th>
-              <th className="p-2 border-b-2 border-zinc-800">Viva</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-blue-700 italic">Total</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-purple-700 italic">Full Mark</th>
-              <th className="p-2 border-b-2 border-zinc-800">CGPA</th>
-              <th className="p-2 border-b-2 border-zinc-800">Grade</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]">Written(T)</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]">Practical(T)</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]">Viva(T)</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-blue-900 italic text-sm">Grand Total</th>
-              <th className="p-2 border-b-2 border-zinc-800 bg-purple-900 italic text-sm">Total F.M</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "6%" }}>Code</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "23%" }}>Subject Name</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "5%" }}>Credit</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "5%" }}>Written</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "5%" }}>Practical</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "5%" }}>Viva</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-blue-700 italic" style={{ width: "5%" }}>Total</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-purple-700 italic" style={{ width: "6%" }}>Full Mark</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "5%" }}>CGPA</th>
+              <th className="p-2 border-b-2 border-zinc-800" style={{ width: "5%" }}>Grade</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]" style={{ width: "6%" }}>Written(T)</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]" style={{ width: "6%" }}>Practical(T)</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-zinc-800 text-[9px]" style={{ width: "6%" }}>Viva(T)</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-blue-900 italic text-xs" style={{ width: "8%" }}>Grand Total</th>
+              <th className="p-2 border-b-2 border-zinc-800 bg-purple-900 italic text-xs" style={{ width: "8%" }}>Total F.M</th>
             </tr>
           </thead>
           <tbody>
             {sem.subjects.map((sub: any, idx: number) => (
               <tr key={idx} className="divide-x divide-zinc-400 border-b border-zinc-300 hover:bg-blue-50/30 transition-colors">
-                <td className="p-0"><input type="text" className="w-full h-10 text-center outline-none bg-transparent font-bold" placeholder="Code" value={sub.code} onChange={(e) => onSubjectChange(sem.id, idx, 'code', e.target.value)} /></td>
-                <td className="p-0"><input type="text" className="w-full h-10 px-2 outline-none text-left bg-transparent" placeholder="Enter Subject Name" value={sub.name} onChange={(e) => onSubjectChange(sem.id, idx, 'name', e.target.value)} /></td>
-                <td className="p-0"><input type="number" className="w-full h-10 text-center outline-none bg-transparent" value={sub.credit || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'credit', e.target.value)} /></td>
-                <td className="p-0"><input type="number" className="w-full h-10 text-center outline-none bg-transparent" value={sub.w || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'w', e.target.value)} /></td>
-                <td className="p-0"><input type="number" className="w-full h-10 text-center outline-none bg-transparent" value={sub.p || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'p', e.target.value)} /></td>
-                <td className="p-0"><input type="number" className="w-full h-10 text-center outline-none bg-transparent" value={sub.v || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'v', e.target.value)} /></td>
+                <td className="p-0"><input type="text" className="w-full h-7 text-center outline-none bg-transparent font-bold text-xs" placeholder="Code" value={sub.code} onChange={(e) => onSubjectChange(sem.id, idx, 'code', e.target.value)} /></td>
+                <td className="p-0"><input type="text" className="w-full h-7 px-2 outline-none text-left bg-transparent text-xs" placeholder="Enter Subject Name" value={sub.name} onChange={(e) => onSubjectChange(sem.id, idx, 'name', e.target.value)} /></td>
+                <td className="p-0"><input type="number" className="w-full h-7 text-center outline-none bg-transparent text-xs" value={sub.credit || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'credit', e.target.value)} /></td>
+                <td className="p-0"><input type="number" className="w-full h-7 text-center outline-none bg-transparent text-xs" value={sub.w || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'w', e.target.value)} /></td>
+                <td className="p-0"><input type="number" className="w-full h-7 text-center outline-none bg-transparent text-xs" value={sub.p || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'p', e.target.value)} /></td>
+                <td className="p-0"><input type="number" className="w-full h-7 text-center outline-none bg-transparent text-xs" value={sub.v || ""} onChange={(e) => onSubjectChange(sem.id, idx, 'v', e.target.value)} /></td>
 
                 {/* Total — auto */}
-                <td className="p-0 bg-blue-50 font-bold text-blue-900">{sub.marks}</td>
+                <td className="p-0 bg-blue-50 font-bold text-blue-900 text-xs">{sub.marks}</td>
 
                 {/* ✅ Full Mark — manually input */}
                 <td className="p-0">
                   <input
                     type="number"
-                    className="w-full h-10 text-center outline-none bg-purple-50 font-bold text-purple-900"
+                    className="w-full h-7 text-center outline-none bg-purple-50 font-bold text-purple-900 text-xs"
                     value={sub.fullMark || ""}
                     onChange={(e) => onSubjectChange(sem.id, idx, 'fullMark', e.target.value)}
                   />
                 </td>
 
-                <td className="p-0 font-semibold">{sub.gp.toFixed(2)}</td>
-                <td className={`p-0 font-black ${sub.grade === 'F' ? 'text-red-600' : 'text-blue-800'}`}>{sub.grade}</td>
+                <td className="p-0 font-semibold text-xs">{sub.gp.toFixed(2)}</td>
+                <td className={`p-0 font-black text-xs ${sub.grade === 'F' ? 'text-red-600' : 'text-blue-800'}`}>{sub.grade}</td>
 
                 {idx === 0 && (
                   <>
-                    <td rowSpan={8} className="bg-zinc-50 border-l border-zinc-800 font-bold text-zinc-700">{summary.totalWritten}</td>
-                    <td rowSpan={8} className="bg-zinc-50 border-l border-zinc-800 font-bold text-zinc-700">{summary.totalPractical}</td>
-                    <td rowSpan={8} className="bg-zinc-50 border-l border-zinc-800 font-bold text-zinc-700">{summary.totalViva}</td>
-                    <td rowSpan={8} className="bg-blue-100 border-l border-zinc-800 text-2xl font-black text-blue-900 shadow-inner">{summary.totalMarks}</td>
+                    <td rowSpan={8} className="bg-zinc-50 border-l border-zinc-800 font-bold text-zinc-700 text-xs">{summary.totalWritten}</td>
+                    <td rowSpan={8} className="bg-zinc-50 border-l border-zinc-800 font-bold text-zinc-700 text-xs">{summary.totalPractical}</td>
+                    <td rowSpan={8} className="bg-zinc-50 border-l border-zinc-800 font-bold text-zinc-700 text-xs">{summary.totalViva}</td>
+                    <td rowSpan={8} className="bg-blue-100 border-l border-zinc-800 text-xl font-black text-blue-900 shadow-inner">{summary.totalMarks}</td>
                     {/* ✅ Total Full Mark — auto */}
-                    <td rowSpan={8} className="bg-purple-100 border-l border-zinc-800 text-2xl font-black text-purple-900 shadow-inner">{summary.totalFullMark}</td>
+                    <td rowSpan={8} className="bg-purple-100 border-l border-zinc-800 text-xl font-black text-purple-900 shadow-inner">{summary.totalFullMark}</td>
                   </>
                 )}
               </tr>
