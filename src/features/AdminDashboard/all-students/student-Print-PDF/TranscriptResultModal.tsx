@@ -382,6 +382,25 @@ function Sheet({
         flexDirection: "column",
       }}
     >
+      {/* Background Watermark Logo */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "280px",
+          height: "280px",
+          backgroundImage: "url('/image.png')",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "contain",
+          opacity: 0.07,
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+
       {/* Header spacer */}
       <div style={{ height: "172px" }} />
 
