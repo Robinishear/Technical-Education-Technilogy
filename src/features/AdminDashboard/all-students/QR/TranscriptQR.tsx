@@ -3,17 +3,15 @@ import { useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { Student } from "../admin-students/types/admin-students.types";
 
-export const buildIdQRData = (student: Student): string => {
+export const buildTranscriptQRData = (student: Student): string => {
   const baseUrl =
     typeof window !== "undefined"
       ? window.location.origin
       : (process.env.NEXT_PUBLIC_APP_URL || "");
-  const sess =
-    student.month1 && student.year1 ? `${student.month1}-${student.year1}` : "";
-  return `${baseUrl}/verify-student/id?roll=${student.roll || ""}${sess ? `&sess=${encodeURIComponent(sess)}` : ""}`;
+  return `${baseUrl}/student-result-page?roll=${student.roll || ""}`;
 };
 
-export const StudentIdQR = ({
+export const TranscriptQR = ({
   student,
   size = 60,
 }: {
@@ -30,9 +28,11 @@ export const StudentIdQR = ({
     return <div style={{ width: size, height: size }} />;
   }
 
+  const url = buildTranscriptQRData(student);
+
   return (
     <QRCode
-      value={buildIdQRData(student)}
+      value={url}
       size={size}
       bgColor="#ffffff"
       fgColor="#000000"
@@ -40,7 +40,7 @@ export const StudentIdQR = ({
   );
 };
 
-export const StudentIdQRHidden = ({ student }: { student: Student }) => {
+export const TranscriptQRHidden = ({ student }: { student: Student }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -49,11 +49,13 @@ export const StudentIdQRHidden = ({ student }: { student: Student }) => {
 
   if (!mounted) return null;
 
+  const url = buildTranscriptQRData(student);
+
   return (
     <div style={{ display: "none" }}>
       <QRCode
-        id="id-qr-code"
-        value={buildIdQRData(student)}
+        id="transcript-qr-code"
+        value={url}
         size={80}
         bgColor="#ffffff"
         fgColor="#000000"
@@ -61,4 +63,5 @@ export const StudentIdQRHidden = ({ student }: { student: Student }) => {
     </div>
   );
 };
+
 

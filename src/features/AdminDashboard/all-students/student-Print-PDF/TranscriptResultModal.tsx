@@ -18,6 +18,7 @@ import {
   Mark,
 } from "@/features/AdminDashboard/all-students/markStudent/types/markStudent.types";
 import { getMarksAction } from "@/features/AdminDashboard/all-students/markStudent/actions/markStudent.actions";
+import { TranscriptQR } from "../QR/TranscriptQR";
 
 interface Props {
   studentId: string;
@@ -356,9 +357,7 @@ function Sheet({
 
   const gridCols = "1fr 1fr";
 
-  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(
-    `${typeof window !== "undefined" ? window.location.origin : process.env.NEXT_PUBLIC_APP_URL}/student-result-page?roll=${student?.roll}`,
-  )}`;
+
 
   return (
     <div
@@ -710,12 +709,9 @@ function Sheet({
               alignItems: "center",
             }}
           >
-            <img
-              src={qrSrc}
-              alt="QR"
-              crossOrigin="anonymous"
-              style={{ width: "56px", height: "56px", display: "block" }}
-            />
+            <div style={{ width: "56px", height: "56px", display: "block" }}>
+              <TranscriptQR student={student} size={56} />
+            </div>
             <span
               style={{
                 fontSize: "7.5px",

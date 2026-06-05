@@ -3,6 +3,7 @@
 import { X, ZoomIn, ZoomOut, Download, Eye } from "lucide-react";
 import { useState } from "react";
 import { Student } from "../admin-students/types/admin-students.types";
+import { CertificateQR, CertificateQRHidden } from "../QR/CertificateQR";
 
 export const CertificateModal = ({
   student,
@@ -19,6 +20,8 @@ export const CertificateModal = ({
     month: "short",
     year: "numeric",
   });
+
+
 
   const monthName = (m: string | number) => {
     const months = [
@@ -53,11 +56,15 @@ export const CertificateModal = ({
     cgpa: { top: "68%", left: "77.5%" },
     date1: { top: "80.2%", left: "25.0%" },
     date2: { top: "82%", left: "18.5%" },
+    qr: { top: "23%", left: "80%" },
   };
 
   const handleDownload = () => {
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
+
+    const qrSvgEl = document.getElementById("certificate-qr-code");
+    const qrSvgString = qrSvgEl ? qrSvgEl.outerHTML : "";
 
     printWindow.document.write(`<!DOCTYPE html>
 <html>
@@ -76,6 +83,19 @@ export const CertificateModal = ({
     font-style: italic;
     color: #000;
     font-size: 11pt;
+  }
+  .qr-block {
+    position: absolute;
+    top: ${P.qr.top};
+    left: ${P.qr.left};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .qr-block svg {
+    width: 52px !important;
+    height: 52px !important;
   }
 </style>
 </head>
@@ -96,6 +116,10 @@ export const CertificateModal = ({
     <div class="f" style="top:${P.cgpa.top}; left:${P.cgpa.left};">—</div>
     <div class="f" style="top:${P.date1.top}; left:${P.date1.left}; font-size:8.5pt;">${today}</div>
     <div class="f" style="top:${P.date2.top}; left:${P.date2.left}; font-size:8.5pt;">${today}</div>
+    <div class="qr-block">
+      ${qrSvgString}
+      <span style="font-size:5.5pt; font-weight:700; color:#000; text-align:center;">Verify Online</span>
+    </div>
   </div>
 </div>
 <script>
@@ -395,6 +419,21 @@ export const CertificateModal = ({
               >
                 {today}
               </div>
+
+              {/* QR Code */}
+              <div
+                style={{
+                  position: "absolute",
+                  display: "flex",
+                  left: P.qr.left,
+                  top: P.qr.top,
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "2px",
+                }}
+              >
+                <CertificateQR student={student} size={62} />
+              </div>
             </div>
           </div>
         </div>
@@ -465,6 +504,8 @@ export const CertificateModal = ({
             Download PDF
           </button>
         </div>
+        {/* Hidden QR for PDF download – must stay in DOM */}
+        <CertificateQRHidden student={student} />
       </div>
     </div>
   );

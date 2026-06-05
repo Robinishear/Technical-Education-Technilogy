@@ -1,17 +1,15 @@
 import QRCode from "react-qr-code";
 import { Student } from "../admin-students/types/admin-students.types";
 
-export const buildQRData = (student: Student): string => {
+export const buildCertQRData = (student: Student): string => {
   const baseUrl =
     typeof window !== "undefined"
       ? window.location.origin
       : (process.env.NEXT_PUBLIC_APP_URL || "");
-  const sess =
-    student.month1 && student.year1 ? `${student.month1}-${student.year1}` : "";
-  return `${baseUrl}/verify-student/admit?roll=${student.roll || ""}${sess ? `&sess=${encodeURIComponent(sess)}` : ""}`;
+  return `${baseUrl}/verify-student/certificate?roll=${student.roll || ""}`;
 };
 
-export const StudentQR = ({
+export const CertificateQR = ({
   student,
   size = 60,
 }: {
@@ -19,18 +17,18 @@ export const StudentQR = ({
   size?: number;
 }) => (
   <QRCode
-    value={buildQRData(student)}
+    value={buildCertQRData(student)}
     size={size}
     bgColor="#ffffff"
     fgColor="#000000"
   />
 );
 
-export const StudentQRHidden = ({ student }: { student: Student }) => (
+export const CertificateQRHidden = ({ student }: { student: Student }) => (
   <div style={{ display: "none" }}>
     <QRCode
-      id="admit-qr-code"
-      value={buildQRData(student)}
+      id="certificate-qr-code"
+      value={buildCertQRData(student)}
       size={80}
       bgColor="#ffffff"
       fgColor="#000000"

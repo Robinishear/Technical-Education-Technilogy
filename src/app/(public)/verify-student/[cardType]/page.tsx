@@ -2,21 +2,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { 
   Loader2, 
-  CheckCircle2, 
   AlertTriangle, 
   Printer, 
-  ArrowLeft,
-  ShieldCheck,
-  FileText,
-  CreditCard,
-  Building2,
-  Calendar,
-  User,
-  Phone
+  ArrowLeft
 } from "lucide-react";
 import { getResultByRollAction } from "@/features/public_assets/student-result/actions.ts";
 import Link from "next/link";
@@ -69,18 +61,31 @@ const formatSession = (student: any) => {
 };
 
 // Sub-component to render the dynamic QR inside the card preview
-const CardQRCode = ({ value, size = 60 }: { value: string; size?: number }) => (
-  <QRCode
-    value={value}
-    size={size}
-    bgColor="#ffffff"
-    fgColor="#000000"
-  />
-);
+const CardQRCode = ({ value, size = 60 }: { value: string; size?: number }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div style={{ width: size, height: size }} />;
+  }
+
+  return (
+    <QRCode
+      value={value}
+      size={size}
+      bgColor="#ffffff"
+      fgColor="#000000"
+    />
+  );
+};
 
 function VerificationPortalContent() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const cardType = (params.cardType as string) || "admit";
   const roll = searchParams.get("roll") || "";
   const sess = searchParams.get("sess") || "";
@@ -90,6 +95,10 @@ function VerificationPortalContent() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    if (cardType === "transcript") {
+      router.replace(`/student-result-page?roll=${roll}`);
+      return;
+    }
     const fetchStudentData = async () => {
       if (!roll) {
         setNotFound(true);
@@ -125,6 +134,8 @@ function VerificationPortalContent() {
       return `${origin}/verify-student/reg?roll=${student?.roll || ""}${sessionStr}`;
     } else if (type === "id") {
       return `${origin}/verify-student/id?roll=${student?.roll || ""}${sessionStr}`;
+    } else if (type === "certificate") {
+      return `${origin}/verify-student/certificate?roll=${student?.roll || ""}`;
     }
     return `${origin}/verify-student/admit?roll=${student?.roll || ""}${sessionStr}`;
   };
@@ -513,6 +524,73 @@ body { margin: 0; font-family: Arial, sans-serif; }
   </script>
 </body>
 </html>`);
+    } else if (cardType === "certificate") {
+      const slNo = student.studentId?.replace("STU-", "") || "—";
+      const P = {
+        slNo: { top: "37.9%", left: "17%" },
+        regNo: { top: "37.2%", left: "74.5%" },
+        session: { top: "41.8%", left: "70.5%" },
+        name: { top: "43.7%", left: "32.0%" },
+        father: { top: "48.3%", left: "28.0%" },
+        mother: { top: "53.4%", left: "18.5%" },
+        institute: { top: "58%", left: "19.5%" },
+        roll: { top: "63.2%", left: "27.0%" },
+        qual: { top: "63.2%", left: "50.0%" },
+        exam: { top: "67.8%", left: "41.5%" },
+        cgpa: { top: "68%", left: "77.5%" },
+        date1: { top: "80.2%", left: "25.0%" },
+        date2: { top: "82%", left: "18.5%" },
+        qr: { top: "23%", left: "80%" },
+      };
+      printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<title>Certificate - ${student.name}</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @page { size: A4 landscape; margin: 0; }
+  body { width: 297mm; height: 210mm; font-family: 'Times New Roman', serif; overflow: hidden; }
+  .card { width: 297mm; height: 210mm; position: relative; background: white; }
+  .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; z-index: 0; }
+  .overlay { position: absolute; inset: 0; z-index: 1; }
+  .f {
+    position: absolute;
+    font-weight: 700;
+    font-style: italic;
+    color: #000;
+    font-size: 11pt;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="bg" src="${window.location.origin}/Certificate.png" crossorigin="anonymous" />
+  <div class="overlay">
+    <div class="f" style="top:${P.slNo.top}; left:${P.slNo.left}; font-size:10pt;">${slNo}</div>
+    <div class="f" style="top:${P.regNo.top}; left:${P.regNo.left}; font-size:10pt;">${student.regNumber || "—"}</div>
+    <div class="f" style="top:${P.session.top}; left:${P.session.left}; font-size:10pt;">${monthName(student.month1)} - ${monthName(student.month2)} ${student.year1}</div>
+    <div class="f" style="top:${P.name.top}; left:${P.name.left}; right:8%;">${student.name || "—"}</div>
+    <div class="f" style="top:${P.father.top}; left:${P.father.left}; right:14%;">${student.fatherName || "—"}</div>
+    <div class="f" style="top:${P.mother.top}; left:${P.mother.left}; right:14%;">${student.motherName || "—"}</div>
+    <div class="f" style="top:${P.institute.top}; left:${P.institute.left}; right:8%;">${student.institute || "—"}</div>
+    <div class="f" style="top:${P.roll.top}; left:${P.roll.left};">${student.roll || "—"}</div>
+    <div class="f" style="top:${P.qual.top}; left:${P.qual.left}; right:8%;">${student.educationQualification || "—"}</div>
+    <div class="f" style="top:${P.exam.top}; left:${P.exam.left};">${monthName(student.month1)} ${student.year1}</div>
+    <div class="f" style="top:${P.cgpa.top}; left:${P.cgpa.left};">—</div>
+    <div class="f" style="top:${P.date1.top}; left:${P.date1.left}; font-size:8.5pt;">${today}</div>
+    <div class="f" style="top:${P.date2.top}; left:${P.date2.left}; font-size:8.5pt;">${today}</div>
+  </div>
+</div>
+<script>
+  window.onload = function() {
+    setTimeout(function() {
+      window.print();
+      window.close();
+    }, 600);
+  };
+</script>
+</body>
+</html>`);
     }
     printWindow.document.close();
   };
@@ -575,61 +653,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
     );
   }
 
-  // Define dynamic content based on cardType
-  let badgeText = "● Registry Record Verified";
-  let titleText = "Official Student Record";
-  let descText = "This student record has been validated against the official registry of Bangladesh Technical Education Technology. All signatures and certifications are verified.";
-  let studentRows = [];
 
-  if (cardType === "reg") {
-    badgeText = "● Registration Record Verified";
-    titleText = "Official Registration Record";
-    descText = "This student registration record has been validated against the official registry of Bangladesh Technical Education Technology. All credentials and enrollment parameters are active and verified.";
-    studentRows = [
-      { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
-      { label: "Father's Name", value: student.fatherName, icon: <User size={16} className="text-slate-400" /> },
-      { label: "Mother's Name", value: student.motherName, icon: <User size={16} className="text-slate-400" /> },
-      { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
-      { label: "Session", value: formatSession(student), icon: <Calendar size={16} className="text-rose-500" /> },
-      { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
-      { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
-      { label: "Course Duration", value: student.duration || "—", icon: <Calendar size={16} className="text-amber-500" /> },
-      { label: "Sex / Gender", value: student.gender || "—", icon: <User size={16} className="text-sky-500" /> },
-      { label: "Upazilla / Thana", value: student.thana || "—", icon: <FileText size={16} className="text-slate-500" /> },
-      { label: "District", value: student.district || "—", icon: <Building2 size={16} className="text-slate-500" /> },
-    ];
-  } else if (cardType === "id") {
-    badgeText = "● Student Identity Verified";
-    titleText = "Official Student ID Record";
-    descText = "This student identity card has been validated against the official registry of Bangladesh Technical Education Technology. All active status privileges and identity credentials are fully verified.";
-    studentRows = [
-      { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
-      { label: "Roll Number", value: student.roll, icon: <CreditCard size={16} className="text-amber-500" /> },
-      { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
-      { label: "Session", value: formatSession(student), icon: <Calendar size={16} className="text-rose-500" /> },
-      { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
-      { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
-      { label: "Mobile / Phone", value: student.guardianPhone || "—", icon: <Phone size={16} className="text-sky-500" /> },
-      { label: "Joined Date", value: student.joinedDate ? formatDOB(student.joinedDate) : "—", icon: <Calendar size={16} className="text-teal-500" /> },
-      { label: "Expire Date", value: student.expireDate ? formatDOB(student.expireDate) : "—", icon: <Calendar size={16} className="text-rose-500" /> },
-    ];
-  } else {
-    // admit
-    badgeText = "● Admit Card Record Verified";
-    titleText = "Official Examinee Admit Card";
-    descText = "This examinee admit card has been validated against the official registry of Bangladesh Technical Education Technology. All examination permits and subject details are verified.";
-    studentRows = [
-      { label: "Student Name", value: student.name, icon: <User size={16} className="text-blue-500" /> },
-      { label: "Father's Name", value: student.fatherName, icon: <User size={16} className="text-slate-400" /> },
-      { label: "Mother's Name", value: student.motherName, icon: <User size={16} className="text-slate-400" /> },
-      { label: "Roll Number", value: student.roll, icon: <CreditCard size={16} className="text-amber-500" /> },
-      { label: "Registration No", value: student.regNumber, icon: <FileText size={16} className="text-purple-500" /> },
-      { label: "Session", value: formatSession(student), icon: <Calendar size={16} className="text-rose-500" /> },
-      { label: "Subject / Course", value: student.educationQualification, icon: <FileText size={16} className="text-emerald-500" /> },
-      { label: "Name of the Institute", value: student.institute, icon: <Building2 size={16} className="text-indigo-500" /> },
-      { label: "Type of Examinee", value: "Regular", icon: <User size={16} className="text-sky-500" /> },
-    ];
-  }
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -781,6 +805,121 @@ body { margin: 0; font-family: Arial, sans-serif; }
             </div>
           </div>
         )}
+
+        {/* Render: Certificate */}
+        {cardType === "certificate" && (() => {
+          const slNo = student.studentId?.replace("STU-", "") || "—";
+          const today = new Date().toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+          const P = {
+            slNo: { top: "37.9%", left: "17%" },
+            regNo: { top: "37.2%", left: "74.5%" },
+            session: { top: "41.8%", left: "70.5%" },
+            name: { top: "43.7%", left: "32.0%" },
+            father: { top: "48.3%", left: "28.0%" },
+            mother: { top: "53.4%", left: "18.5%" },
+            institute: { top: "58%", left: "19.5%" },
+            roll: { top: "63.2%", left: "27.0%" },
+            qual: { top: "63.2%", left: "50.0%" },
+            exam: { top: "67.8%", left: "41.5%" },
+            cgpa: { top: "68%", left: "77.5%" },
+            date1: { top: "80.2%", left: "25.0%" },
+            date2: { top: "82%", left: "18.5%" },
+            qr: { top: "23%", left: "80%" },
+          };
+          return (
+            <div
+              className="w-full relative bg-white border border-slate-200 rounded-xl overflow-hidden shadow-md"
+              style={{
+                aspectRatio: "297 / 210",
+                containerType: "inline-size",
+              }}
+            >
+              <img
+                src="/Certificate.png"
+                alt=""
+                className="absolute inset-0 w-full h-full object-fill pointer-events-none"
+              />
+              <div
+                className="absolute inset-0"
+                style={{ fontFamily: "'Times New Roman', Georgia, serif" }}
+              >
+                {/* SL No */}
+                <div style={{ position: "absolute", top: P.slNo.top, left: P.slNo.left, fontSize: "1.25cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {slNo}
+                </div>
+                {/* Reg No */}
+                <div style={{ position: "absolute", top: P.regNo.top, left: P.regNo.left, fontSize: "1.25cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.regNumber || "—"}
+                </div>
+                {/* Session */}
+                <div style={{ position: "absolute", top: P.session.top, left: P.session.left, fontSize: "1.25cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {monthName(student.month1)} - {monthName(student.month2)} {student.year1}
+                </div>
+                {/* Name */}
+                <div style={{ position: "absolute", top: P.name.top, left: P.name.left, right: "8%", fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.name || "—"}
+                </div>
+                {/* Father */}
+                <div style={{ position: "absolute", top: P.father.top, left: P.father.left, right: "14%", fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.fatherName || "—"}
+                </div>
+                {/* Mother */}
+                <div style={{ position: "absolute", top: P.mother.top, left: P.mother.left, right: "14%", fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.motherName || "—"}
+                </div>
+                {/* Institute */}
+                <div style={{ position: "absolute", top: P.institute.top, left: P.institute.left, right: "8%", fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.institute || "—"}
+                </div>
+                {/* Roll */}
+                <div style={{ position: "absolute", top: P.roll.top, left: P.roll.left, fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.roll || "—"}
+                </div>
+                {/* Qual */}
+                <div style={{ position: "absolute", top: P.qual.top, left: P.qual.left, right: "8%", fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {student.educationQualification || "—"}
+                </div>
+                {/* Exam */}
+                <div style={{ position: "absolute", top: P.exam.top, left: P.exam.left, fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {monthName(student.month1)} {student.year1}
+                </div>
+                {/* CGPA */}
+                <div style={{ position: "absolute", top: P.cgpa.top, left: P.cgpa.left, fontSize: "1.35cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  —
+                </div>
+                {/* Date 1 */}
+                <div style={{ position: "absolute", top: P.date1.top, left: P.date1.left, fontSize: "1.1cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {today}
+                </div>
+                {/* Date 2 */}
+                <div style={{ position: "absolute", top: P.date2.top, left: P.date2.left, fontSize: "1.1cqw", fontWeight: 700, fontStyle: "italic", color: "#000" }}>
+                  {today}
+                </div>
+
+                {/* QR Code */}
+                <div style={{
+                  position: "absolute",
+                  top: P.qr.top,
+                  left: P.qr.left,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "2px",
+                }}>
+                  <CardQRCode
+                    value={`${typeof window !== "undefined" ? window.location.origin : ""}/verify-student/certificate?roll=${student.roll || ""}`}
+                    size={52}
+                  />
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Render: Registration Card */}
         {cardType === "reg" && (
@@ -962,7 +1101,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
                 </p>
                 <p className="font-semibold">
                   <span className="font-black text-gray-900">Sess: </span>
-                  <span className="text-gray-800">{student.month1}-${student.year1}</span>
+                  <span className="text-gray-800">{student.month1}-{student.year1}</span>
                 </p>
                 <p className="font-semibold truncate">
                   <span className="font-black text-gray-900">Course: </span>
@@ -1024,6 +1163,8 @@ body { margin: 0; font-family: Arial, sans-serif; }
           </div>
         )}
       </div>
+
+
 
       {/* Print / Download Button Block */}
       <div className="flex flex-col sm:flex-row gap-3 pt-2 print:hidden">
